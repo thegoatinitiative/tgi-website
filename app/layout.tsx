@@ -1,0 +1,86 @@
+import type { Metadata, Viewport } from "next";
+import { Inter, Orbitron } from "next/font/google";
+import "./globals.css";
+import { TrustBanner } from "@/components/TrustBanner";
+import { Navbar } from "@/components/Navbar";
+import { FloatingHUD } from "@/components/FloatingHUD";
+import { FloatingDonate } from "@/components/FloatingDonate";
+import { Footer } from "@/components/Footer";
+import { VisitorTracker } from "@/components/VisitorTracker";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const orbitron = Orbitron({
+  subsets: ["latin"],
+  variable: "--font-orbitron",
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800", "900"],
+});
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#0a0a0f",
+};
+
+export const metadata: Metadata = {
+  title: "THE GOAT INITIATIVE | Official Portal",
+  description: "An official portal of The GOAT Initiative - Secure Operations Center",
+  keywords: ["GOAT Initiative", "TGI", "Operations", "Mission"],
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "TGI Portal",
+  },
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" className="dark">
+      <body
+        className={`${inter.variable} ${orbitron.variable} font-sans bg-dark min-h-screen`}
+      >
+        {/* CRT Scanline Overlay */}
+        <div className="crt-scanlines" aria-hidden="true" />
+        
+        {/* Topographic/Hex Grid Background */}
+        <div className="topo-grid" aria-hidden="true" />
+        
+        {/* Main Content Wrapper */}
+        <div className="relative z-10 flex flex-col min-h-screen">
+          {/* Trust Banner */}
+          <TrustBanner />
+          
+          {/* Navigation */}
+          <Navbar />
+          
+          {/* Main Content */}
+          <main className="flex-grow pt-28">
+            {children}
+          </main>
+          
+          {/* Footer */}
+          <Footer />
+        </div>
+        
+        {/* Floating HUD */}
+        <FloatingHUD />
+        
+        {/* Floating Donate Button */}
+        <FloatingDonate />
+        
+        {/* Visitor Tracking */}
+        <VisitorTracker />
+      </body>
+    </html>
+  );
+}
