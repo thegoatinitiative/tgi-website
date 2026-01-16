@@ -291,7 +291,7 @@ export default function MissionPage() {
               Every contribution helps us gather more intel and save lives.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Link href="/support" className="cyber-button">
+              <Link href="/donate" className="cyber-button">
                 Support Mission
               </Link>
               <Link

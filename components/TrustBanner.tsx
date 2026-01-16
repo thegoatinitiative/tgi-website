@@ -13,10 +13,10 @@ export function TrustBanner() {
       aria-label="Official government-style trust indicator showing secure connection"
     >
       <div className="max-w-7xl mx-auto px-4 py-2">
-        <div className="flex items-center justify-center gap-2 text-xs sm:text-sm">
+        <div className="flex items-center justify-center gap-3 text-xs sm:text-sm">
           {/* Lock Icon */}
           <svg
-            className="w-4 h-4 text-success"
+            className="w-3.5 h-3.5 text-success flex-shrink-0"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -31,14 +31,14 @@ export function TrustBanner() {
             />
           </svg>
 
-          <span className="text-gray-400">
+          <span className="text-gray-400 whitespace-nowrap">
             An official portal of{" "}
             <span className="text-primary font-semibold">The GOAT Initiative</span>
           </span>
 
           <span className="hidden sm:inline text-gray-600">|</span>
 
-          <span className="hidden sm:flex items-center gap-1 text-gray-400">
+          <span className="hidden sm:flex items-center gap-1.5 text-gray-400 whitespace-nowrap">
             <span className="text-success">Secure</span>
             <span className="text-gray-600">•</span>
             <span className="text-success">HTTPS Encrypted</span>
@@ -46,7 +46,7 @@ export function TrustBanner() {
 
           <span className="hidden md:inline text-gray-600">|</span>
 
-          <span className="hidden md:inline text-accent font-heading text-xs tracking-wider">
+          <span className="hidden md:inline text-accent font-heading text-xs tracking-wider whitespace-nowrap">
             EYES ONLY
           </span>
         </div>

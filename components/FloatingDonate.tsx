@@ -70,7 +70,7 @@ export function FloatingDonate() {
                 
                 {/* Custom Amount Link */}
                 <Link
-                  href="/support"
+                  href="/donate"
                   className="block text-center text-xs text-gray-500 hover:text-primary transition-colors"
                 >
                   Choose custom amount →

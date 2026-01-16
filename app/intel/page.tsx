@@ -265,7 +265,7 @@ export default function IntelPage() {
                 Subscribe Now
               </a>
               <Link
-                href="/support"
+                href="/donate"
                 className="px-6 py-3 font-heading text-sm uppercase tracking-widest border border-gray-700 text-gray-400 hover:border-primary hover:text-primary transition-all duration-300"
               >
                 Support Mission

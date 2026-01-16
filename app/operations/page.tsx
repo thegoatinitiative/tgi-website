@@ -220,7 +220,7 @@ export default function OperationsPage() {
             <p className="text-gray-500 mb-8 max-w-xl mx-auto">
               Your contribution directly funds field operations, equipment, and intelligence gathering capabilities.
             </p>
-            <Link href="/support" className="cyber-button">
+            <Link href="/donate" className="cyber-button">
               Fund Operations
             </Link>
           </motion.div>

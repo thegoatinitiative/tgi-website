@@ -1378,7 +1378,7 @@ export default function Home() {
             {/* Link to full support page */}
             <div className="mt-10">
               <Link
-                href="/support"
+                href="/donate"
                 className="text-sm text-gray-500 hover:text-primary transition-colors"
               >
                 View all donation options and supporter tiers →
