@@ -689,6 +689,18 @@ export default function Home() {
                       <circle cx={country.x} cy={country.y} r="5" fill="#00d4ff" />
                       {/* Center highlight */}
                       <circle cx={country.x} cy={country.y} r="2" fill="#ffffff" />
+                      {/* Country label */}
+                      <text 
+                        x={country.x} 
+                        y={country.y - 12} 
+                        textAnchor="middle" 
+                        fill="#00d4ff" 
+                        fontSize="8" 
+                        fontFamily="monospace"
+                        opacity="0.9"
+                      >
+                        {country.name}
+                      </text>
                     </g>
                   ))}
                   

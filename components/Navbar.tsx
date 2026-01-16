@@ -10,6 +10,7 @@ const navLinks = [
   { href: "/operations", label: "Operations" },
   { href: "/operatives", label: "Operatives" },
   { href: "/media", label: "Video Intel" },
+  { href: "/intel", label: "Intel Updates" },
 ];
 
 export function Navbar() {
