@@ -39,6 +39,76 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  // Redirects for Google sitelinks
+  async redirects() {
+    return [
+      {
+        source: '/who-we-are',
+        destination: '/mission',
+        permanent: true,
+      },
+      {
+        source: '/who-are-we',
+        destination: '/mission',
+        permanent: true,
+      },
+      {
+        source: '/about',
+        destination: '/mission',
+        permanent: true,
+      },
+      {
+        source: '/our-team',
+        destination: '/operatives',
+        permanent: true,
+      },
+      {
+        source: '/team',
+        destination: '/operatives',
+        permanent: true,
+      },
+      {
+        source: '/cory-gautereaux',
+        destination: '/operatives',
+        permanent: true,
+      },
+      {
+        source: '/stories',
+        destination: '/articles',
+        permanent: true,
+      },
+      {
+        source: '/submit-a-tip-or-lead',
+        destination: '/contact',
+        permanent: true,
+      },
+      {
+        source: '/submit-tip',
+        destination: '/contact',
+        permanent: true,
+      },
+      {
+        source: '/tip',
+        destination: '/contact',
+        permanent: true,
+      },
+      {
+        source: '/tips',
+        destination: '/contact',
+        permanent: true,
+      },
+      {
+        source: '/lead',
+        destination: '/contact',
+        permanent: true,
+      },
+      {
+        source: '/leads',
+        destination: '/contact',
+        permanent: true,
+      },
+    ];
+  },
   // Allow external images
   images: {
     remotePatterns: [
