@@ -67,6 +67,13 @@ export default function MissionPage() {
               </h2>
             </div>
             
+            {/* Official Mission Statement */}
+            <div className="mb-6 p-6 bg-primary/5 border-l-4 border-primary rounded-sm">
+              <p className="text-base md:text-lg text-gray-200 leading-relaxed font-medium">
+                The GOAT Initiative is dedicated to the collection, analysis, and dissemination of sensitive or critical information exposing and disrupting the infiltration of special interest aliens across the southern border.
+              </p>
+            </div>
+            
             <p className="text-lg text-gray-300 leading-relaxed mb-6">
               Our mission is to <span className="text-primary font-semibold">safeguard national security</span> along 
               the U.S./Mexico border through comprehensive intelligence gathering — identifying Special Interest 
