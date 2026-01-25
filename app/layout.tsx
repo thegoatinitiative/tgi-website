@@ -29,6 +29,8 @@ export const viewport: Viewport = {
   themeColor: "#0a0a0f",
 };
 
+const adsensePublisherId = process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID || "ca-pub-3375791945592013";
+
 export const metadata: Metadata = {
   title: "THE GOAT INITIATIVE | Official Portal",
   description: "An official portal of The GOAT Initiative - Secure Operations Center",
@@ -38,6 +40,9 @@ export const metadata: Metadata = {
     statusBarStyle: "black-translucent",
     title: "TGI Portal",
   },
+  other: {
+    "google-adsense-account": adsensePublisherId,
+  },
 };
 
 export default function RootLayout({
@@ -45,9 +50,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Google AdSense publisher ID
-  const adsensePublisherId = process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID || "ca-pub-3375791945592013";
-
   return (
     <html lang="en" className="dark">
       <head>
@@ -56,10 +58,17 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${orbitron.variable} font-sans bg-dark min-h-screen`}
       >
-        {/* Google AdSense Script */}
+        {/* Google AdSense Script - loads before page is interactive for crawler visibility */}
+        <Script
+          id="adsbygoogle-script"
+          strategy="beforeInteractive"
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsensePublisherId}`}
+          crossOrigin="anonymous"
+        />
+        {/* Google AdSense Initialization */}
         <Script
           id="adsbygoogle-init"
-          strategy="afterInteractive"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               (adsbygoogle = window.adsbygoogle || []).push({
@@ -68,12 +77,6 @@ export default function RootLayout({
               });
             `,
           }}
-        />
-        <Script
-          async
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsensePublisherId}`}
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
         />
         {/* CRT Scanline Overlay */}
         <div className="crt-scanlines" aria-hidden="true" />
