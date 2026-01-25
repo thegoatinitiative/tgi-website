@@ -58,14 +58,15 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${orbitron.variable} font-sans bg-dark min-h-screen`}
       >
-        {/* Google AdSense Script - loads before page is interactive for crawler visibility */}
+        {/* Google AdSense Auto Ads Script */}
         <Script
-          id="adsbygoogle-script"
+          id="adsbygoogle-auto-ads"
           strategy="beforeInteractive"
+          async
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsensePublisherId}`}
           crossOrigin="anonymous"
         />
-        {/* Google AdSense Initialization */}
+        {/* Google AdSense Auto Ads Initialization */}
         <Script
           id="adsbygoogle-init"
           strategy="beforeInteractive"
