@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Orbitron } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { TrustBanner } from "@/components/TrustBanner";
 import { Navbar } from "@/components/Navbar";
@@ -44,8 +45,19 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Google AdSense publisher ID
+  const adsensePublisherId = process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID || "ca-pub-3375791945592013";
+
   return (
     <html lang="en" className="dark">
+      <head>
+        <Script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsensePublisherId}`}
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+      </head>
       <body
         className={`${inter.variable} ${orbitron.variable} font-sans bg-dark min-h-screen`}
       >
