@@ -51,16 +51,30 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
+        <meta name="google-adsense-account" content={adsensePublisherId} />
+      </head>
+      <body
+        className={`${inter.variable} ${orbitron.variable} font-sans bg-dark min-h-screen`}
+      >
+        {/* Google AdSense Script */}
+        <Script
+          id="adsbygoogle-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (adsbygoogle = window.adsbygoogle || []).push({
+                google_ad_client: "${adsensePublisherId}",
+                enable_page_level_ads: true
+              });
+            `,
+          }}
+        />
         <Script
           async
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsensePublisherId}`}
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
-      </head>
-      <body
-        className={`${inter.variable} ${orbitron.variable} font-sans bg-dark min-h-screen`}
-      >
         {/* CRT Scanline Overlay */}
         <div className="crt-scanlines" aria-hidden="true" />
         
