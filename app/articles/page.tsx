@@ -8,7 +8,15 @@ const INSTAGRAM_URL = "https://instagram.com/thecorygoat";
 const X_URL = "https://x.com/thecorygoat";
 
 // Add your articles here - easy to update!
-const articles = [
+type Article = {
+  title: string;
+  description: string;
+  url: string;
+  date: string;
+  source: string;
+};
+
+const articles: Article[] = [
   // Add more articles here as needed
   // {
   //   title: "Article Title",
