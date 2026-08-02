@@ -7,26 +7,6 @@ const SUBSTACK_URL = "https://substack.com/@thecorygoat";
 const INSTAGRAM_URL = "https://instagram.com/thecorygoat";
 const X_URL = "https://x.com/thecorygoat";
 
-// Add your articles here - easy to update!
-type Article = {
-  title: string;
-  description: string;
-  url: string;
-  date: string;
-  source: string;
-};
-
-const articles: Article[] = [
-  // Add more articles here as needed
-  // {
-  //   title: "Article Title",
-  //   description: "Description here",
-  //   url: "https://example.com",
-  //   date: "2024-01-20",
-  //   source: "External",
-  // },
-];
-
 export default function ArticlesPage() {
   return (
     <div className="min-h-screen py-12">
@@ -166,83 +146,6 @@ export default function ArticlesPage() {
               </div>
             </div>
           </motion.div>
-        </div>
-      </section>
-
-      {/* Additional Articles Section */}
-      <section className="py-16 bg-dark-100/30">
-        <div className="max-w-5xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="font-heading text-3xl text-gray-100 tracking-wider mb-4">
-              ADDITIONAL <span className="text-primary">ARTICLES</span>
-            </h2>
-            <p className="text-gray-500 max-w-2xl mx-auto">
-              Curated articles and briefings from trusted sources.
-            </p>
-          </motion.div>
-
-          {articles.length > 0 ? (
-            <div className="grid md:grid-cols-2 gap-6">
-              {articles.map((article, index) => (
-                <motion.a
-                  key={index}
-                  href={article.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  whileHover={{ y: -5 }}
-                  className="block bg-dark-100/80 border border-gray-800 rounded-sm overflow-hidden hover:border-primary/50 transition-all group"
-                >
-                  <div className="p-6">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="px-2 py-1 bg-primary/10 border border-primary/30 rounded text-xs font-heading text-primary tracking-wider">
-                        {article.source}
-                      </span>
-                      <span className="text-xs text-gray-600 font-mono">
-                        {new Date(article.date).toLocaleDateString('en-US', { 
-                          year: 'numeric', 
-                          month: 'short', 
-                          day: 'numeric' 
-                        })}
-                      </span>
-                    </div>
-                    <h3 className="font-heading text-lg text-gray-100 mb-3 group-hover:text-primary transition-colors">
-                      {article.title}
-                    </h3>
-                    <p className="text-sm text-gray-400 mb-4 leading-relaxed">
-                      {article.description}
-                    </p>
-                    <div className="flex items-center gap-2 text-primary text-sm font-heading tracking-wider">
-                      READ ARTICLE
-                      <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
-                    </div>
-                  </div>
-                </motion.a>
-              ))}
-            </div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="text-center py-12 bg-dark-100/50 border border-gray-800 rounded-sm"
-            >
-              <p className="text-gray-500 mb-2">No additional articles yet.</p>
-              <p className="text-sm text-gray-600">
-                Add articles by editing the <code className="text-primary">articles</code> array in <code className="text-primary">app/articles/page.tsx</code>
-              </p>
-            </motion.div>
-          )}
         </div>
       </section>
 
