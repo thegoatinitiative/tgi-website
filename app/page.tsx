@@ -1008,16 +1008,6 @@ export default function Home() {
                 status: "ACTIVE",
               },
               {
-                id: "OP-003",
-                name: "Hels Apffel",
-                role: "Director of Strategic Intelligence",
-                clearance: "ALPHA",
-                bio: "Sets collection priorities and fuses field reporting into assessments the organization can act on.",
-                specialization: "Strategic Intelligence",
-                redactedDetail: "████ Finished Briefings",
-                status: "ACTIVE",
-              },
-              {
                 id: "OP-010",
                 name: "Tayler James",
                 role: "Board Secretary",
@@ -1025,6 +1015,16 @@ export default function Home() {
                 bio: "Keeps the official record, certifies board actions, and carries formal correspondence for the organization.",
                 specialization: "Board Governance",
                 redactedDetail: "██████ Official Records",
+                status: "ACTIVE",
+              },
+              {
+                id: "OP-003",
+                name: "Hels Apffel",
+                role: "Director of Strategic Intelligence",
+                clearance: "ALPHA",
+                bio: "Sets collection priorities and fuses field reporting into assessments the organization can act on.",
+                specialization: "Strategic Intelligence",
+                redactedDetail: "████ Finished Briefings",
                 status: "ACTIVE",
               },
             ].map((operative, index) => (
