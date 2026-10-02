@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { classifyGovernment, noteGovernmentIp } from "@/lib/government-network";
 
 // Your Discord Webhook URL - Set this in your environment variables
 const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL || "";
@@ -9,6 +10,9 @@ interface GeoData {
   city: string;
   isp: string;
   org: string;
+  as?: string;
+  asname?: string;
+  reverse?: string;
   lat: number;
   lon: number;
 }
@@ -16,7 +20,7 @@ interface GeoData {
 async function getGeoData(ip: string): Promise<GeoData | null> {
   try {
     // Using ip-api.com (free, no API key needed, 45 requests/min limit)
-    const response = await fetch(`http://ip-api.com/json/${ip}?fields=country,regionName,city,isp,org,lat,lon`);
+    const response = await fetch(`http://ip-api.com/json/${encodeURIComponent(ip)}?fields=status,country,regionName,city,isp,org,as,asname,reverse,lat,lon`);
     if (response.ok) {
       return await response.json();
     }
@@ -70,8 +74,13 @@ export async function POST(request: NextRequest) {
     const { page, referrer } = body;
 
     // Get IP address
+    const vercel = request.headers.get("x-vercel-forwarded-for");
     const forwarded = request.headers.get("x-forwarded-for");
-    const ip = forwarded ? forwarded.split(",")[0].trim() : request.headers.get("x-real-ip") || "Unknown";
+    const ip = vercel
+      ? vercel.split(",")[0].trim()
+      : forwarded
+        ? forwarded.split(",")[0].trim()
+        : request.headers.get("x-real-ip") || "Unknown";
 
     // Get user agent
     const userAgent = request.headers.get("user-agent") || "Unknown";
@@ -90,14 +99,41 @@ export async function POST(request: NextRequest) {
       ? `https://www.google.com/maps?q=${geo.lat},${geo.lon}`
       : null;
 
+    const flag = geo
+      ? classifyGovernment({
+          country: geo.country,
+          isp: geo.isp,
+          org: geo.org,
+          as: geo.as,
+          asname: geo.asname,
+          reverse: geo.reverse,
+        })
+      : null;
+    const visit = flag ? noteGovernmentIp(ip) : null;
+    const title = flag
+      ? visit === "new"
+        ? `New government IP — ${flag.label}`
+        : `Government IP again — ${flag.label}`
+      : "New Visitor";
+    if (flag) console.log(`VISITOR_GOV ip=${ip} gov=${flag.label} visit=${visit} page=${page || "/"}`);
+
     // Send to Discord webhook
     if (DISCORD_WEBHOOK_URL) {
       const embed = {
+        content: flag ? `🚩 ${title}${geo?.country ? ` · ${geo.country}` : ""}` : "",
+        allowed_mentions: { parse: [] },
         embeds: [
           {
-            title: "🌐 New Visitor",
-            color: 0x00d4ff, // Cyan color matching your site
+            title,
+            color: flag ? 0xffb000 : 0x00d4ff,
             fields: [
+              ...(flag
+                ? [{
+                    name: "Flag",
+                    value: `${flag.label}${geo?.country ? ` · ${geo.country}` : ""} · ${visit === "new" ? "first time this address has been seen" : "this address has been seen before"}`,
+                    inline: false,
+                  }]
+                : []),
               {
                 name: "📍 Location",
                 value: location,
@@ -120,7 +156,7 @@ export async function POST(request: NextRequest) {
               },
               {
                 name: "🏢 ISP/Org",
-                value: geo?.isp || geo?.org || "Unknown",
+                value: [geo?.isp, geo?.org, geo?.asname].filter(Boolean).filter((value, index, all) => all.indexOf(value) === index).join(" · ") || "Unknown",
                 inline: true,
               },
               ...(referrer ? [{

@@ -1,6 +1,7 @@
 import { appendFile, mkdir } from "fs/promises";
 import { dirname } from "path";
 import { NextRequest, NextResponse } from "next/server";
+import { classifyGovernment, noteGovernmentIp } from "@/lib/government-network";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -14,6 +15,9 @@ interface GeoData {
   city?: string;
   isp?: string;
   org?: string;
+  as?: string;
+  asname?: string;
+  reverse?: string;
   lat?: number;
   lon?: number;
   status?: string;
@@ -74,7 +78,7 @@ async function getGeoData(ip: string): Promise<GeoData | null> {
   if (geoCache.has(ip)) return geoCache.get(ip) ?? null;
   try {
     const response = await fetch(
-      `http://ip-api.com/json/${encodeURIComponent(ip)}?fields=status,country,regionName,city,isp,org,lat,lon`
+      `http://ip-api.com/json/${encodeURIComponent(ip)}?fields=status,country,regionName,city,isp,org,as,asname,reverse,lat,lon`
     );
     if (!response.ok) {
       geoCache.set(ip, null);
@@ -175,18 +179,34 @@ export async function POST(request: NextRequest) {
         ? `https://www.google.com/maps?q=${geo.lat},${geo.lon}`
         : null;
 
-    const title =
+    const flag = classifyGovernment({
+      country: geo?.country,
+      isp: geo?.isp,
+      org: geo?.org,
+      as: geo?.as,
+      asname: geo?.asname,
+      reverse: geo?.reverse,
+    });
+    const visit = flag ? noteGovernmentIp(ip) : null;
+    const baseTitle =
       status === "left"
         ? "Left the briefing"
         : visibleSeconds < 5
           ? "Briefing opened"
           : "Still on the briefing";
+    const title = flag
+      ? `${visit === "new" ? "New government IP" : "Government IP again"} — ${baseTitle}`
+      : baseTitle;
 
     const entry = {
       at: new Date().toISOString(),
       ip,
       location,
       isp: geo?.isp || geo?.org || "Unknown",
+      org: geo?.org || null,
+      asname: geo?.asname || null,
+      government: flag?.label || null,
+      visit,
       device,
       status,
       visibleSeconds,
@@ -195,18 +215,26 @@ export async function POST(request: NextRequest) {
       referrer: referrer || null,
     };
     console.log(
-      `INTEL_READ ip=${ip} status=${status} visible=${visibleSeconds}s open=${openSeconds}s session=${sessionId.slice(0, 8)}`
+      `INTEL_READ ip=${ip} status=${status} visible=${visibleSeconds}s open=${openSeconds}s session=${sessionId.slice(0, 8)}${flag ? ` gov=${flag.label} visit=${visit}` : ""}`
     );
     await writeLog(entry);
 
+    const network = [geo?.isp, geo?.org, geo?.asname].filter(Boolean).filter((value, index, all) => all.indexOf(value) === index).join(" · ") || "Unknown";
     const fields = [
+      ...(flag
+        ? [{
+            name: "Flag",
+            value: `${flag.label}${geo?.country ? ` · ${geo.country}` : ""} · ${visit === "new" ? "first time this address has been seen" : "this address has been seen before"}`,
+            inline: false,
+          }]
+        : []),
       { name: "Time on report", value: formatDuration(visibleSeconds), inline: true },
       { name: "Tab open", value: formatDuration(openSeconds), inline: true },
       { name: "Status", value: status === "left" ? "Left" : "Reading", inline: true },
       { name: "IP Address", value: `\`${ip}\``, inline: true },
       { name: "Location", value: location, inline: true },
       { name: "Device", value: device, inline: true },
-      { name: "ISP", value: geo?.isp || geo?.org || "Unknown", inline: true },
+      { name: "Network", value: network.slice(0, 1024), inline: false },
       { name: "Report", value: "TECNO CH6i FER · FER-2026-0906", inline: true },
       { name: "Session", value: sessionId ? `\`${sessionId.slice(0, 8)}\`` : "—", inline: true },
       ...(referrer ? [{ name: "Referrer", value: referrer, inline: false }] : []),
@@ -215,10 +243,12 @@ export async function POST(request: NextRequest) {
 
     const messageId = await publishDiscord(
       {
+        content: flag ? `🚩 ${title}` : "",
+        allowed_mentions: { parse: [] },
         embeds: [
           {
             title,
-            color: status === "left" ? 0xff2a6d : 0x00d4ff,
+            color: flag ? 0xffb000 : status === "left" ? 0xff2a6d : 0x00d4ff,
             fields,
             footer: { text: "TGI Briefing Log · time on report is visible time in the browser" },
             timestamp: new Date().toISOString(),
