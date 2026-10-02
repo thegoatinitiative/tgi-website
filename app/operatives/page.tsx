@@ -37,6 +37,17 @@ const operatives = [
     status: "ACTIVE",
     classified: false,
   },
+  {
+    id: "OP-010",
+    name: "Tayler James",
+    role: "Board Secretary",
+    clearance: "ALPHA",
+    bio: "Board Secretary for The GOAT Initiative. Keeps the corporate record, certifies board actions, and carries the organization's formal correspondence. Oversees filings, the continuity of the minutes, and the paper trail behind partnerships and written referrals.",
+    specializations: ["Board Governance", "Official Records", "Formal Correspondence", "Organizational Compliance"],
+    experience: "Board administration",
+    status: "ACTIVE",
+    classified: false,
+  },
   // CLASSIFIED OPERATIVES - Identity Protected
   {
     id: "OP-004",

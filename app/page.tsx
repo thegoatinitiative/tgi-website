@@ -985,7 +985,7 @@ export default function Home() {
           </motion.div>
 
           {/* Operatives Grid */}
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
             {[
               {
                 id: "OP-001",
@@ -1015,6 +1015,16 @@ export default function Home() {
                 bio: "Director of Strategic Intelligence for The GOAT Initiative.",
                 specialization: "Strategic Intelligence",
                 redactedDetail: "██████ Strategic Intelligence",
+                status: "ACTIVE",
+              },
+              {
+                id: "OP-010",
+                name: "Tayler James",
+                role: "Board Secretary",
+                clearance: "ALPHA",
+                bio: "Keeps the official record, certifies board actions, and carries formal correspondence for the organization.",
+                specialization: "Board Governance",
+                redactedDetail: "██████ Official Records",
                 status: "ACTIVE",
               },
             ].map((operative, index) => (
