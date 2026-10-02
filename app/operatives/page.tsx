@@ -37,6 +37,17 @@ const operatives = [
     status: "ACTIVE",
     classified: false,
   },
+  {
+    id: "OP-009",
+    name: "Hels Apffel",
+    role: "Operative",
+    clearance: "ALPHA",
+    bio: "Operative with The GOAT Initiative.",
+    specializations: [],
+    experience: "",
+    status: "ACTIVE",
+    classified: false,
+  },
   // CLASSIFIED OPERATIVES - Identity Protected
   {
     id: "OP-004",
@@ -268,7 +279,9 @@ export default function OperativesPage() {
                     {/* Footer */}
                     <div className="flex items-center justify-between pt-4 border-t border-gray-800">
                       <div className="flex items-center gap-4">
-                        <span className="font-mono text-xs text-gray-500">{operative.experience}</span>
+                        {operative.experience ? (
+                          <span className="font-mono text-xs text-gray-500">{operative.experience}</span>
+                        ) : null}
                       </div>
                       <div className="flex items-center gap-2">
                         <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${
