@@ -1012,9 +1012,9 @@ export default function Home() {
                 name: "Hels Apffel",
                 role: "Director of Strategic Intelligence",
                 clearance: "ALPHA",
-                bio: "Director of Strategic Intelligence for The GOAT Initiative.",
+                bio: "Sets collection priorities and fuses field reporting into assessments the organization can act on.",
                 specialization: "Strategic Intelligence",
-                redactedDetail: "██████ Strategic Intelligence",
+                redactedDetail: "████ Finished Briefings",
                 status: "ACTIVE",
               },
               {
