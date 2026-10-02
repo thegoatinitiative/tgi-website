@@ -1009,12 +1009,12 @@ export default function Home() {
               },
               {
                 id: "OP-003",
-                name: "Gary Wyer",
-                role: "Treasurer",
+                name: "Hels Apffel",
+                role: "Director of Strategic Intelligence",
                 clearance: "ALPHA",
-                bio: "Manages financial operations and resource allocation for field missions.",
-                specialization: "Financial Operations",
-                redactedDetail: "████ Resources Managed",
+                bio: "Director of Strategic Intelligence for The GOAT Initiative.",
+                specialization: "Strategic Intelligence",
+                redactedDetail: "██████ Strategic Intelligence",
                 status: "ACTIVE",
               },
             ].map((operative, index) => (
