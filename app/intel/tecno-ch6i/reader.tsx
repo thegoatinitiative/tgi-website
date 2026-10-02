@@ -115,11 +115,8 @@ export function FerReader() {
           <p className="text-gray-400 leading-relaxed mb-4">
             Unlocked handset recovered at Otay Mountain. Device forensic report prepared by The GOAT Initiative.
           </p>
-          <p className="text-sm text-gray-500 leading-relaxed mb-2">
-            Some pages are omitted from this public copy.
-          </p>
           <p className="text-sm text-gray-500 leading-relaxed">
-            Opening this report records your IP address and how long this page stays open in the browser.
+            Some pages are omitted from this public copy.
           </p>
         </div>
       </section>
