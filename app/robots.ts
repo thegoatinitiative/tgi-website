@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/api/'],
+      disallow: ['/api/', '/intel/tecno-ch6i'],
     },
     sitemap: 'https://thegoatinitiative.org/sitemap.xml',
   }

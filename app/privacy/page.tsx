@@ -33,7 +33,7 @@ export default function PrivacyPage() {
             </h1>
             
             <p className="text-gray-400">
-              Last Updated: January 14, 2026
+              Last Updated: October 2, 2026
             </p>
           </motion.div>
         </div>
@@ -87,7 +87,7 @@ export default function PrivacyPage() {
               <div className="hud-panel p-6">
                 <h2 className="font-heading text-xl text-primary tracking-wider mb-4">5. COOKIES AND TRACKING</h2>
                 <p className="text-gray-400 leading-relaxed">
-                  Our website may use cookies and similar tracking technologies to enhance your experience. You can control cookies through your browser settings. We may also collect analytics data to improve our website and services.
+                  Our website may use cookies and similar tracking technologies to enhance your experience. You can control cookies through your browser settings. We may also collect analytics data to improve our website and services. When you open a briefing on this site, we record the IP address, approximate location, device, and how long that briefing stays open in your browser.
                 </p>
               </div>
 

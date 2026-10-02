@@ -7,8 +7,8 @@ export function VisitorTracker() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Don't track in development (optional - remove if you want to test)
-    // if (process.env.NODE_ENV === "development") return;
+    // The briefing reader sends its own timed record.
+    if (pathname === "/intel/tecno-ch6i") return;
 
     // Send tracking data
     const trackVisit = async () => {

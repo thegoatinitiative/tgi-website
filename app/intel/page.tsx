@@ -53,6 +53,46 @@ export default function IntelPage() {
         </div>
       </section>
 
+      <section className="pb-4">
+        <div className="max-w-5xl mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <Link
+              href="/intel/tecno-ch6i"
+              className="block bg-dark-100/80 border border-primary/30 rounded-sm overflow-hidden hover:border-primary/60 transition-colors"
+            >
+              <div className="h-1 bg-gradient-to-r from-primary via-cyan-400 to-primary" />
+              <div className="p-8 md:p-10 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+                <div>
+                  <p className="font-mono text-xs text-primary tracking-widest mb-3">
+                    FIELD REPORT · 6 SEP 2026
+                  </p>
+                  <h2 className="font-heading text-2xl md:text-3xl text-gray-100 tracking-wider mb-3">
+                    TECNO CAMON 19 NEO
+                  </h2>
+                  <p className="text-gray-400 max-w-2xl leading-relaxed">
+                    Unlocked handset recovered at Otay Mountain. Device forensic report prepared by The GOAT Initiative.
+                  </p>
+                  <p className="font-mono text-[10px] text-gray-600 tracking-widest mt-4">
+                    FER-2026-0906-TECNO-CH6i
+                  </p>
+                </div>
+                <span className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-dark font-heading text-sm tracking-wider shrink-0">
+                  OPEN REPORT
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </span>
+              </div>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Main Content */}
       <section className="py-16">
         <div className="max-w-5xl mx-auto px-4">
