@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/api/', '/intel/tecno-ch6i'],
     },
-    sitemap: 'https://thegoatinitiative.org/sitemap.xml',
+    sitemap: 'https://www.thegoatinitiative.org/sitemap.xml',
   }
 }

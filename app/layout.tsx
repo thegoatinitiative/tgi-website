@@ -8,6 +8,7 @@ import { FloatingHUD } from "@/components/FloatingHUD";
 import { FloatingDonate } from "@/components/FloatingDonate";
 import { Footer } from "@/components/Footer";
 import { VisitorTracker } from "@/components/VisitorTracker";
+import { HOME_DESCRIPTION, HOME_TITLE, SITE_NAME, SITE_URL, organizationJsonLd } from "@/lib/seo";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -32,9 +33,30 @@ export const viewport: Viewport = {
 const adsensePublisherId = process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID || "ca-pub-3375791945592013";
 
 export const metadata: Metadata = {
-  title: "THE GOAT INITIATIVE | Official Portal",
-  description: "An official portal of The GOAT Initiative - Secure Operations Center",
-  keywords: ["GOAT Initiative", "TGI", "Operations", "Mission"],
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: HOME_TITLE,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: HOME_DESCRIPTION,
+  applicationName: SITE_NAME,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: SITE_NAME,
+    url: "/",
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: SITE_NAME }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+    images: ["/og.png"],
+  },
+  robots: { index: true, follow: true },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
@@ -110,6 +132,10 @@ export default function RootLayout({
         
         {/* Visitor Tracking */}
         <VisitorTracker />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
       </body>
     </html>
   );
