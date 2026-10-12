@@ -6,6 +6,10 @@ import { TypeAnimation } from "react-type-animation";
 import { useState, useEffect, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import { RedactedText } from "@/components/RedactedText";
+import { FaqList } from "@/components/FaqList";
+import { JsonLd } from "@/components/JsonLd";
+import { homeFaq } from "@/lib/faqs";
+import { HOME_DESCRIPTION, HOME_TITLE, SITE_URL } from "@/lib/seo";
 
 // TGI Emblem SVG Component
 function TGIEmblem() {
@@ -410,9 +414,8 @@ export default function Home() {
           
           {/* Headline */}
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 1, y: 0 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
             className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold tracking-[0.2em] mt-8 mb-6"
           >
             <span className="text-gray-100">THE </span>
@@ -427,6 +430,7 @@ export default function Home() {
             transition={{ duration: 0.5, delay: 1 }}
             className="h-16 md:h-12 flex items-center justify-center mb-8"
           >
+            <p className="sr-only">Secure the border. Gather the intel. Defend the homeland.</p>
             <TypeAnimation
               sequence={[
                 "SECURE THE BORDER.",
@@ -439,15 +443,15 @@ export default function Home() {
               wrapper="span"
               speed={50}
               repeat={Infinity}
+              aria-hidden="true"
               className="font-heading text-lg md:text-xl text-primary tracking-widest text-glow-sm"
             />
           </motion.div>
           
           {/* Mission Paragraph */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 1, y: 0 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.3 }}
             className="max-w-3xl mx-auto mb-8"
           >
             <p className="text-gray-400 leading-relaxed text-base md:text-lg">
@@ -613,7 +617,7 @@ export default function Home() {
                 {/* Real world map image */}
                 <img 
                   src="https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg"
-                  alt="World Map"
+                  alt="Blank world map behind The GOAT Initiative intelligence graphic"
                   className="absolute inset-0 w-full h-full object-cover opacity-30"
                   style={{ filter: 'invert(1) sepia(100%) saturate(300%) hue-rotate(160deg) brightness(0.7)' }}
                 />
@@ -1397,6 +1401,35 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebPage",
+              "@id": `${SITE_URL}/#webpage`,
+              url: SITE_URL,
+              name: HOME_TITLE,
+              description: HOME_DESCRIPTION,
+              isPartOf: { "@id": `${SITE_URL}/#website` },
+              about: { "@id": `${SITE_URL}/#organization` },
+              inLanguage: "en-US",
+              primaryImageOfPage: `${SITE_URL}/og.png`,
+            },
+            {
+              "@type": "FAQPage",
+              "@id": `${SITE_URL}/#faq`,
+              mainEntity: homeFaq.map((item) => ({
+                "@type": "Question",
+                name: item.question,
+                acceptedAnswer: { "@type": "Answer", text: item.answer },
+              })),
+            },
+          ],
+        }}
+      />
+      <FaqList items={homeFaq} />
     </div>
     </>
   );

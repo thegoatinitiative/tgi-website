@@ -1,0 +1,29 @@
+# The GOAT Initiative
+
+> Independent 501(c)(3) nonprofit (EIN 99-3753614) that gathers intelligence along the U.S.–Mexico border, including the San Diego sector, and delivers it to local, state, and federal law enforcement. Founder and president: Cory Gautereaux. The organization does not arrest, detain, or take custody.
+
+Official site: https://www.thegoatinitiative.org
+
+## Pages
+
+- [Home](https://www.thegoatinitiative.org/): Organization overview
+- [Mission](https://www.thegoatinitiative.org/mission): What the organization collects and who receives it
+- [Operations](https://www.thegoatinitiative.org/operations): Named field operations
+- [Leadership](https://www.thegoatinitiative.org/operatives): Cory Gautereaux, Dan Conchas, Tayler James, Hels Apffel
+- [Video briefings](https://www.thegoatinitiative.org/media): YouTube briefings, including the organization's own interview
+- [Articles](https://www.thegoatinitiative.org/articles): Titles and links for briefings on Cory Gautereaux's Substack
+- [Intel updates](https://www.thegoatinitiative.org/intel): Field-report notices
+- [Donate](https://www.thegoatinitiative.org/donate): Tax-deductible gifts via Donorbox
+- [Contact](https://www.thegoatinitiative.org/contact): Questions and tips. Call 911 first if a crime is in progress
+
+## Profiles
+
+- https://x.com/GoatInitiative
+- https://x.com/thecorygoat
+- https://www.youtube.com/@TheGoatInitiative
+- https://www.instagram.com/thegoatinitiative
+- https://thecorygoat.substack.com
+
+## Not for indexing
+
+- https://www.thegoatinitiative.org/intel/tecno-ch6i is disallowed and marked noindex

@@ -19,9 +19,8 @@ export function Navbar() {
 
   return (
     <motion.nav
-      initial={{ y: -20, opacity: 0 }}
+      initial={{ y: 0, opacity: 1 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, delay: 0.2 }}
       className="fixed top-9 left-0 right-0 z-40 bg-dark/80 backdrop-blur-md border-b border-primary/10"
       role="navigation"
       aria-label="Main navigation"

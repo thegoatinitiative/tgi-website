@@ -56,7 +56,17 @@ export const metadata: Metadata = {
     description: HOME_DESCRIPTION,
     images: ["/og.png"],
   },
-  robots: { index: true, follow: true },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
@@ -116,7 +126,13 @@ export default function RootLayout({
           <Navbar />
           
           {/* Main Content */}
-          <main className="flex-grow pt-28">
+          <a
+            href="#content"
+            className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:bg-primary focus:text-dark focus:px-4 focus:py-2"
+          >
+            Skip to content
+          </a>
+          <main id="content" className="flex-grow pt-28">
             {children}
           </main>
           

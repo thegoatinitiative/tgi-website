@@ -34,10 +34,20 @@ const socialLinks = [
   },
 ];
 
+const exploreLinks = [
+  { label: "Mission", href: "/mission" },
+  { label: "Operations", href: "/operations" },
+  { label: "Operatives", href: "/operatives" },
+  { label: "Video Intel", href: "/media" },
+  { label: "Intel Updates", href: "/intel" },
+  { label: "Articles", href: "/articles" },
+  { label: "Donate", href: "/donate" },
+  { label: "Contact", href: "/contact" },
+];
+
 const footerLinks = [
   { label: "Privacy Policy", href: "/privacy" },
   { label: "Terms of Service", href: "/terms" },
-  { label: "Contact", href: "/contact" },
   { label: "Accessibility", href: "/accessibility" },
 ];
 
@@ -107,6 +117,15 @@ export function Footer() {
               QUICK LINKS
             </h3>
             <div className="grid grid-cols-2 gap-2">
+              {exploreLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-sm text-gray-500 hover:text-primary transition-colors"
+                >
+                  {link.label}
+                </Link>
+              ))}
               {footerLinks.map((link) => (
                 <Link
                   key={link.href}

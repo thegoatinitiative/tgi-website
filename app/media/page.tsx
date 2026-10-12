@@ -2,45 +2,10 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
-
-// Video data
-const videos = [
-  {
-    id: "VVQTfAdIs00",
-    title: "California Smuggling Network Exposed",
-    description: "High-risk actors, passports, phones linked to extremists. Deep dive into the sophisticated smuggling operations uncovered at the southern border.",
-    classification: "UNCLASSIFIED",
-    date: "2024",
-    category: "FIELD REPORT",
-  },
-  {
-    id: "q5IVsKHwZ80",
-    title: "Exposing CCP Infiltration Plot",
-    description: "Trailer revealing evidence of Chinese Communist Party-linked individuals exploiting border vulnerabilities for strategic infiltration.",
-    classification: "UNCLASSIFIED",
-    date: "2024",
-    category: "INVESTIGATION",
-  },
-  {
-    id: "9KapPxGtkEI",
-    title: "High Tech Human Smuggling Ops",
-    description: "How criminal organizations leverage advanced technology, encrypted communications, and coordinated networks to traffic humans across the border.",
-    classification: "UNCLASSIFIED",
-    date: "2024",
-    category: "INTEL BRIEF",
-  },
-  {
-    id: "Df5EOGSe_TE",
-    title: "Terrorist Smuggling Operation Preview",
-    description: "Preview of ongoing investigation into terror-linked smuggling operations and their connections to Special Interest Aliens.",
-    classification: "UNCLASSIFIED",
-    date: "2024",
-    category: "PREVIEW",
-  },
-];
+import { videos, watchUrl } from "@/lib/videos";
 
 // Video Card Component
-function VideoCard({ video, index }: { video: typeof videos[0]; index: number }) {
+function VideoCard({ video, index }: { video: (typeof videos)[number]; index: number }) {
   const [isHovered, setIsHovered] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
 
@@ -74,9 +39,10 @@ function VideoCard({ video, index }: { video: typeof videos[0]; index: number })
           ) : (
             <>
               {/* Thumbnail */}
-              <div 
-                className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                style={{ backgroundImage: `url(${thumbnailUrl})` }}
+              <img
+                src={thumbnailUrl}
+                alt={video.title}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
               
               {/* Scanline overlay on hover */}
@@ -107,14 +73,16 @@ function VideoCard({ video, index }: { video: typeof videos[0]; index: number })
                     <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
                   </span>
                   <span className="font-heading text-[10px] text-white tracking-widest">
-                    {video.classification}
+                    {video.source}
                   </span>
                 </div>
               </div>
               
               {/* Play Button */}
               <button
+                type="button"
                 onClick={() => setShowVideo(true)}
+                aria-label={`Play ${video.title}`}
                 className="absolute inset-0 flex items-center justify-center"
               >
                 <motion.div
@@ -155,7 +123,7 @@ function VideoCard({ video, index }: { video: typeof videos[0]; index: number })
           {/* Footer */}
           <div className="flex items-center justify-between pt-4 border-t border-gray-800">
             <div className="flex items-center gap-2">
-              <span className="font-mono text-[10px] text-gray-600">{video.date}</span>
+              <span className="font-mono text-[10px] text-gray-600">{video.source} · {video.date}</span>
               <span className="text-gray-700">|</span>
               <div className="flex items-center gap-1">
                 <span className="w-1.5 h-1.5 bg-success rounded-full animate-pulse" />
@@ -163,12 +131,14 @@ function VideoCard({ video, index }: { video: typeof videos[0]; index: number })
               </div>
             </div>
             
-            <button
-              onClick={() => setShowVideo(true)}
+            <a
+              href={watchUrl(video.id)}
+              target="_blank"
+              rel="noopener noreferrer"
               className="font-heading text-[10px] text-primary tracking-wider hover:text-glow-sm transition-all"
             >
-              VIEW NOW →
-            </button>
+              WATCH ON YOUTUBE
+            </a>
           </div>
         </div>
         

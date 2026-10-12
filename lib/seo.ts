@@ -61,10 +61,22 @@ export const organizationJsonLd = {
       taxID: "99-3753614",
       founder: {
         "@type": "Person",
+        "@id": `${SITE_URL}/operatives#cory-gautereaux`,
         name: "Cory Gautereaux",
         jobTitle: "Founder and President",
-        sameAs: "https://x.com/thecorygoat",
+        url: `${SITE_URL}/operatives#cory-gautereaux`,
+        sameAs: ["https://x.com/thecorygoat", "https://thecorygoat.substack.com"],
       },
+      areaServed: [
+        { "@type": "Country", name: "United States" },
+        { "@type": "AdministrativeArea", name: "San Diego County, California" },
+      ],
+      knowsAbout: [
+        "U.S.–Mexico border security",
+        "Special interest aliens",
+        "Human trafficking",
+        "Border intelligence",
+      ],
       sameAs: [
         "https://x.com/GoatInitiative",
         "https://x.com/thecorygoat",

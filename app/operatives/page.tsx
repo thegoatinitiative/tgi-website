@@ -14,6 +14,7 @@ const operatives = [
     experience: "Military service & operational leadership",
     status: "ACTIVE",
     classified: false,
+    slug: "cory-gautereaux",
   },
   {
     id: "OP-002",
@@ -25,6 +26,7 @@ const operatives = [
     experience: "Strategic operations",
     status: "ACTIVE",
     classified: false,
+    slug: "dan-conchas",
   },
   {
     id: "OP-010",
@@ -36,6 +38,7 @@ const operatives = [
     experience: "Board administration",
     status: "ACTIVE",
     classified: false,
+    slug: "tayler-james",
   },
   {
     id: "OP-003",
@@ -47,6 +50,7 @@ const operatives = [
     experience: "Intelligence direction",
     status: "ACTIVE",
     classified: false,
+    slug: "hels-apffel",
   },
   // CLASSIFIED OPERATIVES - Identity Protected
   {
@@ -161,6 +165,7 @@ export default function OperativesPage() {
             {operatives.map((operative, index) => (
               <motion.div
                 key={operative.id}
+                id={"slug" in operative ? operative.slug : undefined}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
