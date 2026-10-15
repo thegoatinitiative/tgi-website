@@ -87,8 +87,7 @@ export default function SupportPage() {
             </h1>
             
             <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed mb-8">
-              Your contribution directly funds field operations, equipment, and intelligence 
-              gathering capabilities that protect our homeland.
+              Your contribution funds field reporting on child trafficking, human trafficking, and other threats along the border.
             </p>
 
             {/* 501c3 Badge */}

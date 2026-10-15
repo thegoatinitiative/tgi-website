@@ -5,7 +5,7 @@ export const SITE_NAME = "The GOAT Initiative";
 
 export const HOME_TITLE = "The GOAT Initiative | Border Intelligence Nonprofit";
 export const HOME_DESCRIPTION =
-  "The GOAT Initiative is a 501(c)(3) nonprofit. We gather intelligence along the U.S.–Mexico border and share it with law enforcement partners.";
+  "The GOAT Initiative is a 501(c)(3) nonprofit. We document child trafficking, human trafficking, and other border intelligence and share it with law enforcement.";
 
 const OG_IMAGE = {
   url: "/og.png",
@@ -72,9 +72,10 @@ export const organizationJsonLd = {
         { "@type": "AdministrativeArea", name: "San Diego County, California" },
       ],
       knowsAbout: [
+        "Child trafficking",
+        "Human trafficking",
         "U.S.–Mexico border security",
         "Special interest aliens",
-        "Human trafficking",
         "Border intelligence",
       ],
       sameAs: [

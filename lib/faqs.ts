@@ -4,7 +4,7 @@ export const homeFaq: FaqItem[] = [
   {
     question: "What is The GOAT Initiative?",
     answer:
-      "The GOAT Initiative is an independent 501(c)(3) nonprofit. It gathers intelligence along the U.S.–Mexico border and sends that intelligence to local, state, and federal law enforcement.",
+      "The GOAT Initiative is an independent 501(c)(3) nonprofit. It gathers intelligence along the U.S.–Mexico border, including child trafficking and human trafficking, and sends that intelligence to local, state, and federal law enforcement.",
   },
   {
     question: "Who founded The GOAT Initiative?",
@@ -27,7 +27,7 @@ export const missionFaq: FaqItem[] = [
   {
     question: "What is the mission of The GOAT Initiative?",
     answer:
-      "Gather intelligence on special interest aliens, suspicious travel patterns, and other threats along the U.S.–Mexico border, then deliver that intelligence to law enforcement partners.",
+      "Child trafficking and human trafficking are a central part of the mission, along with intelligence on special interest aliens and other threats along the U.S.–Mexico border. The team delivers that intelligence to law enforcement partners.",
   },
   {
     question: "Where does the field work focus?",
@@ -45,12 +45,12 @@ export const operationsFaq: FaqItem[] = [
   {
     question: "What operations does The GOAT Initiative list?",
     answer:
-      "Border intelligence, special interest alien tracking, sharing with law enforcement, evidence documentation, vulnerability mapping, public briefings, and reports of suspected child trafficking.",
+      "Child trafficking, human trafficking, border intelligence, special interest alien tracking, sharing with law enforcement, evidence documentation, vulnerability mapping, and public briefings.",
   },
   {
-    question: "What does the child trafficking operation do?",
+    question: "What does the trafficking work do?",
     answer:
-      "Identify, document, and report suspected child trafficking at the border to law enforcement, including HSI and the FBI.",
+      "Identify, document, and report suspected child trafficking and human trafficking at the border to law enforcement, including HSI and the FBI. If a crime is in progress, call 911.",
   },
 ];
 
@@ -95,7 +95,7 @@ export const donateFaq: FaqItem[] = [
   {
     question: "What do donations pay for?",
     answer:
-      "Field operations, equipment, and intelligence gathering. Monthly support on this page starts at $25, $50, and $100, processed by Donorbox.",
+      "Field reporting on child trafficking, human trafficking, and other border threats, including equipment for that work. Monthly support on this page starts at $25, $50, and $100, processed by Donorbox.",
   },
   {
     question: "How do I give?",

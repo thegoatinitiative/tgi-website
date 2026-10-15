@@ -5,6 +5,18 @@ import Link from "next/link";
 
 const operations = [
   {
+    name: "Child Trafficking",
+    description:
+      "Children moved across the southern border. The team identifies the signs, documents what it sees, and reports suspected child trafficking to law enforcement, including HSI and the FBI.",
+    objectives: ["Identify the signs", "Document what is seen", "Report it to HSI and the FBI"],
+  },
+  {
+    name: "Human Trafficking",
+    description:
+      "Adults and children moved for labor or sexual exploitation. The team identifies it, documents it, and reports it. The organization does not arrest, detain, or take custody.",
+    objectives: ["Identify trafficking indicators", "Write up the record", "Send it to law enforcement"],
+  },
+  {
     name: "Border Intelligence",
     description:
       "The team documents crossings, suspicious activity, and what it sees along the border, then writes that up for law enforcement.",
@@ -40,12 +52,6 @@ const operations = [
       "Video and written reports for the public and for lawmakers about what the team is seeing at the border.",
     objectives: ["Publish video briefings", "Publish written reports", "Talk with the press"],
   },
-  {
-    name: "Child Trafficking Reports",
-    description:
-      "Identify, document, and report suspected child trafficking at the border to law enforcement, including HSI and the FBI.",
-    objectives: ["Identify trafficking indicators", "Document suspected cases", "Report them to HSI and the FBI"],
-  },
 ];
 
 export default function OperationsPage() {
@@ -68,7 +74,8 @@ export default function OperationsPage() {
             </h1>
 
             <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
-              Field reporting along the southern border, written up and sent to law enforcement.
+              Child trafficking and human trafficking lead the work, along with the rest of the border reporting.
+              Findings are written up and sent to law enforcement.
               The organization does not arrest, detain, or take custody.
             </p>
           </motion.div>

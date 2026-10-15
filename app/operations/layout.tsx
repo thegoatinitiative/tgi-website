@@ -4,7 +4,7 @@ import { operationsFaq } from "@/lib/faqs";
 import { pageMetadata } from "@/lib/seo";
 
 const description =
-  "Active GOAT Initiative operations: border intelligence, special interest alien tracking, evidence documentation, and reports to law enforcement.";
+  "How The GOAT Initiative reports child trafficking, human trafficking, and other border intelligence to law enforcement.";
 
 export const metadata: Metadata = pageMetadata({
   title: "Border Operations",

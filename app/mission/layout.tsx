@@ -4,10 +4,10 @@ import { missionFaq } from "@/lib/faqs";
 import { pageMetadata } from "@/lib/seo";
 
 const description =
-  "The mission of The GOAT Initiative: collect border intelligence, including in the San Diego sector, and share findings with law enforcement.";
+  "The GOAT Initiative documents child trafficking and human trafficking on the southern border, along with other border intelligence, and shares those findings with law enforcement.";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Border Intelligence Mission",
+  title: "Trafficking and Border Intelligence",
   description,
   path: "/mission",
 });

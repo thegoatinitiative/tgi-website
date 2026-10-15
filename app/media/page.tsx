@@ -193,8 +193,7 @@ export default function MediaPage() {
             
             {/* Subtitle */}
             <p className="text-gray-400 text-lg max-w-3xl mx-auto leading-relaxed mb-8">
-              Raw footage, interviews, and intel discussions exposing border vulnerabilities, 
-              SIA movements, discarded evidence, and homeland security risks.
+              Footage and interviews on child trafficking, human trafficking, border crossings, and what the team finds in the field.
             </p>
             
             {/* Stats row */}

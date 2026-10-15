@@ -341,10 +341,12 @@ export default function Home() {
             transition={{ duration: 0.5, delay: 1 }}
             className="h-16 md:h-12 flex items-center justify-center mb-8"
           >
-            <p className="sr-only">Secure the border. Gather the intel. Defend the homeland.</p>
+            <p className="sr-only">Secure the border. Report trafficking. Gather the intel. Defend the homeland.</p>
             <TypeAnimation
               sequence={[
                 "SECURE THE BORDER.",
+                2000,
+                "REPORT TRAFFICKING.",
                 2000,
                 "GATHER THE INTEL.",
                 2000,
@@ -366,11 +368,10 @@ export default function Home() {
             className="max-w-3xl mx-auto mb-8"
           >
             <p className="text-gray-400 leading-relaxed text-base md:text-lg">
-              Our mission is to safeguard national security along the U.S./Mexico border 
-              through comprehensive intelligence gathering — identifying Special Interest 
-              Aliens (SIAs), known and unknown terrorist risks, suspicious patterns, and 
-              potential homeland attack vectors — and delivering actionable insights to 
-              local, state, and federal law enforcement partners.
+              The GOAT Initiative gathers intelligence along the U.S.–Mexico border and sends it to law enforcement.
+              Child trafficking and human trafficking are a central part of that work.
+              The team identifies what it sees, documents it, and reports it.
+              It does not arrest, detain, or take custody.
             </p>
           </motion.div>
           
@@ -454,7 +455,7 @@ export default function Home() {
               <span className="text-primary text-glow-sm">Preempting Homeland Threats</span>
             </h2>
             <p className="text-gray-500 max-w-2xl mx-auto text-lg">
-              Field reporting and written analysis, shared with law enforcement.
+              Child trafficking, human trafficking, and the rest of the border record, written up for law enforcement.
             </p>
           </motion.div>
 
@@ -914,23 +915,23 @@ export default function Home() {
               CURRENT <span className="text-primary">WORK</span>
             </h2>
             <p className="text-gray-500 max-w-2xl mx-auto">
-              Document what is happening at the border and send that record to law enforcement.
+              Child trafficking and human trafficking come first. The team documents what it finds and sends that record to law enforcement.
             </p>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-6">
             {[
               {
+                title: "Child Trafficking",
+                description: "Identify the signs that a child is being trafficked, document what is seen, and report it to law enforcement, including HSI and the FBI.",
+              },
+              {
+                title: "Human Trafficking",
+                description: "Identify adults and children moved for labor or sexual exploitation, write up the record, and send it to law enforcement.",
+              },
+              {
                 title: "Border Intelligence",
-                description: "Document crossings and suspicious activity along the border, then write it up.",
-              },
-              {
-                title: "SIA Tracking",
-                description: "Identify Special Interest Aliens and prepare a written record for law enforcement.",
-              },
-              {
-                title: "Intel Sharing",
-                description: "Send findings to federal, state, and local law enforcement. Enforcement stays with those agencies.",
+                description: "Document crossings, special interest aliens, and other suspicious activity, then write it up for the same partners.",
               },
             ].map((op, index) => (
               <motion.div
@@ -1030,8 +1031,7 @@ export default function Home() {
               FUND THE <span className="text-primary text-glow-sm">MISSION</span>
             </h2>
             <p className="text-gray-400 mb-10 max-w-2xl mx-auto text-lg">
-              Your donation directly funds field operations, equipment, and intelligence 
-              gathering that protects our homeland and children.
+              Your donation funds field reporting on child trafficking, human trafficking, and other threats along the border.
             </p>
             
             {/* Quick Donate Buttons */}

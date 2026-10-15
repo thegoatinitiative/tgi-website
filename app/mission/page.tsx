@@ -33,7 +33,7 @@ export default function MissionPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
               <span className="font-heading text-xs text-primary tracking-widest">
-                BORDER INTELLIGENCE
+                CHILD AND HUMAN TRAFFICKING
               </span>
             </motion.div>
             
@@ -42,7 +42,7 @@ export default function MissionPage() {
             </h1>
             
             <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
-              Safeguarding national security through intelligence, vigilance, and unwavering dedication to the homeland.
+              Child trafficking and human trafficking are at the center of the mission, alongside the rest of the border intelligence. The team documents what it finds and sends that record to law enforcement.
             </p>
           </motion.div>
         </div>
@@ -68,19 +68,35 @@ export default function MissionPage() {
             {/* Official Mission Statement */}
             <div className="mb-6 p-6 bg-primary/5 border-l-4 border-primary rounded-sm">
               <p className="text-base md:text-lg text-gray-200 leading-relaxed font-medium">
-                The GOAT Initiative is dedicated to the collection, analysis, and dissemination of sensitive or critical information exposing and disrupting the infiltration of special interest aliens across the southern border.
+                The GOAT Initiative collects, analyzes, and shares what it finds on the southern border. Child trafficking and human trafficking are a central part of that work, along with special interest aliens and other threats. The record goes to local, state, and federal law enforcement. The organization does not arrest, detain, or take custody.
               </p>
             </div>
-            
-            <p className="text-lg text-gray-300 leading-relaxed mb-6">
-              Our mission is to <span className="text-primary font-semibold">safeguard national security</span> along 
-              the U.S./Mexico border through comprehensive intelligence gathering — identifying Special Interest 
-              Aliens (SIAs), known and unknown terrorist risks, suspicious patterns, and potential homeland 
-              attack vectors — and delivering actionable insights to local, state, and federal law enforcement partners.
-            </p>
-            
 
+            <p className="text-lg text-gray-300 leading-relaxed">
+              The team identifies trafficking when it sees the signs, writes down what it observed, and sends that report to law enforcement, including HSI and the FBI. If a crime is in progress, call 911.
+            </p>
           </motion.div>
+        </div>
+      </section>
+
+      <section className="pb-16">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="bg-dark-100/80 border border-primary/40 rounded-sm p-8">
+              <p className="font-heading text-xs text-primary tracking-widest mb-3">CENTRAL TO THE MISSION</p>
+              <h2 className="font-heading text-2xl text-gray-100 tracking-wider mb-4">CHILD TRAFFICKING</h2>
+              <p className="text-gray-400 leading-relaxed">
+                Children moved across the southern border by smugglers and traffickers. The team looks for the signs, documents what it sees, and reports suspected child trafficking to law enforcement, including HSI and the FBI.
+              </p>
+            </div>
+            <div className="bg-dark-100/80 border border-primary/40 rounded-sm p-8">
+              <p className="font-heading text-xs text-primary tracking-widest mb-3">CENTRAL TO THE MISSION</p>
+              <h2 className="font-heading text-2xl text-gray-100 tracking-wider mb-4">HUMAN TRAFFICKING</h2>
+              <p className="text-gray-400 leading-relaxed">
+                Adults and children moved for labor or sexual exploitation. The same rule applies: identify it, document it, and report it. The organization does not take custody of anyone it reports.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -103,6 +119,24 @@ export default function MissionPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
+              {
+                icon: (
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                ),
+                title: "Child Trafficking",
+                description: "Identify and report suspected child trafficking at the border to law enforcement, including HSI and the FBI.",
+              },
+              {
+                icon: (
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                ),
+                title: "Human Trafficking",
+                description: "Identify adults and children moved for labor or sexual exploitation, document the record, and send it to law enforcement.",
+              },
               {
                 icon: (
                   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -157,16 +191,6 @@ export default function MissionPage() {
                 ),
                 title: "Public Awareness",
                 description: "Educate citizens and lawmakers about the reality of border security challenges through documented evidence and reporting.",
-              },
-              {
-                icon: (
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                  </svg>
-                ),
-                title: "Child Trafficking Reports",
-                description: "Identify and report child trafficking activity at the border. Protecting the most vulnerable victims is our highest moral imperative.",
-                highlight: true,
               },
             ].map((objective, index) => (
               <motion.div
@@ -223,11 +247,9 @@ export default function MissionPage() {
                 </div>
               </div>
               <div>
-                <h3 className="font-heading text-lg text-accent mb-2">THE THREAT IS REAL</h3>
+                <h3 className="font-heading text-lg text-accent mb-2">CHILDREN AND ADULTS ARE BEING MOVED</h3>
                 <p className="text-gray-400 leading-relaxed">
-                  Every day, individuals from countries with known terrorist ties cross our southern border. 
-                  Without proper intelligence and tracking, these Special Interest Aliens disappear into our 
-                  communities, creating potential attack vectors that threaten American lives.
+                  Smugglers and traffickers move children and adults across the southern border. The GOAT Initiative treats child trafficking and human trafficking as a central part of the mission. The team identifies what it can, documents it, and reports it to law enforcement, including HSI and the FBI. If a crime is in progress, call 911.
                 </p>
               </div>
             </div>
@@ -284,8 +306,7 @@ export default function MissionPage() {
               JOIN THE <span className="text-primary">MISSION</span>
             </h2>
             <p className="text-gray-500 mb-8 max-w-xl mx-auto">
-              Support our efforts to secure the border and protect the homeland. 
-              Every contribution helps us gather more intel and save lives.
+              Support the reporting on child trafficking, human trafficking, and the rest of the border work.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link href="/donate" className="cyber-button">
