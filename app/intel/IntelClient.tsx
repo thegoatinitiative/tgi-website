@@ -27,7 +27,7 @@ export function IntelClient() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
               </svg>
               <span className="font-heading text-xs text-primary tracking-widest">
-                CLASSIFIED INTEL BRIEFINGS
+                FIELD REPORTS
               </span>
             </motion.div>
             
@@ -36,19 +36,12 @@ export function IntelClient() {
             </h1>
             
             <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed mb-8">
-              Subscribe to receive classified intelligence briefings, field reports, 
-              and exclusive updates from TGI operations directly to your inbox.
+              Field reports and written briefings from The GOAT Initiative.
+              Full articles are on Substack.
             </p>
 
             {/* Classification Banner */}
-            <div className="inline-flex items-center gap-3 px-6 py-3 bg-dark-100 border border-primary/30 rounded-sm">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-success rounded-full animate-pulse" />
-                <span className="font-mono text-xs text-success">LIVE FEED</span>
-              </div>
-              <span className="text-gray-600">|</span>
-              <span className="font-mono text-xs text-gray-500">CLEARANCE: PUBLIC</span>
-            </div>
+
           </motion.div>
         </div>
       </section>

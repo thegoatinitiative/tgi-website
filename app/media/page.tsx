@@ -60,12 +60,7 @@ function VideoCard({ video, index }: { video: (typeof videos)[number]; index: nu
               {/* Dark overlay */}
               <div className="absolute inset-0 bg-dark/40 group-hover:bg-dark/30 transition-colors" />
               
-              {/* EYES ONLY Watermark */}
-              <div className="absolute top-4 right-4 opacity-30 group-hover:opacity-60 transition-opacity">
-                <span className="font-heading text-xs text-primary tracking-widest">EYES ONLY</span>
-              </div>
-              
-              {/* Classification Badge */}
+              {/* Source badge */}
               <div className="absolute top-4 left-4">
                 <div className="flex items-center gap-2 px-2 py-1 bg-accent/80 backdrop-blur-sm rounded-sm">
                   <span className="relative flex h-1.5 w-1.5">
@@ -124,11 +119,6 @@ function VideoCard({ video, index }: { video: (typeof videos)[number]; index: nu
           <div className="flex items-center justify-between pt-4 border-t border-gray-800">
             <div className="flex items-center gap-2">
               <span className="font-mono text-[10px] text-gray-600">{video.source} · {video.date}</span>
-              <span className="text-gray-700">|</span>
-              <div className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 bg-success rounded-full animate-pulse" />
-                <span className="font-mono text-[10px] text-success">DECLASSIFIED</span>
-              </div>
             </div>
             
             <a
@@ -185,7 +175,7 @@ export default function MediaPage() {
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
               </span>
               <span className="font-heading text-sm text-accent tracking-[0.3em]">
-                VIDEO INTELLIGENCE ARCHIVE
+                PUBLIC BRIEFINGS
               </span>
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
@@ -195,7 +185,7 @@ export default function MediaPage() {
             
             {/* Title */}
             <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-gray-100 tracking-wider mb-6">
-              Declassified Video Briefings{" "}
+              Video Briefings{" "}
               <span className="text-primary text-glow-sm">&</span>{" "}
               <br className="hidden md:block" />
               Field Reports
@@ -230,23 +220,6 @@ export default function MediaPage() {
         </div>
       </section>
       
-      {/* Warning Banner */}
-      <section className="py-4 bg-accent/5 border-y border-accent/20">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-center gap-2 md:gap-3 text-sm">
-            <svg className="w-5 h-5 text-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
-            <span className="font-mono text-[10px] md:text-xs text-accent tracking-wide text-center">
-              CLASSIFIED FOOTAGE – <span className="hidden sm:inline">AUTHORIZED PERSONNEL ONLY – </span>DISTRIBUTION RESTRICTED
-            </span>
-            <svg className="w-5 h-5 text-accent flex-shrink-0 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
-          </div>
-        </div>
-      </section>
-      
       {/* Video Grid */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4">
@@ -263,15 +236,7 @@ export default function MediaPage() {
               </span>
             </div>
             
-            <div className="flex items-center gap-2">
-              <span className="font-mono text-xs text-gray-500">SORT:</span>
-              <button className="px-3 py-1 bg-primary/10 border border-primary/30 text-xs text-primary font-mono tracking-wider rounded-sm">
-                LATEST
-              </button>
-              <button className="px-3 py-1 border border-gray-700 text-xs text-gray-500 font-mono tracking-wider rounded-sm hover:border-primary/30 hover:text-gray-400 transition-colors">
-                CLASSIFICATION
-              </button>
-            </div>
+
           </motion.div>
           
           {/* Grid */}
@@ -295,7 +260,7 @@ export default function MediaPage() {
                 <span className="w-1.5 h-1.5 bg-yellow-400 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }} />
               </div>
               <span className="font-mono text-sm text-gray-500 tracking-wider">
-                MORE BRIEFINGS BEING DECLASSIFIED...
+                MORE BRIEFINGS ARE ADDED AS THEY ARE PUBLISHED.
               </span>
             </div>
           </motion.div>
@@ -326,7 +291,7 @@ export default function MediaPage() {
               </h3>
               
               <p className="text-gray-500 mb-6 max-w-lg mx-auto">
-                Get notified when new briefings are declassified. Join our intelligence network on YouTube.
+                New briefings are posted on the YouTube channel.
               </p>
               
               <a

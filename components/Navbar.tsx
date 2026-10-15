@@ -8,7 +8,7 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/mission", label: "Mission" },
   { href: "/operations", label: "Operations" },
-  { href: "/operatives", label: "Operatives" },
+  { href: "/operatives", label: "Leadership" },
   { href: "/media", label: "Video Intel" },
   { href: "/intel", label: "Intel Updates" },
   { href: "/articles", label: "Articles" },
@@ -21,7 +21,7 @@ export function Navbar() {
     <motion.nav
       initial={{ y: 0, opacity: 1 }}
       animate={{ y: 0, opacity: 1 }}
-      className="fixed top-9 left-0 right-0 z-40 bg-dark/80 backdrop-blur-md border-b border-primary/10"
+      className="fixed top-0 left-0 right-0 z-40 bg-dark/80 backdrop-blur-md border-b border-primary/10"
       role="navigation"
       aria-label="Main navigation"
     >
@@ -40,7 +40,7 @@ export function Navbar() {
                 THE GOAT INITIATIVE
               </p>
               <p className="text-xs text-gray-500 tracking-wide">
-                OFFICIAL PORTAL
+                501(c)(3) NONPROFIT
               </p>
             </div>
           </Link>
@@ -59,9 +59,7 @@ export function Navbar() {
             ))}
           </div>
 
-          {/* Right Side - Donate Button & Clearance Badge */}
           <div className="hidden lg:flex items-center gap-3 flex-shrink-0">
-            {/* Donate Button */}
             <Link
               href="/donate"
               className="px-4 py-2 bg-gradient-to-r from-primary to-cyan-400 text-dark font-heading text-xs tracking-wider rounded-sm hover:shadow-[0_0_20px_rgba(0,212,255,0.5)] transition-all duration-300 flex items-center gap-2"
@@ -71,58 +69,9 @@ export function Navbar() {
               </svg>
               DONATE
             </Link>
-            
-            {/* Clearance Badge */}
-            <motion.div
-              animate={{
-                boxShadow: [
-                  "0 0 0 0 rgba(0, 255, 159, 0.4)",
-                  "0 0 0 8px rgba(0, 255, 159, 0)",
-                  "0 0 0 0 rgba(0, 255, 159, 0.4)",
-                ],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className="flex items-center gap-2 px-3 py-1.5 bg-success/10 border border-success/30 rounded-sm"
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-success"></span>
-              </span>
-              <span className="font-heading text-xs text-success tracking-wider whitespace-nowrap">
-                CLEARANCE LEVEL 5 – ACTIVE
-              </span>
-            </motion.div>
           </div>
 
-          {/* Mobile Menu Button & Clearance Badge */}
           <div className="lg:hidden flex items-center gap-3">
-            <motion.div
-              animate={{
-                boxShadow: [
-                  "0 0 0 0 rgba(0, 255, 159, 0.4)",
-                  "0 0 0 8px rgba(0, 255, 159, 0)",
-                  "0 0 0 0 rgba(0, 255, 159, 0.4)",
-                ],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className="hidden md:flex items-center gap-2 px-2 py-1 bg-success/10 border border-success/30 rounded-sm"
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-success"></span>
-              </span>
-              <span className="font-heading text-[10px] text-success tracking-wider whitespace-nowrap">
-                LEVEL 5
-              </span>
-            </motion.div>
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="p-2 text-gray-400 hover:text-primary transition-colors"
@@ -204,18 +153,6 @@ export function Navbar() {
                 </Link>
               </motion.div>
               
-              {/* Mobile Clearance Badge */}
-              <div className="pt-4 mt-4 border-t border-primary/10">
-                <div className="flex items-center gap-2 px-4 py-2">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-success"></span>
-                  </span>
-                  <span className="font-heading text-xs text-success tracking-wider">
-                    CLEARANCE LEVEL 5 – ACTIVE
-                  </span>
-                </div>
-              </div>
             </div>
           </motion.div>
         )}

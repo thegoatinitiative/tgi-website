@@ -45,7 +45,7 @@ export const operationsFaq: FaqItem[] = [
   {
     question: "What operations does The GOAT Initiative list?",
     answer:
-      "Border intelligence, special interest alien tracking, intel fusion, evidence documentation, vulnerability mapping, public briefings, and reports of suspected child trafficking to law enforcement.",
+      "Border intelligence, special interest alien tracking, sharing with law enforcement, evidence documentation, vulnerability mapping, public briefings, and reports of suspected child trafficking.",
   },
   {
     question: "What does the child trafficking operation do?",
@@ -59,11 +59,6 @@ export const operativesFaq: FaqItem[] = [
     question: "Who leads The GOAT Initiative?",
     answer:
       "Cory Gautereaux is founder and president. Dan Conchas is vice president. Tayler James is board secretary. Hels Apffel is director of strategic intelligence.",
-  },
-  {
-    question: "Why are some names withheld?",
-    answer:
-      "Those dossiers are marked identity-protected for operational security. The public leadership is listed by name.",
   },
 ];
 

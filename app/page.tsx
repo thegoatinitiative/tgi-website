@@ -3,9 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { TypeAnimation } from "react-type-animation";
-import { useState, useEffect, useRef } from "react";
-import { AnimatePresence } from "framer-motion";
-import { RedactedText } from "@/components/RedactedText";
+import { useEffect, useRef } from "react";
 import { FaqList } from "@/components/FaqList";
 import { JsonLd } from "@/components/JsonLd";
 import { homeFaq } from "@/lib/faqs";
@@ -314,94 +312,7 @@ function ConnectingDotsBackground() {
 
 
 export default function Home() {
-  const [showAccessDenied, setShowAccessDenied] = useState(false);
-
-  const handlePortalClick = () => {
-    setShowAccessDenied(true);
-  };
-
   return (
-    <>
-      {/* Access Denied Modal */}
-      <AnimatePresence>
-        {showAccessDenied && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-dark/90 backdrop-blur-sm"
-            onClick={() => setShowAccessDenied(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              transition={{ type: "spring", damping: 25 }}
-              className="relative max-w-md w-full bg-dark-100 border-2 border-accent rounded-sm overflow-hidden"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Warning stripe */}
-              <div className="h-2 bg-gradient-to-r from-accent via-yellow-500 to-accent" />
-              
-              {/* Content */}
-              <div className="p-8 text-center">
-                {/* Icon */}
-                <motion.div
-                  animate={{ 
-                    scale: [1, 1.1, 1],
-                    rotate: [0, -5, 5, 0]
-                  }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  className="inline-flex items-center justify-center w-20 h-20 bg-accent/20 border-2 border-accent rounded-full mb-6"
-                >
-                  <svg className="w-10 h-10 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                  </svg>
-                </motion.div>
-                
-                {/* Title */}
-                <h3 className="font-heading text-2xl text-accent tracking-wider mb-2">
-                  ACCESS DENIED
-                </h3>
-                
-                {/* Error code */}
-                <p className="font-mono text-xs text-gray-500 mb-4">
-                  ERROR CODE: TGI-401-UNAUTHORIZED
-                </p>
-                
-                {/* Message */}
-                <p className="text-gray-400 mb-6">
-                  This portal requires authorized credentials. Please contact TGI administration for access permissions.
-                </p>
-                
-                {/* Contact info */}
-                <div className="bg-dark/50 border border-gray-800 rounded-sm p-4 mb-6">
-                  <p className="font-mono text-xs text-gray-500 mb-2">REQUEST ACCESS:</p>
-                  <Link 
-                    href="/contact" 
-                    className="text-primary hover:text-primary/80 transition-colors"
-                    onClick={() => setShowAccessDenied(false)}
-                  >
-                    Contact TGI Administration →
-                  </Link>
-                </div>
-                
-                {/* Close button */}
-                <button
-                  onClick={() => setShowAccessDenied(false)}
-                  className="px-6 py-2 border border-gray-700 text-gray-400 hover:border-primary hover:text-primary transition-all font-heading text-sm tracking-wider"
-                >
-                  DISMISS
-                </button>
-              </div>
-              
-              {/* Bottom stripe */}
-              <div className="h-1 bg-accent/50" />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative min-h-screen flex flex-col items-center justify-center py-20 overflow-hidden">
@@ -463,71 +374,24 @@ export default function Home() {
             </p>
           </motion.div>
           
-          {/* Redacted Text Example */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 1.6 }}
-            className="mb-10 p-4 bg-dark-100/50 border border-primary/20 rounded-sm inline-block"
-          >
-            <p className="text-sm text-gray-500 font-mono">
-              <span className="text-accent text-xs tracking-wider mr-2">[INTEL BRIEF]</span>
-              Intelligence on{" "}
-              <RedactedText 
-                revealed="migration" 
-                redacted="██████████" 
-              />{" "}
-              patterns reveals{" "}
-              <RedactedText 
-                revealed="emerging threat" 
-                redacted="████████████████" 
-              />{" "}
-              risks.
-              <span className="text-gray-600 text-xs ml-2">(tap to reveal)</span>
-            </p>
-          </motion.div>
-          
-          {/* Enter Secure Portal Button */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.8 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
-            <motion.button
-              onClick={handlePortalClick}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
-              className="relative group px-8 py-4 font-heading text-sm uppercase tracking-[0.3em] bg-primary/10 border-2 border-primary text-primary overflow-hidden"
-              style={{
-                clipPath: "polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px))",
-              }}
+            <Link
+              href="/mission"
+              className="px-8 py-4 font-heading text-sm uppercase tracking-[0.2em] bg-primary text-dark"
             >
-              {/* Glow effect */}
-              <span className="absolute inset-0 bg-primary/20 blur-xl group-hover:bg-primary/40 transition-all duration-500" />
-              
-              {/* Animated border glow */}
-              <motion.span
-                className="absolute inset-0 border-2 border-primary opacity-50"
-                animate={{
-                  boxShadow: [
-                    "0 0 10px #00d4ff, inset 0 0 10px rgba(0,212,255,0.1)",
-                    "0 0 25px #00d4ff, inset 0 0 25px rgba(0,212,255,0.2)",
-                    "0 0 10px #00d4ff, inset 0 0 10px rgba(0,212,255,0.1)",
-                  ],
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
-                style={{
-                  clipPath: "polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px))",
-                }}
-              />
-              
-              <span className="relative z-10 flex items-center gap-3">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-                ENTER SECURE PORTAL
-              </span>
-            </motion.button>
+              Read the Mission
+            </Link>
+            <Link
+              href="/operations"
+              className="px-8 py-4 font-heading text-sm uppercase tracking-[0.2em] border border-primary text-primary hover:bg-primary/10 transition-colors"
+            >
+              See the Work
+            </Link>
           </motion.div>
           
           {/* Scroll indicator */}
@@ -581,7 +445,7 @@ export default function Home() {
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
               </span>
               <span className="font-heading text-xs text-accent tracking-widest">
-                THREAT INTELLIGENCE OPERATIONS
+                FIELD REPORTING
               </span>
             </motion.div>
             
@@ -590,7 +454,7 @@ export default function Home() {
               <span className="text-primary text-glow-sm">Preempting Homeland Threats</span>
             </h2>
             <p className="text-gray-500 max-w-2xl mx-auto text-lg">
-              Advanced intelligence fusion to identify, track, and neutralize emerging threats before they materialize.
+              Field reporting and written analysis, shared with law enforcement.
             </p>
           </motion.div>
 
@@ -762,12 +626,8 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
             {[
               {
-                id: "TI-001",
                 title: "SIA & Watchlist Monitoring",
                 description: "Tracking Special Interest Aliens and flagged individuals from high-risk regions crossing the border.",
-                redactedPrefix: "Potential connections to",
-                redactedRevealed: "extremist cells",
-                redactedSuffix: "flagged for review.",
                 icon: (
                   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -777,12 +637,8 @@ export default function Home() {
                 stats: "2,400+ PROFILES MONITORED",
               },
               {
-                id: "TI-002",
                 title: "Pattern & Puzzle Analysis",
                 description: "Piecing together disparate intel to uncover emerging terror cells, travel anomalies, and potential attack plans.",
-                redactedPrefix: "Network analysis reveals",
-                redactedRevealed: "coordinated movements",
-                redactedSuffix: "across sectors.",
                 icon: (
                   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
@@ -791,12 +647,8 @@ export default function Home() {
                 stats: "847 PATTERNS IDENTIFIED",
               },
               {
-                id: "TI-003",
                 title: "Real-Time Fusion & Sharing",
-                description: "Delivering actionable, time-sensitive intelligence to law enforcement partners to neutralize threats.",
-                redactedPrefix: "Priority alerts on",
-                redactedRevealed: "imminent threats",
-                redactedSuffix: "distributed.",
+                description: "Time-sensitive reporting sent to law enforcement partners so they can act.",
                 icon: (
                   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -805,12 +657,8 @@ export default function Home() {
                 stats: "< 15 MIN RESPONSE TIME",
               },
               {
-                id: "TI-004",
                 title: "Border Vulnerability Mapping",
                 description: "Identifying unguarded sectors and smuggling vectors exploited by adversaries.",
-                redactedPrefix: "Critical gaps in",
-                redactedRevealed: "surveillance coverage",
-                redactedSuffix: "documented.",
                 icon: (
                   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
@@ -820,7 +668,7 @@ export default function Home() {
               },
             ].map((card, index) => (
               <motion.div
-                key={card.id}
+                key={card.title}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -848,33 +696,10 @@ export default function Home() {
                     transition={{ duration: 2, repeat: Infinity }}
                   />
                   
-                  {/* Header Row */}
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <div className="text-primary group-hover:text-glow transition-all duration-300">
-                        {card.icon}
-                      </div>
-                      <span className="font-mono text-xs text-gray-600 tracking-wider">
-                        {card.id}
-                      </span>
+                  <div className="flex items-start mb-4">
+                    <div className="text-primary group-hover:text-glow transition-all duration-300">
+                      {card.icon}
                     </div>
-                    
-                    {/* THREAT VECTOR Badge */}
-                    <motion.div
-                      animate={{
-                        opacity: [0.7, 1, 0.7],
-                      }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                      className="flex items-center gap-1.5 px-2 py-1 bg-accent/10 border border-accent/40 rounded-sm"
-                    >
-                      <span className="relative flex h-1.5 w-1.5">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-accent"></span>
-                      </span>
-                      <span className="font-heading text-[10px] text-accent tracking-widest">
-                        THREAT VECTOR
-                      </span>
-                    </motion.div>
                   </div>
                   
                   {/* Title */}
@@ -885,17 +710,6 @@ export default function Home() {
                   {/* Description */}
                   <p className="text-gray-400 leading-relaxed mb-4">
                     {card.description}
-                  </p>
-                  
-                  {/* Redacted Intel Line */}
-                  <p className="text-xs text-gray-500 font-mono leading-relaxed mb-6 p-2 bg-dark/50 border border-gray-800 rounded-sm">
-                    <span className="text-accent text-[10px] mr-1">[INTEL]</span>
-                    {card.redactedPrefix}{" "}
-                    <RedactedText 
-                      revealed={card.redactedRevealed} 
-                      variant="accent"
-                    />{" "}
-                    {card.redactedSuffix}
                   </p>
                   
                   {/* Stats Footer */}
@@ -923,25 +737,7 @@ export default function Home() {
             ))}
           </div>
           
-          {/* Bottom Decorative Element */}
-          <motion.div
-            initial={{ opacity: 0, scaleX: 0 }}
-            whileInView={{ opacity: 1, scaleX: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="mt-16 flex items-center justify-center gap-4"
-          >
-            <div className="h-px w-20 bg-gradient-to-r from-transparent to-primary/50" />
-            <div className="flex items-center gap-2 px-4 py-2 border border-primary/20 rounded-sm">
-              <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-              <span className="font-mono text-xs text-gray-400">
-                INTELLIGENCE OPERATIONS CENTER • ACTIVE 24/7
-              </span>
-            </div>
-            <div className="h-px w-20 bg-gradient-to-l from-transparent to-primary/50" />
-          </motion.div>
+
         </div>
       </section>
 
@@ -975,16 +771,15 @@ export default function Home() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
               <span className="font-heading text-xs text-primary tracking-widest">
-                LEADERSHIP OPERATIVES
+                LEADERSHIP
               </span>
             </motion.div>
             
             <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-gray-100 tracking-wider mb-4">
-              Elite Analysts &{" "}
-              <span className="text-primary text-glow-sm">Field Operatives</span>
+              The <span className="text-primary text-glow-sm">Officers</span>
             </h2>
             <p className="text-gray-500 max-w-2xl mx-auto text-lg">
-              The tactical minds and field experts driving intelligence operations on the front lines.
+              The people who run the organization and the reporting it sends to law enforcement.
             </p>
           </motion.div>
 
@@ -992,48 +787,36 @@ export default function Home() {
           <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
             {[
               {
-                id: "OP-001",
+                slug: "cory-gautereaux",
                 name: "Cory Gautereaux",
                 role: "Founder & President",
-                clearance: "ALPHA",
                 bio: "Army veteran leading border intel collection and threat pattern analysis.",
                 specialization: "Strategic Intelligence",
-                redactedDetail: "█████ Operations Experience",
-                status: "ACTIVE",
               },
               {
-                id: "OP-002",
+                slug: "dan-conchas",
                 name: "Dan Conchas",
                 role: "Vice President",
-                clearance: "ALPHA",
                 bio: "Expert in cross-border threat assessment and executive leadership.",
                 specialization: "Executive Leadership",
-                redactedDetail: "███ Intel Reports Authored",
-                status: "ACTIVE",
               },
               {
-                id: "OP-010",
+                slug: "tayler-james",
                 name: "Tayler James",
                 role: "Board Secretary",
-                clearance: "ALPHA",
                 bio: "Keeps the official record, certifies board actions, and carries formal correspondence for the organization.",
                 specialization: "Board Governance",
-                redactedDetail: "██████ Official Records",
-                status: "ACTIVE",
               },
               {
-                id: "OP-003",
+                slug: "hels-apffel",
                 name: "Hels Apffel",
                 role: "Director of Strategic Intelligence",
-                clearance: "ALPHA",
                 bio: "Sets collection priorities and fuses field reporting into assessments the organization can act on.",
                 specialization: "Strategic Intelligence",
-                redactedDetail: "████ Finished Briefings",
-                status: "ACTIVE",
               },
-            ].map((operative, index) => (
+            ].map((leader, index) => (
               <motion.div
-                key={operative.id}
+                key={leader.slug}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -1060,91 +843,37 @@ export default function Home() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
                       </div>
-                      {/* Status indicator */}
-                      <div className="absolute bottom-0 right-0 w-5 h-5 bg-dark border-2 border-success rounded-full flex items-center justify-center">
-                        <span className="w-2 h-2 bg-success rounded-full animate-pulse" />
-                      </div>
                     </div>
                     
-                    {/* Operative ID */}
-                    <div className="text-center mb-2">
-                      <span className="font-mono text-[10px] text-gray-600 tracking-wider">{operative.id}</span>
-                    </div>
-                    
-                    {/* Name */}
                     <h3 className="font-heading text-lg text-gray-100 text-center mb-1 group-hover:text-primary transition-colors">
-                      {operative.name}
+                      {leader.name}
                     </h3>
                     
-                    {/* Role */}
                     <p className="text-xs text-primary text-center tracking-wider mb-3">
-                      {operative.role}
+                      {leader.role}
                     </p>
-                    
-                    {/* Clearance Badge */}
-                    <div className="flex justify-center mb-4">
-                      <div className="flex items-center gap-2 px-3 py-1.5 bg-success/10 border border-success/40 rounded-sm">
-                        <svg className="w-3 h-3 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                        </svg>
-                        <span className="font-heading text-[10px] text-success tracking-widest">
-                          CLEARANCE: {operative.clearance}
-                        </span>
-                      </div>
-                    </div>
                   </div>
                   
-                  {/* Bio Section */}
-                  <div className="px-6 pb-4">
+                  <div className="px-6 pb-6">
                     <p className="text-sm text-gray-400 text-center leading-relaxed mb-3">
-                      {operative.bio}
+                      {leader.bio}
                     </p>
                     
-                    {/* Specialization tag */}
-                    <div className="flex justify-center mb-3">
+                    <div className="flex justify-center">
                       <span className="px-2 py-1 bg-primary/10 text-[10px] text-primary font-mono tracking-wider rounded-sm">
-                        {operative.specialization}
-                      </span>
-                    </div>
-                    
-                    {/* Redacted detail */}
-                    <div className="text-center">
-                      <span className="font-mono text-xs text-gray-600 tracking-wide group-hover:text-gray-500 transition-colors">
-                        {operative.redactedDetail}
+                        {leader.specialization}
                       </span>
                     </div>
                   </div>
                   
-                  {/* Footer */}
                   <div className="px-6 py-3 bg-dark-100/50 border-t border-gray-800 group-hover:border-primary/20 transition-colors">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 bg-success rounded-full animate-pulse" />
-                        <span className="font-mono text-[10px] text-success tracking-wider">
-                          {operative.status}
-                        </span>
-                      </div>
-                      <Link 
-                        href="/operatives"
-                        className="font-mono text-[10px] text-gray-500 hover:text-primary tracking-wider transition-colors"
-                      >
-                        VIEW DOSSIER →
-                      </Link>
-                    </div>
+                    <Link
+                      href={`/operatives#${leader.slug}`}
+                      className="font-mono text-[10px] text-gray-500 hover:text-primary tracking-wider transition-colors"
+                    >
+                      READ BIO →
+                    </Link>
                   </div>
-                  
-                  {/* CLEARANCE VERIFIED Stamp - appears on hover */}
-                  <motion.div
-                    initial={{ opacity: 0, rotate: -12, scale: 0.8 }}
-                    whileHover={{ opacity: 1, rotate: -12, scale: 1 }}
-                    className="absolute top-16 right-2 pointer-events-none"
-                  >
-                    <div className="px-2 py-1 border-2 border-success/60 rounded-sm bg-dark/80">
-                      <span className="font-heading text-[8px] text-success tracking-widest">
-                        CLEARANCE VERIFIED
-                      </span>
-                    </div>
-                  </motion.div>
                 </motion.div>
               </motion.div>
             ))}
@@ -1162,7 +891,7 @@ export default function Home() {
               href="/operatives"
               className="inline-flex items-center gap-2 px-6 py-3 border border-primary/30 text-primary hover:bg-primary/10 hover:border-primary transition-all duration-300 font-heading text-sm tracking-wider"
             >
-              <span>VIEW ALL OPERATIVES</span>
+              <span>MEET THE OFFICERS</span>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
@@ -1182,53 +911,36 @@ export default function Home() {
             className="text-center mb-16"
           >
             <h2 className="font-heading text-3xl md:text-4xl text-gray-100 tracking-wider mb-4">
-              CURRENT <span className="text-primary">OPERATIONS</span>
+              CURRENT <span className="text-primary">WORK</span>
             </h2>
             <p className="text-gray-500 max-w-2xl mx-auto">
-              Active missions and ongoing initiatives. Classification level varies.
+              Document what is happening at the border and send that record to law enforcement.
             </p>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-6">
             {[
               {
-                code: "OP-ALPHA",
                 title: "Border Intelligence",
-                status: "ACTIVE",
-                statusColor: "text-success",
-                description: "Real-time intelligence gathering and threat assessment along critical border sectors.",
+                description: "Document crossings and suspicious activity along the border, then write it up.",
               },
               {
-                code: "OP-BRAVO",
                 title: "SIA Tracking",
-                status: "IN PROGRESS",
-                statusColor: "text-yellow-400",
-                description: "Identification and monitoring of Special Interest Aliens and potential security threats.",
+                description: "Identify Special Interest Aliens and prepare a written record for law enforcement.",
               },
               {
-                code: "OP-CHARLIE",
                 title: "Intel Sharing",
-                status: "ACTIVE",
-                statusColor: "text-success",
-                description: "Coordinated intelligence dissemination to federal, state, and local law enforcement partners.",
+                description: "Send findings to federal, state, and local law enforcement. Enforcement stays with those agencies.",
               },
             ].map((op, index) => (
               <motion.div
-                key={op.code}
+                key={op.title}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="hud-panel p-6 hover:border-primary/40 transition-colors group"
               >
-                <div className="flex items-center justify-between mb-4">
-                  <span className="font-heading text-xs text-primary tracking-widest">
-                    {op.code}
-                  </span>
-                  <span className={`font-heading text-xs ${op.statusColor} tracking-wider`}>
-                    {op.status}
-                  </span>
-                </div>
                 <h3 className="font-heading text-lg text-gray-100 mb-2 group-hover:text-primary transition-colors">
                   {op.title}
                 </h3>
@@ -1431,6 +1143,5 @@ export default function Home() {
       />
       <FaqList items={homeFaq} />
     </div>
-    </>
   );
 }

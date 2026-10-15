@@ -75,8 +75,8 @@ export function ArticlesClient({ children }: { children?: React.ReactNode }) {
                 </div>
                 
                 <p className="text-gray-400 mb-6 leading-relaxed">
-                  Subscribe to receive classified intelligence briefings, field reports, 
-                  and exclusive updates from TGI operations directly to your inbox.
+                  Field reports and written briefings from Cory Gautereaux.
+                  The full articles are on Substack.
                 </p>
                 
                 {/* Substack embed */}

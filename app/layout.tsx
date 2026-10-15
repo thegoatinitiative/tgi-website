@@ -2,9 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Orbitron } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-import { TrustBanner } from "@/components/TrustBanner";
 import { Navbar } from "@/components/Navbar";
-import { FloatingHUD } from "@/components/FloatingHUD";
 import { FloatingDonate } from "@/components/FloatingDonate";
 import { Footer } from "@/components/Footer";
 import { VisitorTracker } from "@/components/VisitorTracker";
@@ -70,7 +68,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "TGI Portal",
+    title: "The GOAT Initiative",
   },
   other: {
     "google-adsense-account": adsensePublisherId,
@@ -119,10 +117,6 @@ export default function RootLayout({
         
         {/* Main Content Wrapper */}
         <div className="relative z-10 flex flex-col min-h-screen">
-          {/* Trust Banner */}
-          <TrustBanner />
-          
-          {/* Navigation */}
           <Navbar />
           
           {/* Main Content */}
@@ -132,7 +126,7 @@ export default function RootLayout({
           >
             Skip to content
           </a>
-          <main id="content" className="flex-grow pt-28">
+          <main id="content" className="flex-grow pt-20">
             {children}
           </main>
           
@@ -140,10 +134,6 @@ export default function RootLayout({
           <Footer />
         </div>
         
-        {/* Floating HUD */}
-        <FloatingHUD />
-        
-        {/* Floating Donate Button */}
         <FloatingDonate />
         
         {/* Visitor Tracking */}

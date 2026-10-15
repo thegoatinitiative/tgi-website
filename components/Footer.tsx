@@ -2,8 +2,6 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { IntelTicker } from "./IntelTicker";
-
 const socialLinks = [
   {
     name: "X (Twitter)",
@@ -37,7 +35,7 @@ const socialLinks = [
 const exploreLinks = [
   { label: "Mission", href: "/mission" },
   { label: "Operations", href: "/operations" },
-  { label: "Operatives", href: "/operatives" },
+  { label: "Leadership", href: "/operatives" },
   { label: "Video Intel", href: "/media" },
   { label: "Intel Updates", href: "/intel" },
   { label: "Articles", href: "/articles" },
@@ -54,39 +52,6 @@ const footerLinks = [
 export function Footer() {
   return (
     <footer className="relative z-10 border-t border-primary/10 bg-dark-100/50 backdrop-blur-sm">
-      {/* Intel Ticker */}
-      <IntelTicker />
-      
-      {/* Monitoring Disclaimer */}
-      <div className="bg-accent/5 border-b border-accent/20 py-3">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-center gap-2 text-xs text-accent/80">
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-              />
-            </svg>
-            <span className="font-medium tracking-wide">
-              THIS PORTAL IS MONITORED FOR SECURITY PURPOSES. ALL ACTIVITIES ARE LOGGED.
-            </span>
-          </div>
-        </div>
-      </div>
-
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

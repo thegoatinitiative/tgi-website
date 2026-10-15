@@ -2,8 +2,6 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { RedactedText } from "@/components/RedactedText";
-
 export default function MissionPage() {
   return (
     <div className="min-h-screen py-12">
@@ -35,7 +33,7 @@ export default function MissionPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
               <span className="font-heading text-xs text-primary tracking-widest">
-                MISSION BRIEFING
+                BORDER INTELLIGENCE
               </span>
             </motion.div>
             
@@ -63,7 +61,7 @@ export default function MissionPage() {
             <div className="flex items-center gap-3 mb-6">
               <div className="w-1 h-12 bg-gradient-to-b from-primary to-success" />
               <h2 className="font-heading text-2xl text-gray-100 tracking-wider">
-                PRIMARY DIRECTIVE
+                WHAT WE DO
               </h2>
             </div>
             
@@ -81,15 +79,7 @@ export default function MissionPage() {
               attack vectors — and delivering actionable insights to local, state, and federal law enforcement partners.
             </p>
             
-            <div className="p-4 bg-dark/50 border border-primary/20 rounded-sm">
-              <p className="text-sm text-gray-400 font-mono">
-                <span className="text-accent text-xs mr-2">[CLASSIFIED]</span>
-                Current operations focus on{" "}
-                <RedactedText revealed="critical border sectors" variant="primary" />{" "}
-                with emphasis on{" "}
-                <RedactedText revealed="high-threat corridors" variant="accent" />.
-              </p>
-            </div>
+
           </motion.div>
         </div>
       </section>
@@ -174,7 +164,7 @@ export default function MissionPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                   </svg>
                 ),
-                title: "Child Trafficking Interdiction",
+                title: "Child Trafficking Reports",
                 description: "Identify and report child trafficking activity at the border. Protecting the most vulnerable victims is our highest moral imperative.",
                 highlight: true,
               },
@@ -253,9 +243,9 @@ export default function MissionPage() {
               <div>
                 <h3 className="font-heading text-lg text-primary mb-2">FILLING THE GAP</h3>
                 <p className="text-gray-400 leading-relaxed">
-                  The GOAT Initiative exists to fill critical intelligence gaps that government agencies 
-                  alone cannot address. Our operatives work on the ground, gathering evidence and 
-                  connecting dots that would otherwise go unnoticed.
+                  The GOAT Initiative exists to fill intelligence gaps that government agencies
+                  alone cannot address. The team works in the field, gathering evidence and
+                  writing up what would otherwise go unnoticed.
                 </p>
               </div>
             </div>

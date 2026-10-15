@@ -8,13 +8,13 @@ const DONORBOX_CAMPAIGN = "the-goat-initiative";
 
 const supportTiers = [
   {
-    name: "OPERATIVE",
+    name: "SUPPORTER",
     amount: "$25",
     rawAmount: 25,
     period: "/month",
     description: "Support basic field operations and intelligence gathering.",
     features: [
-      "Fund fuel & transportation for field operatives",
+      "Fund fuel and transportation for field work",
       "Provide supplies for border documentation missions",
       "Support evidence collection & preservation",
     ],
@@ -27,7 +27,7 @@ const supportTiers = [
     period: "/month",
     description: "Fund advanced analysis tools and agency coordination.",
     features: [
-      "All Operative impact, plus:",
+      "All Supporter impact, plus:",
       "Fund camera & surveillance equipment",
       "Support drone operations for sector mapping",
       "Enable secure communications infrastructure",
@@ -242,7 +242,7 @@ export default function SupportPage() {
                   </svg>
                 ),
                 title: "Field Operations",
-                description: "Transportation, supplies, and logistics for operatives in the field.",
+                description: "Transportation, supplies, and logistics for the team in the field.",
               },
               {
                 icon: (
