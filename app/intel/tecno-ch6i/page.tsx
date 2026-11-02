@@ -3,15 +3,15 @@ import { pageMetadata } from "@/lib/seo";
 import { FerReader } from "./reader";
 
 const description =
-  "Device forensic report on an unlocked TECNO CAMON 19 Neo recovered at Otay Mountain. Prepared by The GOAT Initiative.";
+  "Device forensic report on a handset associated with Feroz Shah of Mardan, recovered at Otay Mountain. Prepared by The GOAT Initiative.";
 
 export const metadata: Metadata = {
   ...pageMetadata({
-    title: "TECNO CAMON 19 Neo",
+    title: "Feroz Shah's Phone Found on Otay Mountain",
     description,
     path: "/intel/tecno-ch6i",
   }),
-  title: { absolute: "TECNO CAMON 19 Neo | The GOAT Initiative" },
+  title: { absolute: "Feroz Shah's Phone Found on Otay Mountain | The GOAT Initiative" },
   robots: { index: false, follow: false },
 };
 

@@ -95,7 +95,7 @@ export function FerReader() {
   return (
     <div className="min-h-screen py-12">
       <section className="py-10">
-        <div className="max-w-3xl mx-auto px-4">
+        <div className="max-w-[1114px] mx-auto px-3 sm:px-4">
           <Link
             href="/intel"
             className="inline-flex items-center gap-2 font-mono text-xs text-primary tracking-widest mb-8 hover:underline"
@@ -109,30 +109,30 @@ export function FerReader() {
           <p className="font-mono text-xs text-primary tracking-widest mb-4">
             FIELD REPORT · 6 SEP 2026 · FER-2026-0906-TECNO-CH6i
           </p>
-          <h1 className="font-heading text-3xl md:text-5xl text-gray-100 tracking-wider mb-4">
-            TECNO CAMON <span className="text-primary text-glow-sm">19 NEO</span>
+          <h1 className="font-heading text-2xl md:text-4xl text-gray-100 tracking-wider leading-tight mb-4 max-w-5xl">
+            FEROZ SHAH'S PHONE FOUND ON <span className="text-primary text-glow-sm">OTAY MOUNTAIN</span>
           </h1>
-          <p className="text-gray-400 leading-relaxed mb-4">
-            Unlocked handset recovered at Otay Mountain. Device forensic report prepared by The GOAT Initiative.
+          <p className="text-gray-400 leading-relaxed">
+            Handset associated with Feroz Shah of Mardan, recovered in the Otay Mountain wilderness. Device forensic report prepared by The GOAT Initiative.
           </p>
-          <p className="text-sm text-gray-500 leading-relaxed">
+          <p className="mt-4 text-gray-400 leading-relaxed">
             Some pages are omitted from this public copy.
           </p>
         </div>
       </section>
 
       <section className="pb-16">
-        <div className="max-w-3xl mx-auto px-4 space-y-6">
+        <div className="max-w-[1114px] mx-auto px-3 sm:px-4 space-y-6">
           {FER_PUBLIC_PAGES.map((page, index) => (
-            <figure key={page} className="bg-dark-100/80 border border-gray-800 rounded-sm overflow-hidden">
+            <figure key={page} className="bg-dark-100/80 border border-gray-800 rounded-sm overflow-x-auto">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={ferPageSrc(page)}
-                alt={`TECNO CH6i forensic report, page ${page}`}
+                alt={`Feroz Shah phone found on Otay Mountain, report page ${page}`}
                 width={1082}
                 height={1400}
                 loading={index === 0 ? "eager" : "lazy"}
-                className="w-full h-auto bg-white"
+                className="mx-auto block h-auto w-full max-w-[1082px] bg-[#b6b2ac] brightness-[0.68] sepia-[0.14]"
               />
               <figcaption className="px-4 py-2 font-mono text-[10px] text-gray-600 tracking-widest">
                 PAGE {page}

@@ -27,3 +27,4 @@ Official site: https://www.thegoatinitiative.org
 ## Not for indexing
 
 - https://www.thegoatinitiative.org/intel/tecno-ch6i is disallowed and marked noindex
+- https://www.thegoatinitiative.org/intel/iphone-11 is disallowed and marked noindex

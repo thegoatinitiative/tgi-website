@@ -8,7 +8,7 @@ export function VisitorTracker() {
 
   useEffect(() => {
     // The briefing reader sends its own timed record.
-    if (pathname === "/intel/tecno-ch6i") return;
+    if (pathname === "/intel/tecno-ch6i" || pathname === "/intel/iphone-11") return;
 
     // Send tracking data
     const trackVisit = async () => {

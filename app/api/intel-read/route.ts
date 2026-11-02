@@ -165,6 +165,11 @@ export async function POST(request: NextRequest) {
     const sessionId = typeof body.sessionId === "string" ? body.sessionId.slice(0, 36) : "";
     const priorMessageId = typeof body.messageId === "string" ? body.messageId : null;
     const referrer = typeof body.referrer === "string" ? body.referrer.slice(0, 200) : "";
+    const reportKey = body.report === "iphone-11" ? "iphone-11" : "tecno-ch6i";
+    const reportLabel =
+      reportKey === "iphone-11"
+        ? "Chinese iPhone, border wall · TGI-IIR-2026-1101-001"
+        : "Feroz Shah, Otay Mountain · FER-2026-0906";
 
     const ip = clientIp(request);
     const userAgent = (request.headers.get("user-agent") || "Unknown").slice(0, 300);
@@ -211,6 +216,7 @@ export async function POST(request: NextRequest) {
       status,
       visibleSeconds,
       openSeconds,
+      report: reportKey,
       session: sessionId.slice(0, 8),
       referrer: referrer || null,
     };
@@ -235,7 +241,7 @@ export async function POST(request: NextRequest) {
       { name: "Location", value: location, inline: true },
       { name: "Device", value: device, inline: true },
       { name: "Network", value: network.slice(0, 1024), inline: false },
-      { name: "Report", value: "TECNO CH6i FER · FER-2026-0906", inline: true },
+      { name: "Report", value: reportLabel, inline: true },
       { name: "Session", value: sessionId ? `\`${sessionId.slice(0, 8)}\`` : "—", inline: true },
       ...(referrer ? [{ name: "Referrer", value: referrer, inline: false }] : []),
       ...(mapsLink ? [{ name: "Map", value: `[View on Google Maps](${mapsLink})`, inline: false }] : []),
