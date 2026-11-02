@@ -94,7 +94,7 @@ export function IntelClient() {
                     FIELD REPORT · 6 SEP 2026
                   </p>
                   <h2 className="font-heading text-xl md:text-2xl text-gray-100 tracking-wider leading-tight mb-3 max-w-3xl">
-                    FEROZ SHAH'S PHONE FOUND ON OTAY MOUNTAIN
+                    {"FEROZ SHAH'S PHONE FOUND ON OTAY MOUNTAIN"}
                   </h2>
                   <p className="text-gray-400 max-w-2xl leading-relaxed">
                     Handset associated with Feroz Shah of Mardan, recovered at Otay Mountain. Prepared by The GOAT Initiative.
