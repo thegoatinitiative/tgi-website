@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { classifyGovernment, noteGovernmentIp } from "@/lib/government-network";
+import { getSession } from "@/lib/session";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 // Your Discord Webhook URL - Set this in your environment variables
 const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL || "";
@@ -99,6 +103,19 @@ export async function POST(request: NextRequest) {
       ? `https://www.google.com/maps?q=${geo.lat},${geo.lon}`
       : null;
 
+    let visitorName = "Signed out";
+    let visitorEmail = "—";
+    try {
+      const session = await getSession();
+      if (session) {
+        visitorName = session.name.replace(/[`<>\r\n]/g, "").trim().slice(0, 80) || "—";
+        visitorEmail = session.email.replace(/[`<>\r\n]/g, "").trim().slice(0, 200) || "—";
+      }
+    } catch {
+      visitorName = "—";
+      visitorEmail = "—";
+    }
+
     const flag = geo
       ? classifyGovernment({
           country: geo.country,
@@ -134,6 +151,16 @@ export async function POST(request: NextRequest) {
                     inline: false,
                   }]
                 : []),
+              {
+                name: "Name",
+                value: visitorName,
+                inline: true,
+              },
+              {
+                name: "Email",
+                value: visitorEmail,
+                inline: true,
+              },
               {
                 name: "📍 Location",
                 value: location,
