@@ -41,6 +41,7 @@ const exploreLinks = [
   { label: "Articles", href: "/articles" },
   { label: "Donate", href: "/donate" },
   { label: "Contact", href: "/contact" },
+  { label: "Sign in", href: "/login" },
 ];
 
 const footerLinks = [

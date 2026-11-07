@@ -8,5 +8,5 @@ export const IIR_1101_PAGES = [
 ] as const;
 
 export function iir1101PageSrc(page: number): string {
-  return `/intel/iphone-11/page-${String(page).padStart(2, "0")}.jpg?v=6`;
+  return `/api/intel-file/iphone-11/${page}`;
 }

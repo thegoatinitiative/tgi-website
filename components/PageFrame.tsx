@@ -12,6 +12,7 @@ const explore = [
   { href: "/articles", label: "Articles" },
   { href: "/donate", label: "Donate" },
   { href: "/contact", label: "Contact" },
+  { href: "/join", label: "Sign up" },
 ];
 
 export function PageFrame({

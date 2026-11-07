@@ -2,6 +2,7 @@ import { appendFile, mkdir } from "fs/promises";
 import { dirname } from "path";
 import { NextRequest, NextResponse } from "next/server";
 import { classifyGovernment, noteGovernmentIp } from "@/lib/government-network";
+import { getSession } from "@/lib/session";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -172,6 +173,13 @@ export async function POST(request: NextRequest) {
         : "Feroz Shah, Otay Mountain · FER-2026-0906";
 
     const ip = clientIp(request);
+    let account = "Signed out";
+    try {
+      const session = await getSession();
+      if (session) account = `${session.name} · ${session.email}`.replace(/[`<>\r\n]/g, "").slice(0, 200);
+    } catch {
+      account = "—";
+    }
     const userAgent = (request.headers.get("user-agent") || "Unknown").slice(0, 300);
     const device = parseUserAgent(userAgent);
     const geo = await getGeoData(ip);
@@ -237,6 +245,7 @@ export async function POST(request: NextRequest) {
       { name: "Time on report", value: formatDuration(visibleSeconds), inline: true },
       { name: "Tab open", value: formatDuration(openSeconds), inline: true },
       { name: "Status", value: status === "left" ? "Left" : "Reading", inline: true },
+      { name: "Account", value: account, inline: false },
       { name: "IP Address", value: `\`${ip}\``, inline: true },
       { name: "Location", value: location, inline: true },
       { name: "Device", value: device, inline: true },

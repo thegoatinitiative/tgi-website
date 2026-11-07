@@ -8,6 +8,8 @@ const paths = [
   "/operatives",
   "/media",
   "/intel",
+  "/join",
+  "/login",
   "/articles",
   "/donate",
   "/contact",

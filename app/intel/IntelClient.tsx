@@ -2,20 +2,151 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { REPORTS, type ReportId } from "@/lib/reports";
 
 const SUBSTACK_URL = "https://substack.com/@thecorygoat";
 
-export function IntelClient() {
+type IntelReport = {
+  id: ReportId;
+  href: string;
+  date: string;
+  title: string;
+  summary: string;
+  product: string;
+};
+
+const reportCategories: { id: string; title: string; reports: IntelReport[] }[] = [
+  {
+    id: "electronic-devices",
+    title: "Electronic devices found",
+    reports: [
+      {
+        id: "iphone-11",
+        href: "/intel/iphone-11",
+        date: "1 NOV 2026",
+        title: "Chinese iPhone found in the desert next to the border wall",
+        summary:
+          "Handset recovered off Jewel Valley Road in Boulevard, California. Intelligence report prepared by The GOAT Initiative.",
+        product: "TGI-IIR-2026-1101-001",
+      },
+      {
+        id: "tecno-ch6i",
+        href: "/intel/tecno-ch6i",
+        date: "6 SEP 2026",
+        title: "Feroz Shah's phone found on Otay Mountain",
+        summary:
+          "Handset associated with Feroz Shah of Mardan, recovered at Otay Mountain. Prepared by The GOAT Initiative.",
+        product: "FER-2026-0906-TECNO-CH6i",
+      },
+    ],
+  },
+  {
+    id: "identity-documents",
+    title: "IDs, passports and travel documents found",
+    reports: [
+      {
+        id: "iphone-11",
+        href: "/intel/iphone-11#page-9",
+        date: "1 NOV 2026",
+        title: "Passport and travel documents on the Boulevard iPhone",
+        summary:
+          "Passport data page, airline tickets, and Colombian departure paperwork photographed on the handset recovered off Jewel Valley Road.",
+        product: "TGI-IIR-2026-1101-001",
+      },
+      {
+        id: "tecno-ch6i",
+        href: "/intel/tecno-ch6i#page-33",
+        date: "6 SEP 2026",
+        title: "Identity and visa documents on the Otay Mountain handset",
+        summary:
+          "Identity papers and visa packets for other travelers, stored on the handset recovered at Otay Mountain.",
+        product: "FER-2026-0906-TECNO-CH6i",
+      },
+    ],
+  },
+];
+
+function ReportCard({
+  report,
+  signedIn,
+  confirmed,
+  staff,
+  unlocked,
+}: {
+  report: IntelReport;
+  signedIn: boolean;
+  confirmed: boolean;
+  staff: boolean;
+  unlocked: boolean;
+}) {
+  const href = !signedIn
+    ? `/join?next=${encodeURIComponent(report.href)}`
+    : !confirmed && !staff
+      ? "/account"
+      : report.href;
+  const label = !signedIn
+    ? "Sign up to read"
+    : !confirmed && !staff
+      ? "Confirm email"
+      : unlocked
+        ? "Open report"
+        : staff
+          ? "Preview"
+          : "Locked";
+
+  return (
+    <Link
+      href={href}
+      className="block bg-dark-100/80 border border-primary/30 rounded-sm overflow-hidden hover:border-primary/60 transition-colors"
+    >
+      <div className="h-1 bg-gradient-to-r from-primary via-cyan-400 to-primary" />
+      <div className="p-5 md:p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="min-w-0">
+          <p className="text-sm text-primary mb-2">
+            {report.date}
+            <span className="text-gray-500"> · {unlocked ? "Released" : "Locked"}</span>
+          </p>
+          <h3 className="text-lg md:text-xl font-medium text-gray-50 leading-snug mb-2 text-balance">
+            {report.title}
+          </h3>
+          <p className="text-gray-300 leading-relaxed">{report.summary}</p>
+          <p className="text-sm text-gray-400 mt-3">{report.product}</p>
+        </div>
+        <span className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-dark font-medium text-sm shrink-0">
+          {label}
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </span>
+      </div>
+    </Link>
+  );
+}
+
+export function IntelClient({
+  signedIn,
+  confirmed,
+  staff,
+  unlocked,
+}: {
+  signedIn: boolean;
+  confirmed: boolean;
+  staff: boolean;
+  unlocked: ReportId[];
+}) {
+  const released = REPORTS.filter((report) => unlocked.includes(report.id)).length;
+  const next = REPORTS.find((report) => !unlocked.includes(report.id));
+
   return (
     <div className="min-h-screen py-12">
       {/* Header */}
-      <section className="py-16 relative overflow-hidden">
-        <div className="max-w-5xl mx-auto px-4 relative z-10">
+      <section className="pt-8 pb-10">
+        <div className="max-w-5xl mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center"
+            className="text-left sm:text-center"
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
@@ -31,13 +162,16 @@ export function IntelClient() {
               </span>
             </motion.div>
             
-            <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-gray-100 tracking-wider mb-6">
+            <h1 className="font-heading text-3xl sm:text-5xl text-gray-100 tracking-normal sm:tracking-wide leading-tight mb-4">
               INTEL <span className="text-primary text-glow-sm">UPDATES</span>
             </h1>
             
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed mb-8">
-              Field reports and written briefings from The GOAT Initiative.
-              Full articles are on Substack.
+            <p className="text-base md:text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed mb-3">
+              Field reports from The GOAT Initiative, grouped by what was recovered.
+              Each report stays locked until we release it. Confirm the email we send, then you can read a released report.
+            </p>
+            <p className="text-sm text-gray-400 mb-2">
+              {released} of {REPORTS.length} reports released
             </p>
 
             {/* Classification Banner */}
@@ -46,73 +180,49 @@ export function IntelClient() {
         </div>
       </section>
 
-      <section className="pb-4">
-        <div className="max-w-5xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <div className="space-y-6">
-            <Link
-              href="/intel/iphone-11"
-              className="block bg-dark-100/80 border border-primary/30 rounded-sm overflow-hidden hover:border-primary/60 transition-colors"
-            >
-              <div className="h-1 bg-gradient-to-r from-primary via-cyan-400 to-primary" />
-              <div className="p-8 md:p-10 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-                <div>
-                  <p className="font-mono text-xs text-primary tracking-widest mb-3">
-                    FIELD REPORT · 1 NOV 2026
-                  </p>
-                  <h2 className="font-heading text-xl md:text-2xl text-gray-100 tracking-wider leading-tight mb-3 max-w-3xl">
-                    CHINESE IPHONE FOUND IN THE DESERT NEXT TO THE BORDER WALL
-                  </h2>
-                  <p className="text-gray-400 max-w-2xl leading-relaxed">
-                    Handset recovered off Jewel Valley Road in Boulevard, California. Intelligence report prepared by The GOAT Initiative.
-                  </p>
-                  <p className="font-mono text-[10px] text-gray-600 tracking-widest mt-4">
-                    TGI-IIR-2026-1101-001
-                  </p>
-                </div>
-                <span className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-dark font-heading text-sm tracking-wider shrink-0">
-                  OPEN REPORT
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                  </svg>
+      {staff && next ? (
+        <section className="pb-4">
+          <div className="max-w-5xl mx-auto px-4">
+            <form action="/api/auth/unlock" method="post" className="border border-primary/30 bg-dark-100/80 p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <p className="font-mono text-[10px] text-primary tracking-widest mb-2">STAFF</p>
+                <p className="text-gray-300">Next release: {next.title}</p>
+              </div>
+              <input type="hidden" name="expected" value={next.id} />
+              <button type="submit" className="px-6 py-3 bg-primary text-dark font-heading text-sm tracking-wider shrink-0">
+                UNLOCK NEXT
+              </button>
+            </form>
+          </div>
+        </section>
+      ) : null}
+
+      <section className="pb-8">
+        <div className="max-w-5xl mx-auto px-4 space-y-10">
+          {reportCategories.map((category) => (
+            <div key={category.id} id={category.id}>
+              <div className="flex flex-col gap-1 border-b border-gray-700 pb-3 mb-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-x-4">
+                <h2 className="text-base md:text-lg font-medium text-gray-100 leading-snug">
+                  {category.title}
+                </h2>
+                <span className="text-sm text-gray-400 sm:shrink-0">
+                  {category.reports.length} {category.reports.length === 1 ? "report" : "reports"}
                 </span>
               </div>
-            </Link>
-            <Link
-              href="/intel/tecno-ch6i"
-              className="block bg-dark-100/80 border border-primary/30 rounded-sm overflow-hidden hover:border-primary/60 transition-colors"
-            >
-              <div className="h-1 bg-gradient-to-r from-primary via-cyan-400 to-primary" />
-              <div className="p-8 md:p-10 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-                <div>
-                  <p className="font-mono text-xs text-primary tracking-widest mb-3">
-                    FIELD REPORT · 6 SEP 2026
-                  </p>
-                  <h2 className="font-heading text-xl md:text-2xl text-gray-100 tracking-wider leading-tight mb-3 max-w-3xl">
-                    {"FEROZ SHAH'S PHONE FOUND ON OTAY MOUNTAIN"}
-                  </h2>
-                  <p className="text-gray-400 max-w-2xl leading-relaxed">
-                    Handset associated with Feroz Shah of Mardan, recovered at Otay Mountain. Prepared by The GOAT Initiative.
-                  </p>
-                  <p className="font-mono text-[10px] text-gray-600 tracking-widest mt-4">
-                    FER-2026-0906-TECNO-CH6i
-                  </p>
-                </div>
-                <span className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-dark font-heading text-sm tracking-wider shrink-0">
-                  OPEN REPORT
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                  </svg>
-                </span>
+              <div className="space-y-4">
+                {category.reports.map((report) => (
+                  <ReportCard
+                    key={report.href}
+                    report={report}
+                    signedIn={signedIn}
+                    confirmed={confirmed}
+                    staff={staff}
+                    unlocked={unlocked.includes(report.id)}
+                  />
+                ))}
               </div>
-            </Link>
             </div>
-          </motion.div>
+          ))}
         </div>
       </section>
 

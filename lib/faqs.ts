@@ -82,7 +82,7 @@ export const intelFaq: FaqItem[] = [
   {
     question: "What is published on Intel Updates?",
     answer:
-      "Notices from field reporting, plus links to the written briefings and the video briefings. Full articles live on the Articles page and on Substack.",
+      "Field reports grouped as electronic devices found, and as IDs, passports, and travel documents found. Each report stays locked until The GOAT Initiative releases it. An account is required to read a released report, and the email address has to be confirmed. Full articles live on the Articles page and on Substack.",
   },
 ];
 

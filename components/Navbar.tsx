@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
@@ -13,6 +13,32 @@ const navLinks = [
   { href: "/intel", label: "Intel Updates" },
   { href: "/articles", label: "Articles" },
 ];
+
+function AccountLink({ onClick, className }: { onClick?: () => void; className: string }) {
+  const [href, setHref] = useState("/login");
+  const [label, setLabel] = useState("Sign in");
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/auth/me")
+      .then((response) => response.json())
+      .then((data: { signedIn?: boolean }) => {
+        if (cancelled || !data.signedIn) return;
+        setHref("/account");
+        setLabel("Account");
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return (
+    <Link href={href} onClick={onClick} className={className}>
+      {label}
+    </Link>
+  );
+}
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -60,6 +86,7 @@ export function Navbar() {
           </div>
 
           <div className="hidden lg:flex items-center gap-3 flex-shrink-0">
+            <AccountLink className="px-3 py-2 text-sm text-gray-400 hover:text-primary transition-colors font-medium tracking-wide" />
             <Link
               href="/donate"
               className="px-4 py-2 bg-gradient-to-r from-primary to-cyan-400 text-dark font-heading text-xs tracking-wider rounded-sm hover:shadow-[0_0_20px_rgba(0,212,255,0.5)] transition-all duration-300 flex items-center gap-2"
@@ -132,11 +159,22 @@ export function Navbar() {
                 </motion.div>
               ))}
               
-              {/* Mobile Donate Button */}
               <motion.div
                 initial={{ x: -20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: navLinks.length * 0.1 }}
+              >
+                <AccountLink
+                  onClick={() => setIsOpen(false)}
+                  className="block px-4 py-3 text-gray-400 hover:text-primary hover:bg-primary/5 transition-colors rounded-sm font-medium tracking-wide"
+                />
+              </motion.div>
+
+              {/* Mobile Donate Button */}
+              <motion.div
+                initial={{ x: -20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: (navLinks.length + 1) * 0.1 }}
                 className="pt-2"
               >
                 <Link

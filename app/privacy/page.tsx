@@ -33,7 +33,7 @@ export default function PrivacyPage() {
             </h1>
             
             <p className="text-gray-400">
-              Last Updated: October 2, 2026
+              Last Updated: November 7, 2026
             </p>
           </motion.div>
         </div>
@@ -52,7 +52,7 @@ export default function PrivacyPage() {
               <div className="hud-panel p-6">
                 <h2 className="font-heading text-xl text-primary tracking-wider mb-4">1. INFORMATION WE COLLECT</h2>
                 <p className="text-gray-400 leading-relaxed">
-                  The GOAT Initiative (&quot;TGI,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) collects information you provide directly to us, such as when you make a donation, sign up for our newsletter, contact us, or otherwise communicate with us. This may include your name, email address, mailing address, phone number, and payment information.
+                  The GOAT Initiative (&quot;TGI,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) collects information you provide directly to us, such as when you make a donation, sign up for our newsletter, create an account to read field reports, contact us, or otherwise communicate with us. This may include your name, email address, mailing address, phone number, and payment information. A report account stores your name, email address, and a one-way hash of your password. We do not store the password itself. We email that address a confirmation link.
                 </p>
               </div>
 
@@ -87,7 +87,7 @@ export default function PrivacyPage() {
               <div className="hud-panel p-6">
                 <h2 className="font-heading text-xl text-primary tracking-wider mb-4">5. COOKIES AND TRACKING</h2>
                 <p className="text-gray-400 leading-relaxed">
-                  Our website may use cookies and similar tracking technologies to enhance your experience. You can control cookies through your browser settings. We may also collect analytics data to improve our website and services. When you open a briefing on this site, we record the IP address, approximate location, device, and how long that briefing stays open in your browser.
+                  Our website may use cookies and similar tracking technologies to enhance your experience. You can control cookies through your browser settings. We may also collect analytics data to improve our website and services. A sign-in cookie keeps a report account logged in. It is limited to this site. When you create a report account, sign in, confirm your email, or open a briefing, we record the IP address, approximate location, device, and the account email. We review that record in a private staff channel. Opening a briefing also records how long it stays open in your browser.
                 </p>
               </div>
 

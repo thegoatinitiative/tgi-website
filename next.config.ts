@@ -109,6 +109,10 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  // Page images are read from content/intel by the signed-in file route.
+  outputFileTracingIncludes: {
+    "/api/intel-file/[report]/[page]": ["./content/intel/**/*"],
+  },
   // Allow external images
   images: {
     remotePatterns: [

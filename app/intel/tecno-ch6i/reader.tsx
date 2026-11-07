@@ -70,6 +70,11 @@ export function FerReader() {
         .catch(() => {});
     };
 
+    const hash = window.location.hash.replace("#", "");
+    if (hash) {
+      window.setTimeout(() => document.getElementById(hash)?.scrollIntoView({ block: "start" }), 50);
+    }
+
     post("reading", true);
     const timer = window.setInterval(() => {
       if (document.visibilityState === "visible") post("reading", false);
@@ -124,7 +129,7 @@ export function FerReader() {
       <section className="pb-16">
         <div className="max-w-[1114px] mx-auto px-3 sm:px-4 space-y-6">
           {FER_PUBLIC_PAGES.map((page, index) => (
-            <figure key={page} className="bg-dark-100/80 border border-gray-800 rounded-sm overflow-x-auto">
+            <figure key={page} id={`page-${page}`} className="scroll-mt-24 bg-dark-100/80 border border-gray-800 rounded-sm overflow-x-auto">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={ferPageSrc(page)}

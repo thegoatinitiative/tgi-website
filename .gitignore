@@ -35,3 +35,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local member accounts. Report page images stay off the public site tree.
+/data/
+/content/intel/
+.env*

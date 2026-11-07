@@ -10,5 +10,5 @@ export const FER_PUBLIC_PAGES = [
 ] as const;
 
 export function ferPageSrc(page: number): string {
-  return `/intel/tecno-ch6i/page-${String(page).padStart(2, "0")}.jpg`;
+  return `/api/intel-file/tecno-ch6i/${page}`;
 }

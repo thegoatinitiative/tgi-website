@@ -74,8 +74,11 @@ export function IphoneReader() {
     };
 
     const hash = window.location.hash.replace("#", "");
-    if (hash === "world-route" || hash === "americas-route") {
-      window.setTimeout(() => document.getElementById(hash)?.scrollIntoView({ block: "center" }), 50);
+    if (hash) {
+      window.setTimeout(
+        () => document.getElementById(hash)?.scrollIntoView({ block: hash.startsWith("page-") ? "start" : "center" }),
+        50
+      );
     }
 
     post("reading", true);
@@ -134,6 +137,7 @@ export function IphoneReader() {
               const copy = globeCopy(view);
               return (
                 <figure key={page} id={page === 3 ? "world-route" : "americas-route"} className="flex min-h-[calc(100vh-6rem)] scroll-mt-24 flex-col items-center justify-center border border-gray-800 bg-[#07111f] px-4 py-10">
+                  <span id={`page-${page}`} className="block scroll-mt-24" />
                   <div className="mb-5 max-w-3xl text-center">
                     <p className="font-mono text-sm text-primary tracking-widest">{copy.title}</p>
                     <p className="mt-3 text-lg md:text-xl text-gray-200 leading-relaxed">{copy.note}</p>
@@ -146,7 +150,7 @@ export function IphoneReader() {
               );
             }
             return (
-            <figure key={page} className="bg-dark-100/80 border border-gray-800 rounded-sm overflow-x-auto">
+            <figure key={page} id={`page-${page}`} className="scroll-mt-24 bg-dark-100/80 border border-gray-800 rounded-sm overflow-x-auto">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={iir1101PageSrc(page)}
