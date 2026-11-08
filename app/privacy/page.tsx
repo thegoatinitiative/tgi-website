@@ -87,7 +87,7 @@ export default function PrivacyPage() {
               <div className="hud-panel p-6">
                 <h2 className="font-heading text-xl text-primary tracking-wider mb-4">5. COOKIES AND TRACKING</h2>
                 <p className="text-gray-400 leading-relaxed">
-                  Our website may use cookies and similar tracking technologies to enhance your experience. You can control cookies through your browser settings. We may also collect analytics data to improve our website and services. A sign-in cookie keeps a report account logged in. It is limited to this site. When you create a report account, sign in, confirm your email, open a briefing, or visit a page while signed in, we record the IP address, approximate location, device, and the account name and email. We review that record in a private staff channel. Opening a briefing also records how long it stays open in your browser.
+                  Our website may use cookies and similar tracking technologies to enhance your experience. You can control cookies through your browser settings. We may also collect analytics data to improve our website and services. A sign-in cookie keeps a report account logged in. It is limited to this site. When you create a report account, sign in, confirm your email, open a briefing, or visit a page while signed in, we record the IP address, approximate location, device, and the account name and email. We review that record in a private staff channel. When you request access to detailed files on GOAT Intel, we record the name, contact email, username, and IP address and send them to staff for approval. Opening a briefing also records how long it stays open in your browser.
                 </p>
               </div>
 
