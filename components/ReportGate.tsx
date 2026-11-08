@@ -66,7 +66,7 @@ export function ReportGate({
         )}
         <p className="text-gray-300 leading-relaxed mt-8">
           Detailed files are a separate account on{" "}
-          <a href="https://goatintel.com/" className="text-primary hover:underline">GOAT Intel</a>.
+          <a href="https://goatintel.vercel.app/" className="text-primary hover:underline">GOAT Intel</a>.
           That account stays closed until it is approved.
         </p>
       </section>

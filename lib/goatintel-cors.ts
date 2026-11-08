@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 
-const ALLOWED = new Set(["https://goatintel.com", "https://www.goatintel.com"]);
+const ALLOWED = new Set([
+  "https://goatintel.com",
+  "https://www.goatintel.com",
+  "https://goatintel.vercel.app",
+]);
 
 export function corsHeaders(request: Request): Headers {
   const headers = new Headers();
