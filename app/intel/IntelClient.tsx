@@ -175,7 +175,7 @@ export function IntelClient({
             </p>
             <p className="text-sm text-gray-300 max-w-2xl mx-auto leading-relaxed mt-4">
               These pages are the public field reports. Detailed files are a separate account on{" "}
-              <a href="https://goatintel.vercel.app/" className="text-primary hover:underline">GOAT Intel</a>.
+              <a href="https://goatintel.com/" className="text-primary hover:underline">GOAT Intel</a>.
               That account stays closed until it is approved.
             </p>
 
