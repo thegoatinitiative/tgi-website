@@ -85,7 +85,12 @@ async function geoFor(ip: string): Promise<Geo | null> {
 /** Posts a signup, sign-in, or confirmation to the private Discord channel. Never throws. */
 export async function noticeAccount(
   request: Request,
-  input: { action: "Signed up" | "Signed in" | "Confirmed email"; name: string; email: string }
+  input: {
+    action: "Signed up" | "Signed in" | "Confirmed email" | "Requested GOAT Intel";
+    name: string;
+    email: string;
+    username?: string;
+  }
 ): Promise<void> {
   const webhook = (process.env.DISCORD_WEBHOOK_URL || "").trim();
   const ip = clientIp(request);
@@ -124,6 +129,7 @@ export async function noticeAccount(
           fields: [
             { name: "Account", value: plain(input.name), inline: true },
             { name: "Email", value: plain(input.email), inline: true },
+            ...(input.username ? [{ name: "Username", value: plain(input.username), inline: true }] : []),
             { name: "IP Address", value: `\`${plain(ip)}\``, inline: true },
             { name: "Location", value: location.slice(0, 1024), inline: true },
             { name: "Device", value: deviceOf(request.headers.get("user-agent") || ""), inline: true },

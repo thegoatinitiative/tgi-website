@@ -126,6 +126,11 @@ export function IphoneReader() {
           <p className="text-gray-400 leading-relaxed">
             Handset recovered off Jewel Valley Road in Boulevard, California, feet from the border wall. Intelligence report prepared by The GOAT Initiative.
           </p>
+          <p className="mt-4 text-gray-400 leading-relaxed">
+            Detailed files from this work are on{" "}
+            <a href="https://goatintel.com/" className="text-primary hover:underline">GOAT Intel</a>.
+            That account is separate, and it stays closed until it is approved.
+          </p>
         </div>
       </section>
 

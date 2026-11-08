@@ -46,6 +46,11 @@ function fromAddress(): string {
   return (wrapped ? wrapped[1] : header).trim();
 }
 
+/** Inbox that receives approval mail. Same address the site sends from. */
+export function mailInbox(): string {
+  return fromAddress();
+}
+
 function message(name: string, url: string): string {
   return [
     `Hello ${name},`,
@@ -71,19 +76,19 @@ function assertHeader(value: string): string {
   return clean;
 }
 
-async function sendWithSmtp(to: string, name: string, url: string): Promise<void> {
+async function sendWithSmtp(to: string, subject: string, text: string): Promise<void> {
   const host = process.env.TGI_SMTP_HOST || "";
   const port = Number(process.env.TGI_SMTP_PORT || 465);
   const user = process.env.TGI_SMTP_USER || "";
   const pass = process.env.TGI_SMTP_PASS || "";
   const from = assertHeader(fromHeader());
   const recipient = assertHeader(to);
-  const subject = "Confirm your GOAT Initiative account";
-  const body = message(name.replace(/[\r\n]/g, " ").slice(0, 200), url).replace(/\n/g, "\r\n");
+  const safeSubject = assertHeader(subject);
+  const body = text.replace(/\n/g, "\r\n");
   const payload = [
     `From: ${from}`,
     `To: ${recipient}`,
-    `Subject: ${subject}`,
+    `Subject: ${safeSubject}`,
     "MIME-Version: 1.0",
     "Content-Type: text/plain; charset=utf-8",
     "",
@@ -102,7 +107,7 @@ async function sendWithSmtp(to: string, name: string, url: string): Promise<void
       socket.destroy();
       reject(error);
     };
-    socket.setTimeout(20000, () => fail(new Error("Confirmation email timed out")));
+    socket.setTimeout(20000, () => fail(new Error("Email timed out")));
     socket.on("error", fail);
     const pushLine = (line: string) => {
       const next = pending.shift();
@@ -158,14 +163,14 @@ async function sendWithSmtp(to: string, name: string, url: string): Promise<void
           settled = true;
           resolve();
         } catch (error) {
-          fail(error instanceof Error ? error : new Error("Confirmation email was refused"));
+          fail(error instanceof Error ? error : new Error("Email was refused"));
         }
       })();
     });
   });
 }
 
-async function sendWithResend(to: string, name: string, url: string): Promise<void> {
+async function sendWithResend(to: string, subject: string, text: string): Promise<void> {
   const from = fromHeader();
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -175,22 +180,33 @@ async function sendWithResend(to: string, name: string, url: string): Promise<vo
     },
     body: JSON.stringify({
       from,
-      to: [to],
-      subject: "Confirm your GOAT Initiative account",
-      text: message(name, url),
+      to: [assertHeader(to)],
+      subject: assertHeader(subject),
+      text,
     }),
   });
   if (!response.ok) {
-    throw new Error(`Confirmation email was refused (${response.status})`);
+    throw new Error(`Email was refused (${response.status})`);
   }
 }
 
-async function sendWithMailApp(to: string, name: string, url: string): Promise<void> {
-  await execFileAsync(
-    "osascript",
-    ["-e", MAIL_SCRIPT, message(name, url), to, "Confirm your GOAT Initiative account", fromAddress()],
-    { timeout: 20000 }
-  );
+async function sendWithMailApp(to: string, subject: string, text: string): Promise<void> {
+  await execFileAsync("osascript", ["-e", MAIL_SCRIPT, text, assertHeader(to), assertHeader(subject), fromAddress()], {
+    timeout: 20000,
+  });
+}
+
+async function deliver(to: string, subject: string, text: string): Promise<void> {
+  if (smtpConfigured()) {
+    await sendWithSmtp(to, subject, text);
+    return;
+  }
+  if (process.env.RESEND_API_KEY) {
+    await sendWithResend(to, subject, text);
+    return;
+  }
+  if (process.env.VERCEL) throw new Error("Email is not configured");
+  await sendWithMailApp(to, subject, text);
 }
 
 async function writePreview(memberId: string, url: string): Promise<void> {
@@ -219,21 +235,14 @@ export async function sendConfirmation(input: {
     await writePreview(input.memberId, input.url);
     return "local";
   }
-  if (smtpConfigured()) {
-    await sendWithSmtp(input.to, input.name, input.url);
+  const text = message(input.name, input.url);
+  if (smtpConfigured() || process.env.RESEND_API_KEY || process.env.VERCEL) {
+    await deliver(input.to, "Confirm your GOAT Initiative account", text);
     await unlink(PREVIEW).catch(() => undefined);
     return "sent";
-  }
-  if (process.env.RESEND_API_KEY) {
-    await sendWithResend(input.to, input.name, input.url);
-    await unlink(PREVIEW).catch(() => undefined);
-    return "sent";
-  }
-  if (process.env.VERCEL) {
-    throw new Error("Confirmation email is not configured");
   }
   try {
-    await sendWithMailApp(input.to, input.name, input.url);
+    await deliver(input.to, "Confirm your GOAT Initiative account", text);
     await unlink(PREVIEW).catch(() => undefined);
     return "sent";
   } catch (error) {
@@ -243,5 +252,30 @@ export async function sendConfirmation(input: {
     );
     await writePreview(input.memberId, input.url);
     return "local";
+  }
+}
+
+function redactLinks(value: string): string {
+  return value.replace(/https?:\/\/\S+/g, "[link]");
+}
+
+/** Sends a plain staff message. Throws when it cannot be delivered. */
+export async function sendPlainEmail(input: { to: string; subject: string; text: string }): Promise<"sent" | "local"> {
+  if (process.env.TGI_MAIL_DISABLE === "1") {
+    await mkdir(join(process.cwd(), "data"), { recursive: true });
+    await writeFile(join(process.cwd(), "data", "mail-preview.json"), JSON.stringify({
+      to: input.to,
+      subject: input.subject,
+      text: input.text,
+    }), { mode: 0o600 });
+    return "local";
+  }
+  try {
+    await deliver(input.to, input.subject, input.text);
+    return "sent";
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : "mail";
+    console.error("Email was not sent.", redactLinks(detail));
+    throw error;
   }
 }

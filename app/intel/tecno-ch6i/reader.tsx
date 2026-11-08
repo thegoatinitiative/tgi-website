@@ -123,6 +123,11 @@ export function FerReader() {
           <p className="mt-4 text-gray-400 leading-relaxed">
             Some pages are omitted from this public copy.
           </p>
+          <p className="mt-4 text-gray-400 leading-relaxed">
+            Detailed files from this work are on{" "}
+            <a href="https://goatintel.com/" className="text-primary hover:underline">GOAT Intel</a>.
+            That account is separate, and it stays closed until it is approved.
+          </p>
         </div>
       </section>
 

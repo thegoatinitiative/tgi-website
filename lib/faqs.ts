@@ -82,7 +82,7 @@ export const intelFaq: FaqItem[] = [
   {
     question: "What is published on Intel Updates?",
     answer:
-      "Field reports grouped as electronic devices found, and as IDs, passports, and travel documents found. Each report stays locked until The GOAT Initiative releases it. An account is required to read a released report, and the email address has to be confirmed. Full articles live on the Articles page and on Substack.",
+      "Field reports grouped as electronic devices found, and as IDs, passports, and travel documents found. Each report stays locked until The GOAT Initiative releases it. An account is required to read a released report, and the email address has to be confirmed. Detailed files are a separate account on GOAT Intel, and that account stays closed until it is approved. Full articles live on the Articles page and on Substack.",
   },
 ];
 
