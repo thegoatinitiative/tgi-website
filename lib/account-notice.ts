@@ -90,6 +90,8 @@ export async function noticeAccount(
     name: string;
     email: string;
     username?: string;
+    phone?: string;
+    organization?: string;
   }
 ): Promise<void> {
   const webhook = (process.env.DISCORD_WEBHOOK_URL || "").trim();
@@ -129,6 +131,10 @@ export async function noticeAccount(
           fields: [
             { name: "Account", value: plain(input.name), inline: true },
             { name: "Email", value: plain(input.email), inline: true },
+            ...(input.phone ? [{ name: "Phone", value: plain(input.phone), inline: true }] : []),
+            ...(input.organization
+              ? [{ name: "Organization", value: plain(input.organization), inline: false }]
+              : []),
             ...(input.username ? [{ name: "Username", value: plain(input.username), inline: true }] : []),
             { name: "IP Address", value: `\`${plain(ip)}\``, inline: true },
             { name: "Location", value: location.slice(0, 1024), inline: true },

@@ -51,6 +51,23 @@ export function cleanEmail(value: unknown): string | null {
   return email;
 }
 
+export function cleanPhone(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+  const phone = value.replace(/\s+/g, " ").trim();
+  if (!/^[+0-9(). -]+$/.test(phone)) return null;
+  const digits = phone.replace(/\D/g, "");
+  if (digits.length < 10 || digits.length > 15) return null;
+  return phone;
+}
+
+export function cleanOrganization(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+  const organization = value.replace(/\s+/g, " ").trim();
+  if (organization.length < 2 || organization.length > 120) return null;
+  if (/[\u0000-\u001f]/.test(organization)) return null;
+  return organization;
+}
+
 export function cleanPassword(value: unknown): string | { error: "missing" | "short" | "long" } {
   if (typeof value !== "string" || value.length === 0) return { error: "missing" };
   if (value.length < 10) return { error: "short" };

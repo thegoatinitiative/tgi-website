@@ -28,6 +28,13 @@ export type AccessRequest = {
   approveTokenHash: string | null;
   denyTokenHash: string | null;
   tokenExpires: string | null;
+  phone: string;
+  organization: string;
+  firstName: string;
+  lastName: string;
+  kind: "account" | "portal";
+  setupTokenHash: string | null;
+  setupExpires: string | null;
 };
 
 type Store = { requests: AccessRequest[] };
@@ -37,17 +44,33 @@ type Snapshot = { store: Store; etag: string | null };
 export type StagedAccess = {
   status: AccessStatus;
   mailed: boolean;
+  audience: "staff" | "applicant" | "none";
+  uid: string;
   name: string;
   email: string;
   username: string;
+  phone: string;
+  organization: string;
+  firstName: string;
+  lastName: string;
   approveUrl: string | null;
   denyUrl: string | null;
+  setupUrl: string | null;
   previous: AccessRequest | null;
+};
+
+export type AccessDecision = {
+  outcome: "approved" | "denied" | "expired" | "invalid";
+  portal: boolean;
+  applicantEmail: string | null;
+  setupUrl: string | null;
+  uid: string | null;
 };
 
 const FILE = process.env.TGI_GOATINTEL_FILE || join(process.cwd(), "data", "goatintel-access.json");
 const BLOB_PATH = "goatintel/access.json";
 const TOKEN_MS = 7 * 24 * 60 * 60 * 1000;
+const SETUP_PAGE = "https://goatintel.com/?setup=";
 
 function emptyStore(): Store {
   return { requests: [] };
@@ -71,14 +94,24 @@ function locked<T>(fn: () => Promise<T>): Promise<T> {
 function isRequest(value: unknown): value is AccessRequest {
   if (!value || typeof value !== "object") return false;
   const request = value as Partial<AccessRequest>;
-  if (!request.uid || !request.username || !request.name || !request.email) return false;
+  if (typeof request.uid !== "string" || !request.uid) return false;
+  if (typeof request.name !== "string" || !request.name) return false;
+  if (typeof request.email !== "string" || !request.email) return false;
   if (request.status !== "pending" && request.status !== "approved" && request.status !== "denied") return false;
+  request.username = typeof request.username === "string" ? request.username : "";
   request.ip = typeof request.ip === "string" ? request.ip : "Unknown";
   request.createdAt = typeof request.createdAt === "string" ? request.createdAt : new Date(0).toISOString();
   request.decidedAt = typeof request.decidedAt === "string" ? request.decidedAt : null;
   request.approveTokenHash = typeof request.approveTokenHash === "string" ? request.approveTokenHash : null;
   request.denyTokenHash = typeof request.denyTokenHash === "string" ? request.denyTokenHash : null;
   request.tokenExpires = typeof request.tokenExpires === "string" ? request.tokenExpires : null;
+  request.phone = typeof request.phone === "string" ? request.phone : "";
+  request.organization = typeof request.organization === "string" ? request.organization : "";
+  request.firstName = typeof request.firstName === "string" ? request.firstName : "";
+  request.lastName = typeof request.lastName === "string" ? request.lastName : "";
+  request.kind = request.kind === "portal" ? "portal" : "account";
+  request.setupTokenHash = typeof request.setupTokenHash === "string" ? request.setupTokenHash : null;
+  request.setupExpires = typeof request.setupExpires === "string" ? request.setupExpires : null;
   return true;
 }
 
@@ -194,6 +227,36 @@ function copyRequest(request: AccessRequest): AccessRequest {
   return { ...request };
 }
 
+function stagedFrom(
+  request: Pick<
+    AccessRequest,
+    "uid" | "name" | "email" | "username" | "phone" | "organization" | "firstName" | "lastName"
+  >,
+  extra: Partial<StagedAccess> & Pick<StagedAccess, "status" | "mailed" | "audience">
+): StagedAccess {
+  return {
+    uid: request.uid,
+    name: request.name,
+    email: request.email,
+    username: request.username,
+    phone: request.phone,
+    organization: request.organization,
+    firstName: request.firstName,
+    lastName: request.lastName,
+    approveUrl: null,
+    denyUrl: null,
+    setupUrl: null,
+    previous: null,
+    ...extra,
+  };
+}
+
+function setupLive(request: AccessRequest, now: number): boolean {
+  if (!request.setupTokenHash || !request.setupExpires) return false;
+  const expires = Date.parse(request.setupExpires);
+  return Number.isFinite(expires) && expires > now;
+}
+
 export async function accessStatus(uid: string): Promise<AccessStatus | "legacy"> {
   const snapshot = await readSnapshot();
   return snapshot.store.requests.find((request) => request.uid === uid)?.status ?? "legacy";
@@ -212,16 +275,7 @@ export async function stageAccessRequest(input: {
     const existing = store.requests.find((request) => request.uid === input.uid) ?? null;
     if (existing && existing.status !== "pending") {
       return {
-        result: {
-          status: existing.status,
-          mailed: false,
-          name: existing.name,
-          email: existing.email,
-          username: existing.username,
-          approveUrl: null,
-          denyUrl: null,
-          previous: null,
-        },
+        result: stagedFrom(existing, { status: existing.status, mailed: false, audience: "none" }),
         changed: false,
       };
     }
@@ -244,16 +298,7 @@ export async function stageAccessRequest(input: {
         changed = true;
       }
       return {
-        result: {
-          status: "pending" as const,
-          mailed: false,
-          name: existing.name,
-          email: existing.email,
-          username: existing.username,
-          approveUrl: null,
-          denyUrl: null,
-          previous: null,
-        },
+        result: stagedFrom(existing, { status: "pending", mailed: false, audience: "none" }),
         changed,
       };
     }
@@ -275,21 +320,26 @@ export async function stageAccessRequest(input: {
       approveTokenHash: approve.hash,
       denyTokenHash: deny.hash,
       tokenExpires: new Date(now + TOKEN_MS).toISOString(),
+      phone: existing?.phone || "",
+      organization: existing?.organization || "",
+      firstName: existing?.firstName || "",
+      lastName: existing?.lastName || "",
+      kind: existing?.kind === "portal" ? "portal" : "account",
+      setupTokenHash: null,
+      setupExpires: null,
     };
     if (existing) Object.assign(existing, record);
     else store.requests.push(record);
     const decide = `${input.origin.replace(/\/$/, "")}/api/goatintel/decide?token=`;
     return {
-      result: {
-        status: "pending" as const,
+      result: stagedFrom(record, {
+        status: "pending",
         mailed: true,
-        name,
-        email,
-        username: input.username,
+        audience: "staff",
         approveUrl: `${decide}${approve.token}`,
         denyUrl: `${decide}${deny.token}`,
         previous,
-      },
+      }),
       changed: true,
     };
   });
@@ -313,34 +363,58 @@ export function accessRequestText(input: {
   name: string;
   email: string;
   username: string;
+  phone: string;
+  organization: string;
+  firstName: string;
+  lastName: string;
   ip: string;
   approveUrl: string;
   denyUrl: string;
 }): string {
+  const lines = ["A GOAT Intel access request is waiting for approval.", ""];
+  if (input.firstName || input.lastName) {
+    lines.push(`First name: ${input.firstName}`, `Last name: ${input.lastName}`);
+  } else {
+    lines.push(`Name: ${input.name}`);
+  }
+  lines.push(`Email: ${input.email}`);
+  if (input.phone) lines.push(`Phone: ${input.phone}`);
+  if (input.organization) lines.push(`Department / agency / organization: ${input.organization}`);
+  if (input.username) lines.push(`Username: ${input.username}`);
+  lines.push(`IP address: ${input.ip}`, "", "Approve:", input.approveUrl, "", "Deny:", input.denyUrl, "");
+  lines.push("Each link works once and expires in 7 days.");
+  if (input.phone || input.organization) {
+    lines.push(
+      "Approving emails them a link to choose a username and password.",
+      "Denying keeps the request closed."
+    );
+  } else {
+    lines.push("Approving lets that account open detailed files.", "Denying keeps it closed.");
+  }
+  lines.push("", "The GOAT Initiative");
+  return lines.join("\n");
+}
+
+export function applicantSetupText(setupUrl: string): string {
   return [
-    "A GOAT Intel account is waiting for approval.",
+    "Your request for access to GOAT Intel was approved.",
     "",
-    `Name: ${input.name}`,
-    `Email: ${input.email}`,
-    `Username: ${input.username}`,
-    `IP address: ${input.ip}`,
+    "Choose a username and password here:",
+    setupUrl,
     "",
-    "Approve:",
-    input.approveUrl,
-    "",
-    "Deny:",
-    input.denyUrl,
-    "",
-    "Each link works once and expires in 7 days.",
-    "Approving lets that account open detailed files.",
-    "Denying keeps it closed.",
+    "This link works once and expires in 7 days.",
+    "A field-report account on thegoatinitiative.org does not sign you in.",
     "",
     "The GOAT Initiative",
   ].join("\n");
 }
 
-export async function decideAccess(token: string): Promise<"approved" | "denied" | "expired" | "invalid"> {
-  if (typeof token !== "string" || token.length < 20 || token.length > 200) return "invalid";
+function blankDecision(outcome: AccessDecision["outcome"], portal = false): AccessDecision {
+  return { outcome, portal, applicantEmail: null, setupUrl: null, uid: null };
+}
+
+export async function decideAccess(token: string): Promise<AccessDecision> {
+  if (typeof token !== "string" || token.length < 20 || token.length > 200) return blankDecision("invalid");
   const hash = createHash("sha256").update(token).digest("base64url");
   return mutate((store) => {
     const request = store.requests.find(
@@ -348,18 +422,167 @@ export async function decideAccess(token: string): Promise<"approved" | "denied"
         (entry.approveTokenHash && sameHash(entry.approveTokenHash, hash)) ||
         (entry.denyTokenHash && sameHash(entry.denyTokenHash, hash))
     );
-    if (!request) return { result: "invalid" as const, changed: false };
+    if (!request) return { result: blankDecision("invalid"), changed: false };
+    const portal = request.kind === "portal";
     const action = request.approveTokenHash && sameHash(request.approveTokenHash, hash) ? "approve" : "deny";
     const expires = request.tokenExpires ? Date.parse(request.tokenExpires) : NaN;
     request.approveTokenHash = null;
     request.denyTokenHash = null;
     request.tokenExpires = null;
     if (!Number.isFinite(expires) || expires < Date.now()) {
+      return { result: blankDecision("expired", portal), changed: true };
+    }
+    const outcome = action === "approve" ? "approved" : "denied";
+    request.status = outcome;
+    request.decidedAt = new Date().toISOString();
+    if (outcome === "approved" && portal && !request.username) {
+      const setup = newToken();
+      request.setupTokenHash = setup.hash;
+      request.setupExpires = new Date(Date.now() + TOKEN_MS).toISOString();
+      return {
+        result: {
+          outcome,
+          portal: true,
+          applicantEmail: request.email,
+          setupUrl: `${SETUP_PAGE}${setup.token}`,
+          uid: request.uid,
+        },
+        changed: true,
+      };
+    }
+    if (outcome === "denied") {
+      request.setupTokenHash = null;
+      request.setupExpires = null;
+    }
+    return { result: blankDecision(outcome, portal), changed: true };
+  });
+}
+
+export async function stagePortalRequest(input: {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  organization: string;
+  ip: string;
+  origin: string;
+}): Promise<StagedAccess> {
+  const now = Date.now();
+  return mutate((store) => {
+    const existing =
+      store.requests.find((request) => request.kind === "portal" && request.email === input.email) ?? null;
+    if (existing && existing.status === "denied") {
+      return { result: stagedFrom(existing, { status: "denied", mailed: false, audience: "none" }), changed: false };
+    }
+    if (existing && existing.status === "approved" && existing.username) {
+      return { result: stagedFrom(existing, { status: "approved", mailed: false, audience: "none" }), changed: false };
+    }
+    if (existing && existing.status === "approved") {
+      if (setupLive(existing, now)) {
+        return { result: stagedFrom(existing, { status: "approved", mailed: false, audience: "none" }), changed: false };
+      }
+      const previous = copyRequest(existing);
+      const setup = newToken();
+      existing.firstName = input.firstName;
+      existing.lastName = input.lastName;
+      existing.name = `${input.firstName} ${input.lastName}`;
+      existing.phone = input.phone;
+      existing.organization = input.organization;
+      existing.ip = input.ip || existing.ip;
+      existing.setupTokenHash = setup.hash;
+      existing.setupExpires = new Date(now + TOKEN_MS).toISOString();
+      return {
+        result: stagedFrom(existing, {
+          status: "approved",
+          mailed: true,
+          audience: "applicant",
+          setupUrl: `${SETUP_PAGE}${setup.token}`,
+          previous,
+        }),
+        changed: true,
+      };
+    }
+    if (existing && tokenLive(existing, now)) {
+      return { result: stagedFrom(existing, { status: "pending", mailed: false, audience: "none" }), changed: false };
+    }
+    const previous = existing ? copyRequest(existing) : null;
+    const approve = newToken();
+    const deny = newToken();
+    const record: AccessRequest = {
+      uid: existing?.uid || `portal_${randomBytes(16).toString("base64url")}`,
+      username: "",
+      name: `${input.firstName} ${input.lastName}`,
+      email: input.email,
+      ip: input.ip || "Unknown",
+      status: "pending",
+      createdAt: existing?.createdAt || new Date(now).toISOString(),
+      decidedAt: null,
+      approveTokenHash: approve.hash,
+      denyTokenHash: deny.hash,
+      tokenExpires: new Date(now + TOKEN_MS).toISOString(),
+      phone: input.phone,
+      organization: input.organization,
+      firstName: input.firstName,
+      lastName: input.lastName,
+      kind: "portal",
+      setupTokenHash: null,
+      setupExpires: null,
+    };
+    if (existing) Object.assign(existing, record);
+    else store.requests.push(record);
+    const decide = `${input.origin.replace(/\/$/, "")}/api/goatintel/decide?token=`;
+    return {
+      result: stagedFrom(record, {
+        status: "pending",
+        mailed: true,
+        audience: "staff",
+        approveUrl: `${decide}${approve.token}`,
+        denyUrl: `${decide}${deny.token}`,
+        previous,
+      }),
+      changed: true,
+    };
+  });
+}
+
+export async function clearPortalSetup(uid: string): Promise<void> {
+  await mutate((store) => {
+    const request = store.requests.find((entry) => entry.uid === uid);
+    if (!request || (!request.setupTokenHash && !request.setupExpires)) {
+      return { result: undefined, changed: false };
+    }
+    request.setupTokenHash = null;
+    request.setupExpires = null;
+    return { result: undefined, changed: true };
+  });
+}
+
+export async function finishPortalSetup(input: {
+  token: string;
+  uid: string;
+  username: string;
+}): Promise<"ok" | "invalid" | "expired" | "taken"> {
+  if (typeof input.token !== "string" || input.token.length < 20 || input.token.length > 200) return "invalid";
+  if (!input.uid || !input.username) return "invalid";
+  const hash = createHash("sha256").update(input.token).digest("base64url");
+  return mutate((store) => {
+    const request = store.requests.find((entry) => entry.setupTokenHash && sameHash(entry.setupTokenHash, hash));
+    if (!request || request.kind !== "portal" || request.status !== "approved") {
+      return { result: "invalid" as const, changed: false };
+    }
+    const expires = request.setupExpires ? Date.parse(request.setupExpires) : NaN;
+    if (!Number.isFinite(expires) || expires < Date.now()) {
+      request.setupTokenHash = null;
+      request.setupExpires = null;
       return { result: "expired" as const, changed: true };
     }
-    const status = action === "approve" ? "approved" : "denied";
-    request.status = status;
-    request.decidedAt = new Date().toISOString();
-    return { result: status, changed: true };
+    if (store.requests.some((entry) => entry !== request && entry.uid === input.uid)) {
+      return { result: "taken" as const, changed: false };
+    }
+    request.uid = input.uid;
+    request.username = input.username;
+    request.setupTokenHash = null;
+    request.setupExpires = null;
+    return { result: "ok" as const, changed: true };
   });
 }

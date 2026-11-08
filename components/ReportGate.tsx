@@ -65,9 +65,9 @@ export function ReportGate({
           </>
         )}
         <p className="text-gray-300 leading-relaxed mt-8">
-          Detailed files are a separate account on{" "}
-          <a href="https://goatintel.com/" className="text-primary hover:underline">GOAT Intel</a>.
-          That account stays closed until it is approved.
+          Detailed files are separate.{" "}
+          <Link href="/intel/portal" className="text-primary hover:underline">Request access</Link>
+          {" "}with your name, phone, email, and organization. Staff approve or deny each request.
         </p>
       </section>
     </div>

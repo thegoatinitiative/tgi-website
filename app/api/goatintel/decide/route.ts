@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { decideAccess } from "@/lib/goatintel-access";
+import { applicantSetupText, clearPortalSetup, decideAccess } from "@/lib/goatintel-access";
+import { sendPlainEmail } from "@/lib/mail";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -7,10 +8,7 @@ export const dynamic = "force-dynamic";
 const PAGES = {
   approved: ["Approved", "That GOAT Intel account can open detailed files."],
   denied: ["Denied", "That account stays closed."],
-  expired: [
-    "Link expired",
-    "This link has expired. The request is still waiting. They can send it again from GOAT Intel.",
-  ],
+  expired: ["Link expired", "This link has expired. The request is still waiting. They can send it again."],
   invalid: ["Link invalid", "This link is invalid or was already used."],
 } as const;
 
@@ -33,7 +31,7 @@ function page(title: string, body: string): string {
 }
 
 function html(title: string, body: string, status: number) {
-  const response = new NextResponse(page(title, body), {
+  return new NextResponse(page(title, body), {
     status,
     headers: {
       "Content-Type": "text/html; charset=utf-8",
@@ -42,14 +40,42 @@ function html(title: string, body: string, status: number) {
       "X-Robots-Tag": "noindex",
     },
   });
-  return response;
 }
 
 export async function GET(request: Request) {
   const token = new URL(request.url).searchParams.get("token") || "";
   try {
-    const result = await decideAccess(token);
-    const [title, body] = PAGES[result];
+    const decision = await decideAccess(token);
+    if (decision.outcome === "approved" && decision.portal && decision.setupUrl && decision.applicantEmail && decision.uid) {
+      try {
+        await sendPlainEmail({
+          to: decision.applicantEmail,
+          subject: "Your GOAT Intel request was approved",
+          text: applicantSetupText(decision.setupUrl),
+        });
+      } catch {
+        await clearPortalSetup(decision.uid).catch((error) => {
+          console.error("GOATINTEL setup clear", error instanceof Error ? error.message : "clear");
+        });
+        return html(
+          "Approved",
+          "Approved. The setup email did not send. They can submit the request again to get a new link.",
+          200
+        );
+      }
+      return html(
+        "Approved",
+        "Approved. They will get an email with a link to choose a username and password.",
+        200
+      );
+    }
+    if (decision.outcome === "approved" && decision.portal) {
+      return html("Approved", "Approved. They will get an email with a link to choose a username and password.", 200);
+    }
+    if (decision.outcome === "denied" && decision.portal) {
+      return html("Denied", "Denied. That request stays closed.", 200);
+    }
+    const [title, body] = PAGES[decision.outcome];
     return html(title, body, 200);
   } catch (error) {
     console.error("GOATINTEL decide", error instanceof Error ? error.message : "decide");

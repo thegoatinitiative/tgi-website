@@ -75,6 +75,10 @@ export async function POST(request: Request) {
           name: staged.name,
           email: staged.email,
           username: staged.username,
+          phone: staged.phone,
+          organization: staged.organization,
+          firstName: staged.firstName,
+          lastName: staged.lastName,
           ip,
           approveUrl: staged.approveUrl,
           denyUrl: staged.denyUrl,
@@ -91,6 +95,8 @@ export async function POST(request: Request) {
       name: staged.name,
       email: staged.email,
       username: staged.username,
+      phone: staged.phone,
+      organization: staged.organization,
     });
   }
 

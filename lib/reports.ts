@@ -25,7 +25,7 @@ export function reportById(id: string) {
 /** Same-site return paths. A bad value falls back to the catalog. */
 export function safeNext(value: unknown): string {
   if (typeof value !== "string") return "/intel";
-  if (!/^\/(?:account|intel(?:\/(?:iphone-11|tecno-ch6i))?(?:#[A-Za-z0-9-]+)?)$/.test(value)) {
+  if (!/^\/(?:account|intel(?:\/(?:iphone-11|tecno-ch6i|portal))?(?:#[A-Za-z0-9-]+)?)$/.test(value)) {
     return "/intel";
   }
   return value;

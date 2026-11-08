@@ -8,6 +8,7 @@ const paths = [
   "/operatives",
   "/media",
   "/intel",
+  "/intel/portal",
   "/join",
   "/login",
   "/articles",
