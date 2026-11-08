@@ -68,6 +68,7 @@ export async function POST(request: Request) {
       origin: sameOrigin(request, "/").origin,
     });
   } catch (error) {
+    if (error instanceof AccessStoreError && error.code === "rate") return json({ error: "rate" }, 429);
     if (error instanceof AccessStoreError) return json({ error: "store" }, 503);
     console.error("GOATINTEL apply", error instanceof Error ? error.message : "apply");
     return json({ error: "store" }, 503);
@@ -119,5 +120,5 @@ export async function POST(request: Request) {
     }
   }
 
-  return json({ status: staged.status, mailed: staged.mailed }, staged.mailed ? 201 : 200);
+  return json({ ok: true }, 200);
 }

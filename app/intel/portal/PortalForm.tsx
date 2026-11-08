@@ -6,7 +6,7 @@ import Link from "next/link";
 const inputClass =
   "w-full bg-dark border border-gray-700 px-4 py-3 text-gray-100 rounded-sm focus:border-primary focus:outline-none";
 
-type Result = { status?: string; mailed?: boolean; error?: string };
+type Result = { ok?: boolean; error?: string };
 
 function messageFor(result: Result, ok: boolean): { error: string; done: string } {
   if (!ok) {
@@ -19,20 +19,7 @@ function messageFor(result: Result, ok: boolean): { error: string; done: string 
     }
     return { error: "We could not send the request. Try again in a minute.", done: "" };
   }
-  if (result.status === "denied") return { error: "", done: "This request was not approved." };
-  if (result.status === "approved" && result.mailed) {
-    return { error: "", done: "This request was already approved. We sent the setup link again." };
-  }
-  if (result.status === "approved") {
-    return {
-      error: "",
-      done: "This request was already approved. Use the setup link from your email, or sign in at GOAT Intel if you already created a login.",
-    };
-  }
-  if (result.mailed) {
-    return { error: "", done: "Request received. Staff will review it and email you if it is approved." };
-  }
-  return { error: "", done: "This request is already waiting for review." };
+  return { error: "", done: "Request received. Staff will review it and email you if it is approved." };
 }
 
 export function PortalForm() {
@@ -64,9 +51,7 @@ export function PortalForm() {
       const next = messageFor(result, response.ok);
       setError(next.error);
       setDone(next.done);
-      if (response.ok && result.status === "pending" && result.mailed) {
-        formEl.reset();
-      }
+      if (response.ok) formEl.reset();
     } catch {
       setError("We could not send the request. Try again in a minute.");
     } finally {

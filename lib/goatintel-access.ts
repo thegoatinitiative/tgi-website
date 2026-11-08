@@ -5,9 +5,9 @@ import { get, put, BlobNotFoundError, BlobPreconditionFailedError } from "@verce
 import { usesBlobStore } from "@/lib/members";
 
 export class AccessStoreError extends Error {
-  code: "readonly" | "missing";
+  code: "readonly" | "missing" | "rate";
 
-  constructor(code: "readonly" | "missing") {
+  constructor(code: "readonly" | "missing" | "rate") {
     super(code);
     this.name = "AccessStoreError";
     this.code = code;
@@ -71,6 +71,15 @@ const FILE = process.env.TGI_GOATINTEL_FILE || join(process.cwd(), "data", "goat
 const BLOB_PATH = "goatintel/access.json";
 const TOKEN_MS = 7 * 24 * 60 * 60 * 1000;
 const SETUP_PAGE = "https://goatintel.com/?setup=";
+const PUBLIC_ORIGINS = new Set([
+  "https://www.thegoatinitiative.org",
+  "https://thegoatinitiative.org",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+]);
+const STAFF_USERNAMES = new Set(["cgautereaux", "admin"]);
+const RATE_WINDOW_MS = 10 * 60 * 1000;
+const RATE_LIMIT = 8;
 
 function emptyStore(): Store {
   return { requests: [] };
@@ -257,9 +266,44 @@ function setupLive(request: AccessRequest, now: number): boolean {
   return Number.isFinite(expires) && expires > now;
 }
 
-export async function accessStatus(uid: string): Promise<AccessStatus | "legacy"> {
+function decideBase(origin: string): string {
+  const cleaned = origin.replace(/\/$/, "");
+  return PUBLIC_ORIGINS.has(cleaned) ? cleaned : "https://www.thegoatinitiative.org";
+}
+
+function recentFromIp(store: Store, ip: string, now: number): number {
+  return store.requests.filter((request) => {
+    const created = Date.parse(request.createdAt);
+    return request.ip === ip && Number.isFinite(created) && now - created < RATE_WINDOW_MS;
+  }).length;
+}
+
+export function isStaffUsername(username: string): boolean {
+  return STAFF_USERNAMES.has(username);
+}
+
+export async function accessStatus(uid: string): Promise<AccessStatus> {
   const snapshot = await readSnapshot();
-  return snapshot.store.requests.find((request) => request.uid === uid)?.status ?? "legacy";
+  return snapshot.store.requests.find((request) => request.uid === uid)?.status ?? "denied";
+}
+
+export type TokenLook = "approve" | "deny" | "expired" | "invalid";
+
+/** Reads an approval link without spending it. */
+export async function inspectAccess(token: string): Promise<TokenLook> {
+  if (typeof token !== "string" || token.length < 20 || token.length > 200) return "invalid";
+  if (!/^[A-Za-z0-9_-]+$/.test(token)) return "invalid";
+  const hash = createHash("sha256").update(token).digest("base64url");
+  const snapshot = await readSnapshot();
+  const request = snapshot.store.requests.find(
+    (entry) =>
+      (entry.approveTokenHash && sameHash(entry.approveTokenHash, hash)) ||
+      (entry.denyTokenHash && sameHash(entry.denyTokenHash, hash))
+  );
+  if (!request) return "invalid";
+  const expires = request.tokenExpires ? Date.parse(request.tokenExpires) : NaN;
+  if (!Number.isFinite(expires) || expires < Date.now()) return "expired";
+  return request.approveTokenHash && sameHash(request.approveTokenHash, hash) ? "approve" : "deny";
 }
 
 export async function stageAccessRequest(input: {
@@ -330,7 +374,7 @@ export async function stageAccessRequest(input: {
     };
     if (existing) Object.assign(existing, record);
     else store.requests.push(record);
-    const decide = `${input.origin.replace(/\/$/, "")}/api/goatintel/decide?token=`;
+    const decide = `${decideBase(input.origin)}/api/goatintel/decide?token=`;
     return {
       result: stagedFrom(record, {
         status: "pending",
@@ -474,21 +518,12 @@ export async function stagePortalRequest(input: {
     if (existing && existing.status === "denied") {
       return { result: stagedFrom(existing, { status: "denied", mailed: false, audience: "none" }), changed: false };
     }
-    if (existing && existing.status === "approved" && existing.username) {
-      return { result: stagedFrom(existing, { status: "approved", mailed: false, audience: "none" }), changed: false };
-    }
     if (existing && existing.status === "approved") {
-      if (setupLive(existing, now)) {
+      if (existing.username || setupLive(existing, now)) {
         return { result: stagedFrom(existing, { status: "approved", mailed: false, audience: "none" }), changed: false };
       }
       const previous = copyRequest(existing);
       const setup = newToken();
-      existing.firstName = input.firstName;
-      existing.lastName = input.lastName;
-      existing.name = `${input.firstName} ${input.lastName}`;
-      existing.phone = input.phone;
-      existing.organization = input.organization;
-      existing.ip = input.ip || existing.ip;
       existing.setupTokenHash = setup.hash;
       existing.setupExpires = new Date(now + TOKEN_MS).toISOString();
       return {
@@ -504,6 +539,9 @@ export async function stagePortalRequest(input: {
     }
     if (existing && tokenLive(existing, now)) {
       return { result: stagedFrom(existing, { status: "pending", mailed: false, audience: "none" }), changed: false };
+    }
+    if (!existing && recentFromIp(store, input.ip || "Unknown", now) >= RATE_LIMIT) {
+      throw new AccessStoreError("rate");
     }
     const previous = existing ? copyRequest(existing) : null;
     const approve = newToken();
@@ -530,7 +568,7 @@ export async function stagePortalRequest(input: {
     };
     if (existing) Object.assign(existing, record);
     else store.requests.push(record);
-    const decide = `${input.origin.replace(/\/$/, "")}/api/goatintel/decide?token=`;
+    const decide = `${decideBase(input.origin)}/api/goatintel/decide?token=`;
     return {
       result: stagedFrom(record, {
         status: "pending",
