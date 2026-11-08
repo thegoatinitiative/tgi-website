@@ -174,9 +174,9 @@ export function IntelClient({
               {released} of {REPORTS.length} reports released
             </p>
             <p className="text-sm text-gray-300 max-w-2xl mx-auto leading-relaxed mt-4">
-              These pages are the public field reports. Detailed files are a separate account on{" "}
+              These pages are the public field reports. Detailed files are on{" "}
               <a href="https://goatintel.com/" className="text-primary hover:underline">GOAT Intel</a>.
-              That account stays closed until it is approved.
+              A login is required, and The GOAT Initiative issues those logins.
             </p>
 
             {/* Classification Banner */}
