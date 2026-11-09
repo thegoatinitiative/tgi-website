@@ -13,6 +13,10 @@ const BUCKETS = [
   "intel-portal-9578e.firebasestorage.app",
   "intel-portal-9578e.appspot.com",
 ];
+const STORAGE_HOSTS = new Set([
+  "firebasestorage.googleapis.com",
+  "storage.googleapis.com",
+]);
 
 function bearer(request: Request): string | null {
   const header = request.headers.get("authorization") || "";
@@ -26,6 +30,51 @@ function storagePath(raw: unknown): string | null {
   if (raw.includes("..") || raw.includes("\\") || raw.includes("\0") || /[\r\n?#]/.test(raw)) return null;
   if (!/^attachments\/[A-Za-z0-9][A-Za-z0-9._-]{0,80}\/[^/]+$/.test(raw)) return null;
   return raw;
+}
+
+function downloadUrl(raw: unknown): string | null {
+  if (typeof raw !== "string" || raw.length < 20 || raw.length > 2000) return null;
+  let url: URL;
+  try {
+    url = new URL(raw);
+  } catch {
+    return null;
+  }
+  if (url.protocol !== "https:" || url.username || url.password) return null;
+  if (url.hostname !== "firebasestorage.googleapis.com") return null;
+  if (!BUCKETS.some((bucket) => url.pathname.startsWith(`/v0/b/${bucket}/o/`))) return null;
+  if (url.searchParams.get("alt") !== "media") return null;
+  return url.toString();
+}
+
+function allowedRedirect(raw: string, base: string): string | null {
+  let url: URL;
+  try {
+    url = new URL(raw, base);
+  } catch {
+    return null;
+  }
+  if (url.protocol !== "https:" || url.username || url.password) return null;
+  if (!STORAGE_HOSTS.has(url.hostname)) return null;
+  return url.toString();
+}
+
+async function fetchAuthorized(start: string, token: string): Promise<Response> {
+  let current = start;
+  let sendAuth = true;
+  let last: Response | null = null;
+  for (let hop = 0; hop < 3; hop += 1) {
+    const headers = new Headers();
+    if (sendAuth) headers.set("Authorization", `Firebase ${token}`);
+    last = await fetch(current, { headers, redirect: "manual" });
+    if (last.status < 300 || last.status >= 400) return last;
+    const next = allowedRedirect(last.headers.get("location") || "", current);
+    await last.body?.cancel();
+    if (!next) return last;
+    current = next;
+    sendAuth = false;
+  }
+  return last as Response;
 }
 
 async function readLimited(response: Response): Promise<Uint8Array | null> {
@@ -81,11 +130,13 @@ export async function POST(request: Request) {
   }
 
   let path: string | null = null;
+  let extra: string | null = null;
   try {
     const raw = await request.text();
     if (raw.length > 4000) return jsonCors(request, { error: "invalid" }, 400);
-    const body = JSON.parse(raw) as { path?: unknown };
+    const body = JSON.parse(raw) as { path?: unknown; url?: unknown };
     path = storagePath(body.path);
+    extra = downloadUrl(body.url);
   } catch {
     return jsonCors(request, { error: "invalid" }, 400);
   }
@@ -93,29 +144,33 @@ export async function POST(request: Request) {
 
   try {
     const encoded = encodeURIComponent(path);
+    const targets = BUCKETS.map(
+      (bucket) => `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encoded}?alt=media`
+    );
+    if (extra && !targets.includes(extra)) targets.push(extra);
+
     let bytes: Uint8Array | null = null;
     let contentType = "";
-    for (const bucket of BUCKETS) {
-      const upstream = await fetch(
-        `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encoded}?alt=media`,
-        {
-          headers: { Authorization: `Firebase ${token}` },
-          redirect: "manual",
-        }
-      );
+    let missing = true;
+    for (const target of targets) {
+      const upstream = await fetchAuthorized(target, token);
       if (upstream.status === 404) continue;
-      if (upstream.status !== 200) return jsonCors(request, { error: "upstream" }, 502);
-      bytes = await readLimited(upstream);
-      contentType = (upstream.headers.get("content-type") || "").split(";")[0].trim().toLowerCase();
+      missing = false;
+      if (upstream.status !== 200) continue;
+      const got = await readLimited(upstream);
+      if (!got) continue;
+      const headerType = (upstream.headers.get("content-type") || "").split(";")[0].trim().toLowerCase();
+      const pdf = got.byteLength >= 5 && got[0] === 0x25 && got[1] === 0x50 && got[2] === 0x44 && got[3] === 0x46;
+      const type = pdf ? "application/pdf" : headerType.startsWith("image/") ? headerType : "";
+      if (!type) continue;
+      bytes = got;
+      contentType = type;
       break;
     }
-    if (!bytes) return jsonCors(request, { error: "missing" }, 404);
-    const pdf = bytes.byteLength >= 5 && bytes[0] === 0x25 && bytes[1] === 0x50 && bytes[2] === 0x44 && bytes[3] === 0x46;
-    const type = pdf ? "application/pdf" : contentType.startsWith("image/") ? contentType : "";
-    if (!type) return jsonCors(request, { error: "type" }, 415);
+    if (!bytes) return jsonCors(request, { error: missing ? "missing" : "upstream" }, missing ? 404 : 502);
 
     const headers = corsHeaders(request);
-    headers.set("Content-Type", type);
+    headers.set("Content-Type", contentType);
     headers.set("X-Content-Type-Options", "nosniff");
     headers.set("Cache-Control", "private, no-store");
     return new NextResponse(Buffer.from(bytes), { status: 200, headers });
