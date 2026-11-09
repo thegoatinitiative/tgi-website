@@ -1,10 +1,26 @@
-export const SUBSTACK_FEED = "https://thecorygoat.substack.com/feed";
+const WRITERS = [
+  {
+    feed: "https://thecorygoat.substack.com/feed",
+    author: "Cory Gautereaux",
+    site: "https://thecorygoat.substack.com",
+  },
+  {
+    feed: "https://helsapffel.substack.com/feed",
+    author: "Hels Apffel",
+    site: "https://helsapffel.substack.com",
+  },
+] as const;
+
+export const SUBSTACK_FEED = WRITERS[0].feed;
 
 export type Briefing = {
   title: string;
   url: string;
   date: string;
   excerpt: string;
+  author: string;
+  site: string;
+  published: number;
 };
 
 function decode(value: string) {
@@ -28,7 +44,10 @@ function tag(block: string, name: string) {
   return match ? decode(match[1]) : "";
 }
 
-export function parseFeed(xml: string): Briefing[] {
+export function parseFeed(
+  xml: string,
+  writer: { author: string; site: string },
+): Briefing[] {
   return Array.from(xml.matchAll(/<item>([\s\S]*?)<\/item>/g))
     .map((match) => {
       const block = match[1];
@@ -46,27 +65,41 @@ export function parseFeed(xml: string): Briefing[] {
               timeZone: "UTC",
             }),
         excerpt: tag(block, "description").slice(0, 240),
+        author: writer.author,
+        site: writer.site,
+        published: Number.isNaN(parsed.getTime()) ? 0 : parsed.getTime(),
       };
     })
     .filter((item) => item.title && item.url && item.title.toLowerCase() !== "coming soon");
 }
 
-export async function ArticleFeed() {
-  let briefings: Briefing[] = [];
+async function loadFeed(writer: (typeof WRITERS)[number]): Promise<Briefing[]> {
   try {
-    const response = await fetch(SUBSTACK_FEED, {
+    const response = await fetch(writer.feed, {
       headers: {
         "User-Agent": "Mozilla/5.0 (compatible; TGISite/1.0; +https://www.thegoatinitiative.org)",
         Accept: "application/rss+xml, application/xml, text/xml",
       },
       next: { revalidate: 3600 },
     });
-    if (response.ok) {
-      briefings = parseFeed(await response.text());
-    }
+    if (!response.ok) return [];
+    return parseFeed(await response.text(), writer);
   } catch {
-    briefings = [];
+    return [];
   }
+}
+
+export async function ArticleFeed() {
+  const groups = await Promise.all(WRITERS.map(loadFeed));
+  const seen = new Set<string>();
+  const briefings = groups
+    .flat()
+    .filter((item) => {
+      if (seen.has(item.url)) return false;
+      seen.add(item.url);
+      return true;
+    })
+    .sort((a, b) => b.published - a.published || a.title.localeCompare(b.title));
 
   if (briefings.length === 0) {
     return (
@@ -80,6 +113,14 @@ export async function ArticleFeed() {
               rel="noopener noreferrer"
             >
               Cory Gautereaux&apos;s Substack
+            </a>{" "}
+            and{" "}
+            <a
+              href="https://helsapffel.substack.com"
+              className="text-primary hover:underline"
+              rel="noopener noreferrer"
+            >
+              Hels Apffel&apos;s Substack
             </a>
             .
           </p>
@@ -100,7 +141,17 @@ export async function ArticleFeed() {
         <ol className="space-y-4">
           {briefings.map((briefing) => (
             <li key={briefing.url} className="bg-dark-100/80 border border-gray-800 rounded-sm p-5">
-              <p className="font-mono text-[11px] text-gray-500 mb-2">{briefing.date}</p>
+              <p className="font-mono text-[11px] text-gray-500 mb-1">{briefing.date}</p>
+              <p className="font-mono text-[11px] tracking-wider text-primary mb-2">
+                <a
+                  href={briefing.site}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:underline"
+                >
+                  {briefing.author}
+                </a>
+              </p>
               <h3 className="font-heading text-lg text-gray-100 mb-2">
                 <a
                   href={briefing.url}

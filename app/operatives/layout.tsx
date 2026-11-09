@@ -15,7 +15,12 @@ const people: { id: string; name: string; jobTitle: string; sameAs?: string[] }[
   },
   { id: "dan-conchas", name: "Dan Conchas", jobTitle: "Vice President" },
   { id: "tayler-james", name: "Tayler James", jobTitle: "Board Secretary" },
-  { id: "hels-apffel", name: "Hels Apffel", jobTitle: "Director of Strategic Intelligence" },
+  {
+    id: "hels-apffel",
+    name: "Hels Apffel",
+    jobTitle: "Director of Strategic Intelligence",
+    sameAs: ["https://x.com/HelsApffel", "https://helsapffel.substack.com"],
+  },
 ];
 
 export const metadata: Metadata = pageMetadata({

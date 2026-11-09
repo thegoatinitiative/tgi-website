@@ -4,7 +4,7 @@ import { articlesFaq } from "@/lib/faqs";
 import { pageMetadata } from "@/lib/seo";
 
 const description =
-  "Border briefings by Cory Gautereaux and The GOAT Initiative, with titles and links to each essay on Substack.";
+  "Border briefings by Cory Gautereaux and Hels Apffel of The GOAT Initiative, with titles and links to each essay on Substack.";
 
 export const metadata: Metadata = pageMetadata({
   title: "Border Briefings",

@@ -74,7 +74,7 @@ export const articlesFaq: FaqItem[] = [
   {
     question: "Where are the full briefings?",
     answer:
-      "On Cory Gautereaux's Substack. This page lists the current titles and links each one through to the original.",
+      "On Cory Gautereaux's Substack and Hels Apffel's Substack. This page lists the current titles and links each one through to the original.",
   },
 ];
 

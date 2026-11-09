@@ -11,7 +11,7 @@ Official site: https://www.thegoatinitiative.org
 - [Operations](https://www.thegoatinitiative.org/operations): Named field operations
 - [Leadership](https://www.thegoatinitiative.org/operatives): Cory Gautereaux, Dan Conchas, Tayler James, Hels Apffel
 - [Video briefings](https://www.thegoatinitiative.org/media): YouTube briefings, including the organization's own interview
-- [Articles](https://www.thegoatinitiative.org/articles): Titles and links for briefings on Cory Gautereaux's Substack
+- [Articles](https://www.thegoatinitiative.org/articles): Titles and links for briefings on Cory Gautereaux's and Hels Apffel's Substacks
 - [Intel updates](https://www.thegoatinitiative.org/intel): Field-report notices
 - [Donate](https://www.thegoatinitiative.org/donate): Tax-deductible gifts via Donorbox
 - [Contact](https://www.thegoatinitiative.org/contact): Questions and tips. Call 911 first if a crime is in progress
@@ -23,6 +23,7 @@ Official site: https://www.thegoatinitiative.org
 - https://www.youtube.com/@TheGoatInitiative
 - https://www.instagram.com/thegoatinitiative
 - https://thecorygoat.substack.com
+- https://helsapffel.substack.com
 
 ## Not for indexing
 
