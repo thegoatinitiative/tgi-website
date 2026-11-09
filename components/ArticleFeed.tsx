@@ -220,56 +220,43 @@ export async function ArticleFeed() {
   }
 
   return (
-    <div className="pb-8">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-14">
-          {WRITERS.map((writer) => {
-            const items = briefings.filter((item) => item.author === writer.author);
-            const headingId = `briefings-${writer.author.toLowerCase().replace(/[^a-z]+/g, "-")}`;
-            return (
-              <section key={writer.author} aria-labelledby={headingId}>
-                <header className="mb-6 border-b border-gray-800 pb-4">
-                  <h2 id={headingId} className="text-2xl font-semibold text-gray-100">
-                    {writer.author}
-                  </h2>
-                  <a
-                    href={writer.site}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-1 inline-block text-sm text-primary hover:underline"
-                  >
-                    {writer.site.replace("https://", "")}
-                  </a>
-                </header>
-                {items.length === 0 ? (
-                  <p className="text-gray-400">No briefings are listed right now.</p>
-                ) : (
-                  <ol className="space-y-0">
-                    {items.map((briefing) => (
-                      <li key={briefing.url} className="border-b border-gray-800/80 py-5 first:pt-0">
-                        <p className="mb-2 text-xs text-gray-500">{briefing.date}</p>
-                        <h3 className="mb-2 text-lg font-semibold leading-snug text-gray-100">
-                          <a
-                            href={briefing.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover:text-primary"
-                          >
-                            {readableTitle(briefing.title)}
-                          </a>
-                        </h3>
-                        {briefing.excerpt ? (
-                          <p className="text-[15px] leading-7 text-gray-400">{briefing.excerpt}</p>
-                        ) : null}
-                      </li>
-                    ))}
-                  </ol>
-                )}
-              </section>
-            );
-          })}
-        </div>
+    <section className="pb-8" aria-labelledby="briefing-list-heading">
+      <div className="max-w-3xl mx-auto px-4">
+        <h2 id="briefing-list-heading" className="mb-6 text-2xl font-semibold text-gray-100">
+          Latest briefings
+        </h2>
+        <ol>
+          {briefings.map((briefing) => (
+            <li key={briefing.url} className="border-b border-gray-800/80 py-6 first:pt-0">
+              <p className="mb-2 text-sm text-gray-500">
+                {briefing.date}
+                <span aria-hidden="true"> · </span>
+                <a
+                  href={briefing.site}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-300 hover:text-primary"
+                >
+                  {briefing.author}
+                </a>
+              </p>
+              <h3 className="mb-2 text-xl font-semibold leading-snug text-gray-100">
+                <a
+                  href={briefing.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-primary"
+                >
+                  {readableTitle(briefing.title)}
+                </a>
+              </h3>
+              {briefing.excerpt ? (
+                <p className="text-base leading-7 text-gray-400">{briefing.excerpt}</p>
+              ) : null}
+            </li>
+          ))}
+        </ol>
       </div>
-    </div>
+    </section>
   );
 }
