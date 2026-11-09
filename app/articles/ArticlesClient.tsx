@@ -70,11 +70,11 @@ export function ArticlesClient({ children }: { children?: React.ReactNode }) {
               </span>
             </motion.div>
 
-            <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-gray-100 tracking-wider mb-6">
-              ARTICLES & <span className="text-primary text-glow-sm">BRIEFINGS</span>
+            <h1 className="text-4xl md:text-5xl font-semibold tracking-tight text-gray-100 mb-6">
+              Articles and briefings
             </h1>
 
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed mb-8">
+            <p className="text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed mb-8">
               Stay informed with the latest intelligence briefings, analysis, and articles
               from Cory Gautereaux, Hels Apffel, and The Goat Initiative.
             </p>
@@ -105,7 +105,7 @@ export function ArticlesClient({ children }: { children?: React.ReactNode }) {
                       </svg>
                     </div>
                     <div>
-                      <h2 className="font-heading text-2xl text-gray-100 tracking-wider">{writer.name}</h2>
+                      <h2 className="text-2xl font-semibold text-gray-100">{writer.name}</h2>
                       <p className="text-xs text-gray-500">{writer.role}</p>
                     </div>
                   </div>

@@ -44,6 +44,96 @@ function tag(block: string, name: string) {
   return match ? decode(match[1]) : "";
 }
 
+const KEEP_UPPER = new Set([
+  "ai",
+  "cbp",
+  "dhs",
+  "dod",
+  "doj",
+  "fbi",
+  "fisa",
+  "hhs",
+  "hsi",
+  "ice",
+  "id",
+  "nato",
+  "nsa",
+  "oig",
+  "osint",
+  "pemex",
+  "tgi",
+  "u.s",
+  "u.s.",
+  "us",
+  "usa",
+]);
+
+const SMALL_WORDS = new Set([
+  "a",
+  "an",
+  "and",
+  "as",
+  "at",
+  "but",
+  "by",
+  "for",
+  "from",
+  "in",
+  "into",
+  "of",
+  "on",
+  "or",
+  "over",
+  "the",
+  "to",
+  "vs",
+  "with",
+]);
+
+function mostlyUpper(value: string) {
+  const letters = value.replace(/[^A-Za-z]/g, "");
+  if (letters.length < 8) return false;
+  return (value.match(/[A-Z]/g)?.length ?? 0) / letters.length >= 0.8;
+}
+
+function titleCaseShout(value: string) {
+  const word = /[A-Za-z0-9]+(?:[.'’][A-Za-z0-9]+)*/g;
+  let capNext = true;
+  let cursor = 0;
+  let out = "";
+  for (const match of value.matchAll(word)) {
+    const gap = value.slice(cursor, match.index ?? 0);
+    if (/[:.!?—–-]/.test(gap)) capNext = true;
+    out += gap;
+
+    let token = match[0];
+    let end = (match.index ?? 0) + token.length;
+    if (/^u\.s$/i.test(token) && value[end] === ".") {
+      token += ".";
+      end += 1;
+    }
+
+    const bare = token.toLowerCase();
+    if (KEEP_UPPER.has(bare) || /\d/.test(token)) {
+      out += bare === "u.s" || bare === "u.s." ? "U.S." : token.toUpperCase();
+    } else if (capNext || !SMALL_WORDS.has(bare)) {
+      out += bare.charAt(0).toUpperCase() + bare.slice(1);
+    } else {
+      out += bare;
+    }
+    capNext = false;
+    cursor = end;
+  }
+  return out + value.slice(cursor);
+}
+
+export function readableTitle(title: string) {
+  return title
+    .split(/(\s*:\s*)/)
+    .map((part, index) => (index % 2 === 1 || !mostlyUpper(part) ? part : titleCaseShout(part)))
+    .join("");
+}
+
 export function parseFeed(
   xml: string,
   writer: { author: string; site: string },
@@ -130,45 +220,56 @@ export async function ArticleFeed() {
   }
 
   return (
-    <section className="pb-8" aria-labelledby="briefing-list-heading">
-      <div className="max-w-5xl mx-auto px-4">
-        <h2
-          id="briefing-list-heading"
-          className="font-heading text-2xl text-gray-100 tracking-wider mb-6"
-        >
-          LATEST BRIEFINGS
-        </h2>
-        <ol className="space-y-4">
-          {briefings.map((briefing) => (
-            <li key={briefing.url} className="bg-dark-100/80 border border-gray-800 rounded-sm p-5">
-              <p className="font-mono text-[11px] text-gray-500 mb-1">{briefing.date}</p>
-              <p className="font-mono text-[11px] tracking-wider text-primary mb-2">
-                <a
-                  href={briefing.site}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:underline"
-                >
-                  {briefing.author}
-                </a>
-              </p>
-              <h3 className="font-heading text-lg text-gray-100 mb-2">
-                <a
-                  href={briefing.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-primary transition-colors"
-                >
-                  {briefing.title}
-                </a>
-              </h3>
-              {briefing.excerpt ? (
-                <p className="text-sm text-gray-400 leading-relaxed">{briefing.excerpt}</p>
-              ) : null}
-            </li>
-          ))}
-        </ol>
+    <div className="pb-8">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="grid gap-12 lg:grid-cols-2 lg:gap-14">
+          {WRITERS.map((writer) => {
+            const items = briefings.filter((item) => item.author === writer.author);
+            const headingId = `briefings-${writer.author.toLowerCase().replace(/[^a-z]+/g, "-")}`;
+            return (
+              <section key={writer.author} aria-labelledby={headingId}>
+                <header className="mb-6 border-b border-gray-800 pb-4">
+                  <h2 id={headingId} className="text-2xl font-semibold text-gray-100">
+                    {writer.author}
+                  </h2>
+                  <a
+                    href={writer.site}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-1 inline-block text-sm text-primary hover:underline"
+                  >
+                    {writer.site.replace("https://", "")}
+                  </a>
+                </header>
+                {items.length === 0 ? (
+                  <p className="text-gray-400">No briefings are listed right now.</p>
+                ) : (
+                  <ol className="space-y-0">
+                    {items.map((briefing) => (
+                      <li key={briefing.url} className="border-b border-gray-800/80 py-5 first:pt-0">
+                        <p className="mb-2 text-xs text-gray-500">{briefing.date}</p>
+                        <h3 className="mb-2 text-lg font-semibold leading-snug text-gray-100">
+                          <a
+                            href={briefing.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-primary"
+                          >
+                            {readableTitle(briefing.title)}
+                          </a>
+                        </h3>
+                        {briefing.excerpt ? (
+                          <p className="text-[15px] leading-7 text-gray-400">{briefing.excerpt}</p>
+                        ) : null}
+                      </li>
+                    ))}
+                  </ol>
+                )}
+              </section>
+            );
+          })}
+        </div>
       </div>
-    </section>
+    </div>
   );
 }
