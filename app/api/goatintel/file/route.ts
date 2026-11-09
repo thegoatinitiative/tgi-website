@@ -77,6 +77,20 @@ async function fetchAuthorized(start: string, token: string): Promise<Response> 
   return last as Response;
 }
 
+async function fetchStoredLink(start: string): Promise<Response> {
+  let current = start;
+  let last: Response | null = null;
+  for (let hop = 0; hop < 3; hop += 1) {
+    last = await fetch(current, { redirect: "manual" });
+    if (last.status < 300 || last.status >= 400) return last;
+    const next = allowedRedirect(last.headers.get("location") || "", current);
+    await last.body?.cancel();
+    if (!next) return last;
+    current = next;
+  }
+  return last as Response;
+}
+
 async function readLimited(response: Response): Promise<Uint8Array | null> {
   if (!response.body) return null;
   const announced = Number(response.headers.get("content-length") || "0");
@@ -152,22 +166,43 @@ export async function POST(request: Request) {
     let bytes: Uint8Array | null = null;
     let contentType = "";
     let missing = true;
-    for (const target of targets) {
-      const upstream = await fetchAuthorized(target, token);
-      if (upstream.status === 404) continue;
+    let tooBig = false;
+
+    const consider = async (upstream: Response): Promise<boolean> => {
+      if (upstream.status === 404) return false;
       missing = false;
-      if (upstream.status !== 200) continue;
+      if (upstream.status !== 200) {
+        await upstream.body?.cancel();
+        return false;
+      }
+      const announced = Number(upstream.headers.get("content-length") || "0");
+      if (announced > MAX_BYTES) {
+        tooBig = true;
+        await upstream.body?.cancel();
+        return false;
+      }
       const got = await readLimited(upstream);
-      if (!got) continue;
+      if (!got) {
+        tooBig = true;
+        return false;
+      }
       const headerType = (upstream.headers.get("content-type") || "").split(";")[0].trim().toLowerCase();
       const pdf = got.byteLength >= 5 && got[0] === 0x25 && got[1] === 0x50 && got[2] === 0x44 && got[3] === 0x46;
       const type = pdf ? "application/pdf" : headerType.startsWith("image/") ? headerType : "";
-      if (!type) continue;
+      if (!type) return false;
       bytes = got;
       contentType = type;
-      break;
+      return true;
+    };
+
+    for (const target of targets) {
+      if (await consider(await fetchAuthorized(target, token))) break;
     }
-    if (!bytes) return jsonCors(request, { error: missing ? "missing" : "upstream" }, missing ? 404 : 502);
+    if (!bytes && extra) await consider(await fetchStoredLink(extra));
+    if (!bytes) {
+      if (tooBig) return jsonCors(request, { error: "large" }, 413);
+      return jsonCors(request, { error: missing ? "missing" : "upstream" }, missing ? 404 : 502);
+    }
 
     const headers = corsHeaders(request);
     headers.set("Content-Type", contentType);
