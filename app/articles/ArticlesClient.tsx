@@ -48,8 +48,8 @@ function SocialIcon({ kind }: { kind: "instagram" | "x" }) {
 export function ArticlesClient({ children }: { children?: React.ReactNode }) {
   return (
     <div className="min-h-screen py-12">
-      <section className="py-16 relative overflow-hidden">
-        <div className="max-w-5xl mx-auto px-4 relative z-10">
+      <section className="relative overflow-hidden pb-8 pt-10">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -85,7 +85,7 @@ export function ArticlesClient({ children }: { children?: React.ReactNode }) {
       {children}
 
       <section className="py-16">
-        <div className="max-w-5xl mx-auto px-4 space-y-8">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 space-y-8">
           {writers.map((writer, index) => (
             <motion.div
               key={writer.profileUrl}

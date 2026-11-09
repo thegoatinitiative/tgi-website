@@ -18,6 +18,7 @@ export type Briefing = {
   url: string;
   date: string;
   excerpt: string;
+  image: string;
   author: string;
   site: string;
   published: number;
@@ -42,6 +43,23 @@ function decode(value: string) {
 function tag(block: string, name: string) {
   const match = block.match(new RegExp(`<${name}[^>]*>([\\s\\S]*?)</${name}>`));
   return match ? decode(match[1]) : "";
+}
+
+function coverImage(block: string) {
+  const enclosure = block.match(/<enclosure\b([^>]*?)\/?>/i);
+  const enclosedUrl = enclosure?.[1].match(/\burl=["']([^"']+)["']/i)?.[1] ?? "";
+  const enclosedType = enclosure?.[1].match(/\btype=["']([^"']+)["']/i)?.[1] ?? "";
+  const fromEnclosure =
+    enclosedUrl && (!enclosedType || enclosedType.startsWith("image/")) ? enclosedUrl : "";
+  const fromBody = block.match(/<img\b[^>]*\bsrc=["']([^"']+)["']/i)?.[1] ?? "";
+  const raw = decode(fromEnclosure || fromBody).trim();
+  if (!raw.startsWith("https://")) return "";
+  try {
+    if (new URL(raw).hostname !== "substackcdn.com") return "";
+  } catch {
+    return "";
+  }
+  return raw.replace(/\/image\/fetch\/\$s_![A-Za-z0-9]+!/, (token) => `${token},w_1200,c_fill,h_750`);
 }
 
 const KEEP_UPPER = new Set([
@@ -154,7 +172,8 @@ export function parseFeed(
               year: "numeric",
               timeZone: "UTC",
             }),
-        excerpt: tag(block, "description").slice(0, 240),
+        excerpt: tag(block, "description").slice(0, 220),
+        image: coverImage(block),
         author: writer.author,
         site: writer.site,
         published: Number.isNaN(parsed.getTime()) ? 0 : parsed.getTime(),
@@ -219,44 +238,90 @@ export async function ArticleFeed() {
     );
   }
 
+  const [featured, ...rest] = briefings;
+
   return (
     <section className="pb-8" aria-labelledby="briefing-list-heading">
-      <div className="max-w-3xl mx-auto px-4">
-        <h2 id="briefing-list-heading" className="mb-6 text-2xl font-semibold text-gray-100">
+      <div className="mx-auto max-w-screen-2xl px-4 sm:px-6">
+        <h2 id="briefing-list-heading" className="sr-only">
           Latest briefings
         </h2>
-        <ol>
-          {briefings.map((briefing) => (
-            <li key={briefing.url} className="border-b border-gray-800/80 py-6 first:pt-0">
-              <p className="mb-2 text-sm text-gray-500">
-                {briefing.date}
+        <article className="mb-8 overflow-hidden border border-gray-800 bg-dark-100/80">
+          <a
+            href={featured.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group grid md:grid-cols-2"
+          >
+            <BriefingImage briefing={featured} featured />
+            <div className="flex flex-col justify-center p-6 md:p-10">
+              <p className="mb-3 text-sm text-gray-500">
+                {featured.date}
                 <span aria-hidden="true"> · </span>
-                <a
-                  href={briefing.site}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-300 hover:text-primary"
-                >
-                  {briefing.author}
-                </a>
+                <span className="text-gray-300">{featured.author}</span>
               </p>
-              <h3 className="mb-2 text-xl font-semibold leading-snug text-gray-100">
-                <a
-                  href={briefing.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-primary"
-                >
-                  {readableTitle(briefing.title)}
-                </a>
+              <h3 className="mb-4 text-2xl font-semibold leading-snug text-gray-100 group-hover:text-primary md:text-3xl">
+                {readableTitle(featured.title)}
               </h3>
-              {briefing.excerpt ? (
-                <p className="text-base leading-7 text-gray-400">{briefing.excerpt}</p>
+              {featured.excerpt ? (
+                <p className="text-base leading-7 text-gray-400">{featured.excerpt}</p>
               ) : null}
+            </div>
+          </a>
+        </article>
+        <ol className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+          {rest.map((briefing) => (
+            <li key={briefing.url} className="min-w-0">
+              <a
+                href={briefing.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex h-full flex-col overflow-hidden border border-gray-800 bg-dark-100/70 transition-colors hover:border-primary/40"
+              >
+                <BriefingImage briefing={briefing} />
+                <div className="flex flex-1 flex-col p-5">
+                  <p className="mb-2 text-xs text-gray-500">
+                    {briefing.date}
+                    <span aria-hidden="true"> · </span>
+                    <span className="text-gray-300">{briefing.author}</span>
+                  </p>
+                  <h3 className="mb-2 text-lg font-semibold leading-snug text-gray-100 group-hover:text-primary">
+                    {readableTitle(briefing.title)}
+                  </h3>
+                  {briefing.excerpt ? (
+                    <p className="line-clamp-3 text-sm leading-6 text-gray-400">{briefing.excerpt}</p>
+                  ) : null}
+                </div>
+              </a>
             </li>
           ))}
         </ol>
       </div>
     </section>
+  );
+}
+
+function BriefingImage({ briefing, featured = false }: { briefing: Briefing; featured?: boolean }) {
+  if (!briefing.image) {
+    return (
+      <div
+        className={
+          featured
+            ? "min-h-56 bg-gradient-to-br from-primary/20 via-dark to-dark md:min-h-full"
+            : "aspect-[16/9] bg-gradient-to-br from-primary/15 via-dark to-dark"
+        }
+      />
+    );
+  }
+
+  return (
+    <div className={featured ? "min-h-56 overflow-hidden md:min-h-full" : "aspect-[16/9] overflow-hidden"}>
+      <img
+        src={briefing.image}
+        alt=""
+        className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+        loading={featured ? "eager" : "lazy"}
+      />
+    </div>
   );
 }
