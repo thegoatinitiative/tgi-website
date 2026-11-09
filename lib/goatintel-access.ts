@@ -35,6 +35,10 @@ export type AccessRequest = {
   kind: "account" | "portal";
   setupTokenHash: string | null;
   setupExpires: string | null;
+  authEmail: string;
+  recoverTokenHash: string | null;
+  recoverExpires: string | null;
+  recoverSentAt: string | null;
 };
 
 type Store = { requests: AccessRequest[] };
@@ -121,6 +125,10 @@ function isRequest(value: unknown): value is AccessRequest {
   request.kind = request.kind === "portal" ? "portal" : "account";
   request.setupTokenHash = typeof request.setupTokenHash === "string" ? request.setupTokenHash : null;
   request.setupExpires = typeof request.setupExpires === "string" ? request.setupExpires : null;
+  request.authEmail = typeof request.authEmail === "string" ? request.authEmail : "";
+  request.recoverTokenHash = typeof request.recoverTokenHash === "string" ? request.recoverTokenHash : null;
+  request.recoverExpires = typeof request.recoverExpires === "string" ? request.recoverExpires : null;
+  request.recoverSentAt = typeof request.recoverSentAt === "string" ? request.recoverSentAt : null;
   return true;
 }
 
@@ -379,6 +387,10 @@ export async function stageAccessRequest(input: {
       kind: existing?.kind === "portal" ? "portal" : "account",
       setupTokenHash: null,
       setupExpires: null,
+      authEmail: existing?.authEmail || "",
+      recoverTokenHash: null,
+      recoverExpires: null,
+      recoverSentAt: null,
     };
     if (existing) Object.assign(existing, record);
     else store.requests.push(record);
@@ -573,6 +585,10 @@ export async function stagePortalRequest(input: {
       kind: "portal",
       setupTokenHash: null,
       setupExpires: null,
+      authEmail: "",
+      recoverTokenHash: null,
+      recoverExpires: null,
+      recoverSentAt: null,
     };
     if (existing) Object.assign(existing, record);
     else store.requests.push(record);
@@ -631,4 +647,166 @@ export async function finishPortalSetup(input: {
     request.setupExpires = null;
     return { result: "ok" as const, changed: true };
   });
+}
+
+const RECOVER_MS = 2 * 60 * 60 * 1000;
+const RECOVER_COOLDOWN_MS = 10 * 60 * 1000;
+const RECOVER_PAGE = "https://goatintel.com/?recover=";
+const AUTH_DOMAIN = "@intelportal.app";
+
+export type RecoveryDraft = {
+  mailed: boolean;
+  email: string;
+  username: string;
+  recoverUrl: string | null;
+  previous: AccessRequest | null;
+  uid: string | null;
+};
+
+export type RecoveryFinish =
+  | { ok: true; username: string }
+  | { ok: false; error: "invalid" | "expired" | "taken" };
+
+function blankRecovery(): RecoveryDraft {
+  return { mailed: false, email: "", username: "", recoverUrl: null, previous: null, uid: null };
+}
+
+function authLocal(email: string): string | null {
+  const lower = email.trim().toLowerCase();
+  if (!lower.endsWith(AUTH_DOMAIN)) return null;
+  const local = lower.slice(0, -AUTH_DOMAIN.length);
+  if (!/^[a-z0-9][a-z0-9._-]{1,31}$/.test(local)) return null;
+  if (isStaffUsername(local)) return null;
+  return local;
+}
+
+function recoveryReady(request: AccessRequest): boolean {
+  if (request.status !== "approved") return false;
+  if (request.kind !== "portal" && request.kind !== "account") return false;
+  if (!request.username || isStaffUsername(request.username)) return false;
+  if (!request.uid || request.uid.startsWith("portal_")) return false;
+  if (!request.email || !request.email.includes("@")) return false;
+  return true;
+}
+
+export function recoveryText(username: string, recoverUrl: string): string {
+  return [
+    "A GOAT Intel sign-in reset was requested.",
+    "",
+    `Username: ${username}`,
+    "",
+    "Sign in at https://goatintel.com/ with that username.",
+    "The email address is not the username.",
+    "",
+    "To choose a new password, open this link. It works once and expires in 2 hours:",
+    recoverUrl,
+    "",
+    "If you still know the password, sign in and ignore the link.",
+    "If you did not ask for this, ignore this email.",
+    "",
+    "The GOAT Initiative",
+  ].join("\n");
+}
+
+/** Starts a username and password reset for one approved account. Sends nothing when the account is missing. */
+export async function stageRecovery(account: string): Promise<RecoveryDraft> {
+  const trimmed = account.trim().toLowerCase();
+  const byEmail = trimmed.includes("@");
+  if (byEmail) {
+    if (trimmed.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) return blankRecovery();
+  } else if (!/^[a-z0-9][a-z0-9._-]{1,31}$/.test(trimmed) || isStaffUsername(trimmed)) {
+    return blankRecovery();
+  }
+  const now = Date.now();
+  return mutate((store) => {
+    const matches = store.requests.filter((request) => {
+      if (!recoveryReady(request)) return false;
+      return byEmail ? request.email === trimmed : request.username === trimmed;
+    });
+    if (matches.length !== 1) return { result: blankRecovery(), changed: false };
+    const request = matches[0];
+    const sent = request.recoverSentAt ? Date.parse(request.recoverSentAt) : NaN;
+    if (Number.isFinite(sent) && now - sent < RECOVER_COOLDOWN_MS) {
+      return { result: blankRecovery(), changed: false };
+    }
+    const previous = copyRequest(request);
+    const token = newToken();
+    request.recoverTokenHash = token.hash;
+    request.recoverExpires = new Date(now + RECOVER_MS).toISOString();
+    request.recoverSentAt = new Date(now).toISOString();
+    return {
+      result: {
+        mailed: true,
+        email: request.email,
+        username: request.username,
+        recoverUrl: `${RECOVER_PAGE}${token.token}`,
+        previous,
+        uid: request.uid,
+      },
+      changed: true,
+    };
+  });
+}
+
+export async function inspectRecovery(token: string): Promise<"ok" | "invalid" | "expired"> {
+  if (typeof token !== "string" || token.length < 20 || token.length > 200) return "invalid";
+  if (!/^[A-Za-z0-9_-]+$/.test(token)) return "invalid";
+  const hash = createHash("sha256").update(token).digest("base64url");
+  const snapshot = await readSnapshot();
+  const request = snapshot.store.requests.find(
+    (entry) => entry.recoverTokenHash && sameHash(entry.recoverTokenHash, hash)
+  );
+  if (!request || !recoveryReady(request)) return "invalid";
+  const expires = request.recoverExpires ? Date.parse(request.recoverExpires) : NaN;
+  if (!Number.isFinite(expires) || expires < Date.now()) return "expired";
+  return "ok";
+}
+
+/** Points the approved account at a new sign-in after the reset link is used. */
+export async function finishRecovery(input: {
+  token: string;
+  uid: string;
+  authEmail: string;
+}): Promise<RecoveryFinish> {
+  if (typeof input.token !== "string" || input.token.length < 20 || input.token.length > 200) {
+    return { ok: false, error: "invalid" };
+  }
+  if (!/^[A-Za-z0-9_-]+$/.test(input.token)) return { ok: false, error: "invalid" };
+  if (!input.uid || input.uid.startsWith("portal_") || !authLocal(input.authEmail)) {
+    return { ok: false, error: "invalid" };
+  }
+  const authEmail = input.authEmail.trim().toLowerCase();
+  const hash = createHash("sha256").update(input.token).digest("base64url");
+  return mutate((store) => {
+    const request = store.requests.find((entry) => entry.recoverTokenHash && sameHash(entry.recoverTokenHash, hash));
+    if (!request || !recoveryReady(request)) return { result: { ok: false, error: "invalid" } as RecoveryFinish, changed: false };
+    const expires = request.recoverExpires ? Date.parse(request.recoverExpires) : NaN;
+    if (!Number.isFinite(expires) || expires < Date.now()) {
+      request.recoverTokenHash = null;
+      request.recoverExpires = null;
+      return { result: { ok: false, error: "expired" } as RecoveryFinish, changed: true };
+    }
+    if (store.requests.some((entry) => entry !== request && (entry.uid === input.uid || entry.authEmail === authEmail))) {
+      return { result: { ok: false, error: "taken" } as RecoveryFinish, changed: false };
+    }
+    const username = request.username;
+    request.uid = input.uid;
+    request.authEmail = authEmail;
+    request.recoverTokenHash = null;
+    request.recoverExpires = null;
+    return { result: { ok: true, username } as RecoveryFinish, changed: true };
+  });
+}
+
+/** Sign-in address after a password reset. Missing means the username address is still the login. */
+export async function authEmailForUsername(username: string): Promise<string | null> {
+  const trimmed = username.trim().toLowerCase();
+  if (!/^[a-z0-9][a-z0-9._-]{1,31}$/.test(trimmed) || isStaffUsername(trimmed)) return null;
+  const snapshot = await readSnapshot();
+  const matches = snapshot.store.requests.filter((request) => {
+    if (request.status !== "approved" || request.username !== trimmed) return false;
+    return authLocal(request.authEmail) !== null;
+  });
+  if (matches.length !== 1) return null;
+  return matches[0].authEmail;
 }
