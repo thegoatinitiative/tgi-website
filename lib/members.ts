@@ -1,7 +1,7 @@
 import { createHash, randomBytes, randomUUID, timingSafeEqual } from "crypto";
 import { mkdir, readFile, rename, writeFile } from "fs/promises";
 import { dirname, join } from "path";
-import { get, put, BlobNotFoundError, BlobPreconditionFailedError } from "@vercel/blob";
+import { get, head, put, BlobNotFoundError, BlobPreconditionFailedError } from "@vercel/blob";
 import { isReportId, REPORTS, type ReportId } from "@/lib/reports";
 
 export class MemberStoreError extends Error {
@@ -93,11 +93,19 @@ async function readFileStore(): Promise<Snapshot> {
 }
 
 async function readBlobStore(): Promise<Snapshot> {
+  let etag: string | null = null;
+  try {
+    const metadata = await head(BLOB_PATH);
+    etag = metadata.etag || null;
+  } catch (error) {
+    if (error instanceof BlobNotFoundError) return { store: emptyStore(), etag: null };
+    throw error;
+  }
   try {
     const result = await get(BLOB_PATH, { access: "private", useCache: false });
-    if (!result || result.statusCode !== 200 || !result.stream) return { store: emptyStore(), etag: null };
+    if (!result || result.statusCode !== 200 || !result.stream) return { store: emptyStore(), etag };
     const raw = await new Response(result.stream).text();
-    return { store: parseStore(raw), etag: result.blob.etag };
+    return { store: parseStore(raw), etag };
   } catch (error) {
     if (error instanceof BlobNotFoundError) return { store: emptyStore(), etag: null };
     throw error;
