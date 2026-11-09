@@ -21,7 +21,7 @@ const writers = [
     role: "Director of Strategic Intelligence",
     blurb:
       "Investigations and written briefings from Hels Apffel, Director of Strategic Intelligence. The full articles are on Substack.",
-    profileUrl: "https://substack.com/@helsapffel",
+    profileUrl: "https://helsapffel.substack.com/",
     embedUrl: "https://helsapffel.substack.com/embed",
     socials: [
       { kind: "instagram" as const, href: "https://instagram.com/helsapffel", label: "@helsapffel" },
