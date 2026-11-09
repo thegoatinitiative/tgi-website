@@ -36,12 +36,19 @@ export default async function LoginPage({
     <PageFrame path="/login" name="Sign in" description={description}>
       <section className="py-16">
         <div className="max-w-lg mx-auto px-4">
+          <a
+            href="https://goatintel.com/"
+            className="block w-full mb-3 py-3 bg-primary text-dark font-heading text-sm tracking-wider text-center"
+          >
+            SIGN IN
+          </a>
+          <p className="text-sm text-gray-500 text-center mb-10">GOAT Intel. Use the username from your approval email.</p>
           <p className="font-mono text-xs text-primary tracking-widest mb-4">FIELD REPORTS</p>
           <h1 className="font-heading text-4xl text-gray-100 tracking-wider mb-4">
-            SIGN <span className="text-primary">IN</span>
+            FIELD <span className="text-primary">REPORTS</span>
           </h1>
           <p className="text-gray-400 leading-relaxed mb-8">
-            Signed-in members can open each report after it is released.
+            This form is only for field reports on this website. Signed-in members can open each report after it is released.
           </p>
           <form action="/api/auth/login" method="post" className="space-y-4 bg-dark-100/80 border border-primary/20 p-6">
             <input type="hidden" name="next" value={next} />
@@ -64,7 +71,7 @@ export default async function LoginPage({
               type="submit"
               className="w-full py-3 bg-primary text-dark font-heading text-sm tracking-wider"
             >
-              SIGN IN
+              OPEN REPORTS
             </button>
           </form>
           <p className="text-sm text-gray-500 mt-6">

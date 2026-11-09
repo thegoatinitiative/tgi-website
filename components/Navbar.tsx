@@ -15,17 +15,14 @@ const navLinks = [
 ];
 
 function AccountLink({ onClick, className }: { onClick?: () => void; className: string }) {
-  const [href, setHref] = useState("/login");
-  const [label, setLabel] = useState("Sign in");
+  const [signedIn, setSignedIn] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
     fetch("/api/auth/me")
       .then((response) => response.json())
       .then((data: { signedIn?: boolean }) => {
-        if (cancelled || !data.signedIn) return;
-        setHref("/account");
-        setLabel("Account");
+        if (!cancelled && data.signedIn) setSignedIn(true);
       })
       .catch(() => {});
     return () => {
@@ -34,9 +31,16 @@ function AccountLink({ onClick, className }: { onClick?: () => void; className: 
   }, []);
 
   return (
-    <Link href={href} onClick={onClick} className={className}>
-      {label}
-    </Link>
+    <>
+      <a href="https://goatintel.com/" onClick={onClick} className={className}>
+        Sign in
+      </a>
+      {signedIn ? (
+        <Link href="/account" onClick={onClick} className={className}>
+          Account
+        </Link>
+      ) : null}
+    </>
   );
 }
 
@@ -99,6 +103,12 @@ export function Navbar() {
           </div>
 
           <div className="lg:hidden flex items-center gap-3">
+            <a
+              href="https://goatintel.com/"
+              className="px-3 py-2 text-sm text-gray-400 hover:text-primary transition-colors font-medium tracking-wide"
+            >
+              Sign in
+            </a>
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="p-2 text-gray-400 hover:text-primary transition-colors"

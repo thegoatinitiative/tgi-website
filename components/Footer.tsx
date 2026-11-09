@@ -41,7 +41,7 @@ const exploreLinks = [
   { label: "Articles", href: "/articles" },
   { label: "Donate", href: "/donate" },
   { label: "Contact", href: "/contact" },
-  { label: "Sign in", href: "/login" },
+  { label: "Sign in", href: "https://goatintel.com/" },
 ];
 
 const footerLinks = [
@@ -83,15 +83,25 @@ export function Footer() {
               QUICK LINKS
             </h3>
             <div className="grid grid-cols-2 gap-2">
-              {exploreLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-sm text-gray-500 hover:text-primary transition-colors"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {exploreLinks.map((link) =>
+                link.href.startsWith("https://") ? (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className="text-sm text-gray-500 hover:text-primary transition-colors"
+                  >
+                    {link.label}
+                  </a>
+                ) : (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="text-sm text-gray-500 hover:text-primary transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                )
+              )}
               {footerLinks.map((link) => (
                 <Link
                   key={link.href}
