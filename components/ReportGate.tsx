@@ -29,7 +29,7 @@ export function ReportGate({
         {reason === "signed-out" ? (
           <>
             <p className="text-gray-300 leading-relaxed mb-8">
-              Create an account and confirm your email. This report opens when The GOAT Initiative releases it.
+              Create an account and confirm your email. This report opens when The GOAT Initiative releases it. This account is only for released reports on this website.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link

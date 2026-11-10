@@ -14,7 +14,15 @@ const navLinks = [
   { href: "/articles", label: "Articles" },
 ];
 
-function AccountLink({ onClick, className }: { onClick?: () => void; className: string }) {
+function AccountLink({
+  onClick,
+  className,
+  stacked = false,
+}: {
+  onClick?: () => void;
+  className: string;
+  stacked?: boolean;
+}) {
   const [signedIn, setSignedIn] = useState(false);
 
   useEffect(() => {
@@ -30,10 +38,13 @@ function AccountLink({ onClick, className }: { onClick?: () => void; className: 
     };
   }, []);
 
-  return (
+  const links = (
     <>
       <a href="https://goatintel.com/" onClick={onClick} className={className}>
-        Sign in
+        Intel reports
+      </a>
+      <a href="https://thecorygoat.substack.com/subscribe" onClick={onClick} className={className}>
+        Email list
       </a>
       {signedIn ? (
         <Link href="/account" onClick={onClick} className={className}>
@@ -42,6 +53,12 @@ function AccountLink({ onClick, className }: { onClick?: () => void; className: 
       ) : null}
     </>
   );
+
+  if (stacked) {
+    return <div className="flex flex-col items-end leading-tight">{links}</div>;
+  }
+
+  return links;
 }
 
 export function Navbar() {
@@ -90,7 +107,10 @@ export function Navbar() {
           </div>
 
           <div className="hidden lg:flex items-center gap-3 flex-shrink-0">
-            <AccountLink className="px-4 py-2.5 text-base text-gray-300 hover:text-primary transition-colors font-medium tracking-wide" />
+            <AccountLink
+              stacked
+              className="whitespace-nowrap px-1 py-1 text-sm text-gray-300 hover:text-primary transition-colors font-medium tracking-wide xl:text-base"
+            />
             <Link
               href="/donate"
               className="px-5 py-3 bg-gradient-to-r from-primary to-cyan-400 text-dark font-heading text-sm tracking-wider rounded-sm hover:shadow-[0_0_20px_rgba(0,212,255,0.5)] transition-all duration-300 flex items-center gap-2 xl:px-7 xl:py-3.5 xl:text-base"
@@ -103,12 +123,10 @@ export function Navbar() {
           </div>
 
           <div className="lg:hidden flex items-center gap-3">
-            <a
-              href="https://goatintel.com/"
-              className="px-4 py-2.5 text-base text-gray-300 hover:text-primary transition-colors font-medium tracking-wide"
-            >
-              Sign in
-            </a>
+            <AccountLink
+              stacked
+              className="whitespace-nowrap px-1 py-1 text-sm text-gray-300 hover:text-primary transition-colors font-medium"
+            />
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="p-2 text-gray-400 hover:text-primary transition-colors"

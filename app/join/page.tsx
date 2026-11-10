@@ -42,7 +42,7 @@ export default async function JoinPage({
             SIGN <span className="text-primary">UP</span>
           </h1>
           <p className="text-gray-400 leading-relaxed mb-8">
-            We email you a confirmation link. After you confirm, you can read each report when it is released.
+            This account opens a released report on this website. We email you a confirmation link. It does not add you to the email list.
           </p>
           <form action="/api/auth/signup" method="post" className="space-y-4 bg-dark-100/80 border border-primary/20 p-6">
             <input type="hidden" name="next" value={next} />
@@ -79,6 +79,15 @@ export default async function JoinPage({
             <Link href={`/login?next=${encodeURIComponent(next)}`} className="text-primary">
               Sign in
             </Link>
+          </p>
+          <p className="text-sm text-gray-500 mt-3">
+            <a href="https://thecorygoat.substack.com/subscribe" className="text-primary">
+              Join the email list
+            </a>
+            {" · "}
+            <a href="https://goatintel.com/" className="text-primary">
+              Intel reports login
+            </a>
           </p>
         </div>
       </section>

@@ -41,7 +41,8 @@ const exploreLinks = [
   { label: "Articles", href: "/articles" },
   { label: "Donate", href: "/donate" },
   { label: "Contact", href: "/contact" },
-  { label: "Sign in", href: "https://goatintel.com/" },
+  { label: "Intel reports", href: "https://goatintel.com/" },
+  { label: "Email list", href: "https://thecorygoat.substack.com/subscribe" },
 ];
 
 const footerLinks = [

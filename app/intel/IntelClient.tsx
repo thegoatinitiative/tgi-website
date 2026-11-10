@@ -5,7 +5,7 @@ import Link from "next/link";
 import { RequestAccessButton } from "@/components/RequestAccessButton";
 import { REPORTS, type ReportId } from "@/lib/reports";
 
-const SUBSTACK_URL = "https://substack.com/@thecorygoat";
+const SUBSTACK_URL = "https://thecorygoat.substack.com/subscribe";
 
 type IntelReport = {
   id: ReportId;
@@ -169,17 +169,19 @@ export function IntelClient({
             
             <p className="text-base md:text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed mb-3">
               Field reports from The GOAT Initiative, grouped by what was recovered.
-              Each report stays locked until we release it. Confirm the email we send, then you can read a released report.
+              Each report stays locked until we release it. Create an account on this website to open a released report.
             </p>
             <p className="text-sm text-gray-400 mb-2">
               {released} of {REPORTS.length} reports released
             </p>
             <p className="text-sm text-gray-300 max-w-2xl mx-auto leading-relaxed mt-4">
-              These pages are the public field reports. Detailed files are separate.{" "}
+              The intel reports login is separate.{" "}
               <Link href="/intel/portal" className="text-primary hover:underline">Request access</Link>
-              {" "}with your name, phone, email, and organization. Staff approve or deny each request.
-              Approved people sign in at{" "}
-              <a href="https://goatintel.com/" className="text-primary hover:underline">GOAT Intel</a>.
+              , then sign in at{" "}
+              <a href="https://goatintel.com/" className="text-primary hover:underline">GOAT Intel</a>
+              {" "}with the username from your approval email. For email only,{" "}
+              <a href={SUBSTACK_URL} className="text-primary hover:underline">join the email list</a>.
+              That does not open the reports.
             </p>
             <RequestAccessButton className="mt-6" />
 
