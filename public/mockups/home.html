@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The GOAT Initiative — homepage mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #000000;
+    --ink: #ffffff;
+    --muted: #b5b5b5;
+    --dim: #8a8a8a;
+    --line: rgba(255, 255, 255, 0.16);
+    --accent: #FFDDEE;
+    --accent-ink: #1a0d12;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Inter, Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; display: block; }
+
+  .preview-bar {
+    background: var(--accent);
+    color: var(--accent-ink);
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+  }
+
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 18px 40px;
+    background: rgba(0, 0, 0, 0.92);
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(16px);
+  }
+  .brand {
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+  .brand span { color: var(--accent); }
+  .nav-links {
+    display: flex;
+    gap: 22px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-actions { display: flex; align-items: center; gap: 18px; }
+  .signin { font-size: 13px; color: var(--muted); }
+  .signin:hover { color: var(--ink); }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 18px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-size: 13px;
+    font-weight: 650;
+    letter-spacing: 0.04em;
+  }
+  .btn.ghost {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid rgba(255, 221, 238, 0.7);
+  }
+  .btn:hover { filter: brightness(1.05); }
+
+  .wrap { width: min(1180px, calc(100% - 80px)); margin: 0 auto; }
+  .hero { padding: 92px 0 72px; }
+  .eyebrow {
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 22px;
+  }
+  h1 {
+    font-size: clamp(56px, 8vw, 104px);
+    font-weight: 560;
+    letter-spacing: -0.045em;
+    line-height: 0.92;
+    max-width: 11ch;
+  }
+  h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+  .lede {
+    max-width: 640px;
+    margin-top: 32px;
+    color: var(--muted);
+    font-size: 18px;
+    line-height: 1.6;
+  }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+
+  .rule { border: 0; border-top: 1px solid var(--line); }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .stat { padding: 36px 0 40px; }
+  .stat + .stat { border-left: 1px solid var(--line); padding-left: 28px; }
+  .stat b {
+    display: block;
+    font-size: clamp(40px, 4vw, 64px);
+    font-weight: 560;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--accent);
+  }
+  .stat span {
+    display: block;
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  section { padding: 88px 0; }
+  .kicker {
+    color: var(--dim);
+    font-size: 13px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  h2 {
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 560;
+    letter-spacing: -0.04em;
+    line-height: 1.02;
+    max-width: 16ch;
+  }
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 40px;
+    margin-bottom: 36px;
+  }
+  .section-head p { max-width: 360px; color: var(--muted); }
+
+  .sectors { border-top: 1px solid var(--line); }
+  .sector {
+    display: grid;
+    grid-template-columns: 88px 1fr auto;
+    gap: 24px;
+    align-items: center;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .sector .num { color: var(--accent); font-size: 14px; letter-spacing: 0.12em; }
+  .sector h3 { font-size: 28px; font-weight: 560; letter-spacing: -0.03em; }
+  .sector p { color: var(--muted); font-size: 15px; margin-top: 4px; }
+  .sector .go { color: var(--accent); font-size: 14px; }
+
+  .statement {
+    padding: 100px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .statement h2 { max-width: 14ch; }
+  .statement p { margin-top: 24px; max-width: 560px; color: var(--muted); font-size: 18px; }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .card {
+    min-height: 320px;
+    padding: 28px;
+    border: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background:
+      linear-gradient(180deg, rgba(255,221,238,0.05), transparent 42%),
+      #050505;
+  }
+  .card .num { color: var(--accent); font-size: 13px; letter-spacing: 0.14em; margin-bottom: auto; }
+  .card h3 { font-size: 28px; letter-spacing: -0.03em; font-weight: 560; margin-bottom: 10px; }
+  .card p { color: var(--muted); font-size: 15px; }
+  .card .more { margin-top: 18px; color: var(--accent); font-size: 14px; }
+
+  .people {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+  .person { border-top: 1px solid var(--accent); padding-top: 18px; }
+  .person strong { display: block; font-size: 18px; font-weight: 600; }
+  .person span { display: block; margin-top: 6px; color: var(--muted); font-size: 14px; }
+
+  footer {
+    padding: 40px 0 56px;
+    border-top: 1px solid var(--line);
+    color: var(--dim);
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  footer a { color: var(--accent); }
+
+  @media (max-width: 800px) {
+    .nav { padding: 14px 16px; }
+    .nav-links, .signin { display: none; }
+    .wrap { width: calc(100% - 32px); }
+    .hero { padding: 48px 0 40px; }
+    h1 { font-size: 52px; }
+    .stats { grid-template-columns: 1fr 1fr; }
+    .stat + .stat { border-left: 0; padding-left: 0; }
+    .stat:nth-child(even) { padding-left: 16px; border-left: 1px solid var(--line); }
+    .section-head, .sector, .cards, .people, footer { display: block; }
+    .sector { padding: 22px 0; }
+    .sector .go { display: inline-block; margin-top: 8px; }
+    .card, .person { margin-top: 14px; }
+    section { padding: 56px 0; }
+  }
+</style>
+</head>
+<body>
+  <div class="preview-bar">Mockup only. The live site is unchanged. Restore point: branch master-copy</div>
+  <header class="nav">
+    <a class="brand" href="#top">THE <span>GOAT</span> INITIATIVE</a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#work">Mission</a>
+      <a href="#work">Operations</a>
+      <a href="#people">Leadership</a>
+      <a href="#work">Video Intel</a>
+      <a href="#work">Intel Updates</a>
+      <a href="#work">Articles</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="signin" href="https://goatintel.com/">Sign in</a>
+      <a class="btn" href="/donate">Donate</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <div class="wrap hero">
+      <p class="eyebrow">501(c)(3) · San Diego sector · EIN 99-3753614</p>
+      <h1>Built for the <em>border</em> record.</h1>
+      <p class="lede">The GOAT Initiative gathers intelligence along the U.S.–Mexico border and sends it to law enforcement. Child trafficking and human trafficking are a central part of that work. The team identifies what it sees, documents it, and reports it. It does not arrest, detain, or take custody.</p>
+      <div class="hero-actions">
+        <a class="btn" href="/mission">Read the mission</a>
+        <a class="btn ghost" href="/operations">See the work</a>
+      </div>
+    </div>
+
+    <hr class="rule">
+
+    <div class="wrap stats" aria-label="Public figures">
+      <div class="stat"><b>24/7</b><span>Monitoring</span></div>
+      <div class="stat"><b>100+</b><span>Intel reports</span></div>
+      <div class="stat"><b>50+</b><span>Agency partners</span></div>
+      <div class="stat"><b>35</b><span>Countries documented</span></div>
+    </div>
+
+    <section id="work">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="kicker">The work</p>
+            <h2>Where the record is made.</h2>
+          </div>
+          <p>Child trafficking, human trafficking, and the rest of the border record, written up for law enforcement.</p>
+        </div>
+        <div class="sectors">
+          <a class="sector" href="/mission">
+            <span class="num">01</span>
+            <div>
+              <h3>Child trafficking</h3>
+              <p>Identify the signs, document what is seen, and report it to law enforcement, including HSI and the FBI.</p>
+            </div>
+            <span class="go">Read more</span>
+          </a>
+          <a class="sector" href="/mission">
+            <span class="num">02</span>
+            <div>
+              <h3>Human trafficking</h3>
+              <p>Identify people moved for labor or sexual exploitation, write the record, and send it to law enforcement.</p>
+            </div>
+            <span class="go">Read more</span>
+          </a>
+          <a class="sector" href="/operations">
+            <span class="num">03</span>
+            <div>
+              <h3>Border intelligence</h3>
+              <p>Document crossings, special interest aliens, and other suspicious activity for the same partners.</p>
+            </div>
+            <span class="go">Read more</span>
+          </a>
+          <a class="sector" href="/intel">
+            <span class="num">04</span>
+            <div>
+              <h3>Field reports</h3>
+              <p>Devices and travel documents found on the border, written up and released as intel updates.</p>
+            </div>
+            <span class="go">Read more</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <div class="statement">
+      <div class="wrap">
+        <p class="kicker">How it works</p>
+        <h2>Identify. Document. Report.</h2>
+        <p>The organization reports to law enforcement. It does not arrest, detain, or take custody.</p>
+      </div>
+    </div>
+
+    <section>
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Current work</p>
+            <h2>Three lines of reporting.</h2>
+          </div>
+        </div>
+        <div class="cards">
+          <article class="card">
+            <span class="num">01</span>
+            <h3>Child trafficking</h3>
+            <p>Signs a child is being trafficked, documented and sent to HSI and the FBI.</p>
+            <a class="more" href="/mission">Explore</a>
+          </article>
+          <article class="card">
+            <span class="num">02</span>
+            <h3>Human trafficking</h3>
+            <p>Labor and sexual exploitation written up for the agencies that can act.</p>
+            <a class="more" href="/mission">Explore</a>
+          </article>
+          <article class="card">
+            <span class="num">03</span>
+            <h3>Border intelligence</h3>
+            <p>Crossings and other suspicious activity, kept in the same reporting chain.</p>
+            <a class="more" href="/operations">Explore</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="people">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Leadership</p>
+            <h2>The people on the record.</h2>
+          </div>
+        </div>
+        <div class="people">
+          <div class="person"><strong>Cory Gautereaux</strong><span>Founder and president</span></div>
+          <div class="person"><strong>Dan Conchas</strong><span>Vice president</span></div>
+          <div class="person"><strong>Tayler James</strong><span>Board secretary</span></div>
+          <div class="person"><strong>Hels Apffel</strong><span>Director of strategic intelligence</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="wrap">
+    <footer>
+      <div>The GOAT Initiative · 501(c)(3) · EIN 99-3753614</div>
+      <div><a href="https://www.thegoatinitiative.org">thegoatinitiative.org</a></div>
+    </footer>
+  </div>
+</body>
+</html>
