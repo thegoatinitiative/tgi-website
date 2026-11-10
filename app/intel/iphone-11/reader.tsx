@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { RequestAccessButton } from "@/components/RequestAccessButton";
 import { IIR_1101_PAGES, iir1101PageSrc } from "@/lib/iir-1101";
 import { globeCopy, RouteGlobe } from "./route-globe";
 
@@ -127,11 +128,10 @@ export function IphoneReader() {
             Handset recovered off Jewel Valley Road in Boulevard, California, feet from the border wall. Intelligence report prepared by The GOAT Initiative.
           </p>
           <p className="mt-4 text-gray-400 leading-relaxed">
-            Detailed files from this work are separate.{" "}
-            <Link href="/intel/portal" className="text-primary hover:underline">Request access</Link>
-            . Staff approve or deny each request. Approved people sign in at{" "}
+            Detailed files from this work are separate. Staff approve or deny each request. Approved people sign in at{" "}
             <a href="https://goatintel.com/" className="text-primary hover:underline">GOAT Intel</a>.
           </p>
+          <RequestAccessButton className="mt-6" />
         </div>
       </section>
 

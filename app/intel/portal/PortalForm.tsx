@@ -93,7 +93,7 @@ export function PortalForm() {
         <button
           type="submit"
           disabled={pending}
-          className="w-full py-3 bg-primary text-dark font-heading text-sm tracking-wider disabled:opacity-60"
+          className="w-full py-6 bg-primary text-dark font-heading text-xl font-bold tracking-widest disabled:opacity-60 sm:py-7 sm:text-2xl"
         >
           {pending ? "SENDING" : "REQUEST ACCESS"}
         </button>

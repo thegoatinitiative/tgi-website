@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { RequestAccessButton } from "@/components/RequestAccessButton";
 
 export function ReportGate({
   title,
@@ -65,10 +66,9 @@ export function ReportGate({
           </>
         )}
         <p className="text-gray-300 leading-relaxed mt-8">
-          Detailed files are separate.{" "}
-          <Link href="/intel/portal" className="text-primary hover:underline">Request access</Link>
-          {" "}with your name, phone, email, and organization. Staff approve or deny each request.
+          Detailed files are separate. Request access with your name, phone, email, and organization. Staff approve or deny each request.
         </p>
+        <RequestAccessButton className="mt-6" />
       </section>
     </div>
   );

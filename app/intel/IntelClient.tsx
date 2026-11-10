@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { RequestAccessButton } from "@/components/RequestAccessButton";
 import { REPORTS, type ReportId } from "@/lib/reports";
 
 const SUBSTACK_URL = "https://substack.com/@thecorygoat";
@@ -180,12 +181,7 @@ export function IntelClient({
               Approved people sign in at{" "}
               <a href="https://goatintel.com/" className="text-primary hover:underline">GOAT Intel</a>.
             </p>
-            <Link
-              href="/intel/portal"
-              className="inline-block mt-6 px-5 py-2.5 bg-primary text-dark font-heading text-sm tracking-wider"
-            >
-              REQUEST ACCESS
-            </Link>
+            <RequestAccessButton className="mt-6" />
 
             {/* Classification Banner */}
 

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
+import { RequestAccessButton } from "@/components/RequestAccessButton";
 import { FER_PUBLIC_PAGES, ferPageSrc } from "@/lib/fer-ch6i";
 
 export function FerReader() {
@@ -124,11 +125,10 @@ export function FerReader() {
             Some pages are omitted from this public copy.
           </p>
           <p className="mt-4 text-gray-400 leading-relaxed">
-            Detailed files from this work are separate.{" "}
-            <Link href="/intel/portal" className="text-primary hover:underline">Request access</Link>
-            . Staff approve or deny each request. Approved people sign in at{" "}
+            Detailed files from this work are separate. Staff approve or deny each request. Approved people sign in at{" "}
             <a href="https://goatintel.com/" className="text-primary hover:underline">GOAT Intel</a>.
           </p>
+          <RequestAccessButton className="mt-6" />
         </div>
       </section>
 
