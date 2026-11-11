@@ -3,7 +3,7 @@ import { get, BlobNotFoundError } from "@vercel/blob";
 import { clientIp } from "@/lib/account-notice";
 import { rateLimited } from "@/lib/auth-messages";
 import { FirebaseTokenError, verifyFirebaseIdToken } from "@/lib/firebase-token";
-import { accessStatus, isStaffUsername } from "@/lib/goatintel-access";
+import { accountMayReadReports } from "@/lib/goatintel-role";
 import { corsHeaders, jsonCors, preflight } from "@/lib/goatintel-cors";
 
 export const runtime = "nodejs";
@@ -32,9 +32,8 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
 
   try {
     const claims = await verifyFirebaseIdToken(token);
-    if (!isStaffUsername(claims.username)) {
-      const status = await accessStatus(claims.uid);
-      if (status !== "approved") return jsonCors(request, { error: "denied" }, 403);
+    if (!(await accountMayReadReports(token, claims))) {
+      return jsonCors(request, { error: "denied" }, 403);
     }
   } catch (error) {
     if (error instanceof FirebaseTokenError && error.code === "unavailable") {

@@ -2,6 +2,7 @@ import { clientIp } from "@/lib/account-notice";
 import { rateLimited } from "@/lib/auth-messages";
 import { FirebaseTokenError, verifyFirebaseIdToken } from "@/lib/firebase-token";
 import { accessStatus, isStaffUsername } from "@/lib/goatintel-access";
+import { hasFirestorePortalRole } from "@/lib/goatintel-role";
 import { jsonCors, preflight } from "@/lib/goatintel-cors";
 
 export const runtime = "nodejs";
@@ -25,7 +26,9 @@ export async function GET(request: Request) {
   if (!token) return jsonCors(request, { error: "invalid" }, 401);
   try {
     const claims = await verifyFirebaseIdToken(token);
-    if (isStaffUsername(claims.username)) return jsonCors(request, { status: "approved" }, 200);
+    if (isStaffUsername(claims.username) || (await hasFirestorePortalRole(token, claims.uid))) {
+      return jsonCors(request, { status: "approved" }, 200);
+    }
     const status = await accessStatus(claims.uid);
     return jsonCors(request, { status }, 200);
   } catch (error) {
