@@ -10,7 +10,7 @@ import { getSession } from "@/lib/session";
 export const dynamic = "force-dynamic";
 
 const description =
-  "Create an account to read field reports from The GOAT Initiative as each report is released.";
+  "Create an account to read reports from The GOAT Initiative as each report is released.";
 
 export const metadata: Metadata = pageMetadata({
   title: "Sign up to read reports",
@@ -37,7 +37,7 @@ export default async function JoinPage({
     <PageFrame path="/join" name="Sign up" description={description}>
       <section className="py-16">
         <div className="max-w-lg mx-auto px-4">
-          <p className="font-mono text-xs text-primary tracking-widest mb-4">FIELD REPORTS</p>
+          <p className="font-mono text-xs text-primary tracking-widest mb-4">REPORTS</p>
           <h1 className="font-heading text-4xl text-gray-100 tracking-wider mb-4">
             SIGN <span className="text-primary">UP</span>
           </h1>
@@ -86,7 +86,7 @@ export default async function JoinPage({
             </a>
             {" · "}
             <a href="https://goatintel.com/" className="text-primary">
-              Intel reports login
+              Approval username
             </a>
           </p>
         </div>

@@ -10,7 +10,7 @@ const navLinks = [
   { href: "/operations", label: "Operations" },
   { href: "/operatives", label: "Leadership" },
   { href: "/media", label: "Video Intel" },
-  { href: "/intel", label: "Intel Updates" },
+  { href: "/intel", label: "Reports" },
   { href: "/articles", label: "Articles" },
 ];
 
@@ -41,7 +41,7 @@ function AccountLink({
   const links = (
     <>
       <a href="https://goatintel.com/" onClick={onClick} className={className}>
-        Intel reports
+        GOAT Intel
       </a>
       <a href="https://thecorygoat.substack.com/subscribe" onClick={onClick} className={className}>
         Email list

@@ -27,7 +27,7 @@ export const videos: BriefingVideo[] = [
     description:
       "High-risk actors, passports, phones linked to extremists. Segment on smuggling operations uncovered at the southern border.",
     date: "2024",
-    category: "FIELD REPORT",
+    category: "REPORT",
     source: "IRONCLAD",
     owned: false,
   },

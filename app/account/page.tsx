@@ -32,7 +32,7 @@ export default async function AccountPage({
     <PageFrame
       path="/account"
       name="Account"
-      description="Your account for field reports released by The GOAT Initiative."
+      description="Your account for reports released by The GOAT Initiative."
     >
       <section className="py-16">
         <div className="max-w-3xl mx-auto px-4">
@@ -107,7 +107,7 @@ export default async function AccountPage({
 
           <div className="flex flex-wrap items-center gap-6">
             <Link href="/intel" className="text-primary font-heading text-sm tracking-wider">
-              INTEL UPDATES
+              REPORTS
             </Link>
             <form action="/api/auth/logout" method="post">
               <button type="submit" className="text-gray-400 font-heading text-sm tracking-wider hover:text-primary">

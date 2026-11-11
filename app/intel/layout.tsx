@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Intel Updates",
+  title: "Reports",
   description:
-    "Intel updates from The GOAT Initiative: field reports and threat briefings from the U.S.–Mexico border.",
+    "Reports from The GOAT Initiative, from the U.S.–Mexico border.",
   path: "/intel",
 });
 

@@ -12,10 +12,10 @@ export const dynamic = "force-dynamic";
 const EMAIL_LIST = "https://thecorygoat.substack.com/subscribe";
 
 const description =
-  "Sign in to intel reports with the username from your approval email, or join the email list. The email list does not use a password.";
+  "Sign in to reports with the login you were given, or join the email list. The email list does not use a password.";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Intel reports or email list",
+  title: "Reports or email list",
   description,
   path: "/login",
 });
@@ -37,7 +37,7 @@ export default async function LoginPage({
   const reportAccount = Boolean(params.next || params.error || params.account === "1");
 
   return (
-    <PageFrame path="/login" name="Intel reports or email list" description={description}>
+    <PageFrame path="/login" name="Reports or email list" description={description}>
       <section className="py-16">
         <div className="max-w-lg mx-auto px-4">
           {reportAccount ? (
@@ -45,17 +45,27 @@ export default async function LoginPage({
           ) : (
             <>
               <h1 className="font-heading text-4xl text-gray-100 tracking-wider mb-4">
-                CHOOSE <span className="text-primary">ONE</span>
+                <span className="text-primary">REPORTS</span>
               </h1>
               <p className="text-gray-400 leading-relaxed mb-8">
-                These are two different things. Intel reports is a login. The email list is not.
+                One set of reports. Use the login you were given. The email list does not open them.
               </p>
               <div className="space-y-4">
-                <a href="https://goatintel.com/" className="block border border-primary/30 bg-dark-100/80 p-6">
-                  <p className="font-mono text-xs text-primary tracking-widest mb-3">LOGIN</p>
-                  <h2 className="font-heading text-2xl text-gray-100 tracking-wider mb-3">Intel reports</h2>
+                <Link href="/login?account=1" className="block border border-primary/30 bg-dark-100/80 p-6">
+                  <p className="font-mono text-xs text-primary tracking-widest mb-3">THIS WEBSITE</p>
+                  <h2 className="font-heading text-2xl text-gray-100 tracking-wider mb-3">Reports</h2>
                   <p className="text-gray-400 leading-relaxed mb-5">
-                    For people who already have a login. Use the username from your approval email.
+                    Email and password for a report released on this website.
+                  </p>
+                  <span className="block w-full py-3 bg-primary text-dark font-heading text-sm tracking-wider text-center">
+                    OPEN
+                  </span>
+                </Link>
+                <a href="https://goatintel.com/" className="block border border-primary/30 bg-dark-100/80 p-6">
+                  <p className="font-mono text-xs text-primary tracking-widest mb-3">APPROVAL USERNAME</p>
+                  <h2 className="font-heading text-2xl text-gray-100 tracking-wider mb-3">Reports</h2>
+                  <p className="text-gray-400 leading-relaxed mb-5">
+                    Use the username from your approval email. This opens the files that go with a report.
                   </p>
                   <span className="block w-full py-3 bg-primary text-dark font-heading text-sm tracking-wider text-center">
                     SIGN IN
@@ -72,11 +82,6 @@ export default async function LoginPage({
                   </span>
                 </a>
               </div>
-              <p className="text-sm text-gray-500 mt-8">
-                <Link href="/login?account=1" className="text-primary">
-                  I already have an account for a released report on this website
-                </Link>
-              </p>
             </>
           )}
         </div>
@@ -93,7 +98,7 @@ function ReportAccountForm({ next, error }: { next: string; error: string }) {
         OPEN A <span className="text-primary">REPORT</span>
       </h1>
       <p className="text-gray-400 leading-relaxed mb-8">
-        This email and password opens a released report on this website. It is not the intel reports login, and it does not join the email list.
+        This email and password opens a released report on this website. It does not use the approval username, and it does not join the email list.
       </p>
       <form action="/api/auth/login" method="post" className="space-y-4 bg-dark-100/80 border border-primary/20 p-6">
         <input type="hidden" name="next" value={next} />
@@ -124,7 +129,7 @@ function ReportAccountForm({ next, error }: { next: string; error: string }) {
       </p>
       <p className="text-sm text-gray-500 mt-3">
         <a href="https://goatintel.com/" className="text-primary">
-          Intel reports login
+          Approval username
         </a>
         {" · "}
         <a href={EMAIL_LIST} className="text-primary">

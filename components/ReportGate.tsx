@@ -20,9 +20,9 @@ export function ReportGate({
           href="/intel"
           className="inline-flex items-center gap-2 font-mono text-xs text-primary tracking-widest mb-8 hover:underline"
         >
-          INTEL UPDATES
+          REPORTS
         </Link>
-        <p className="text-sm text-primary mb-3">Field report</p>
+        <p className="text-sm text-primary mb-3">Report</p>
         <h1 className="text-2xl md:text-3xl font-medium text-gray-50 leading-snug mb-4">
           {title}
         </h1>
@@ -61,12 +61,12 @@ export function ReportGate({
               This report is still locked. It opens for every confirmed member when The GOAT Initiative releases it.
             </p>
             <Link href="/intel" className="text-primary text-sm">
-              Back to Intel Updates
+              Back to reports
             </Link>
           </>
         )}
         <p className="text-gray-300 leading-relaxed mt-8">
-          Detailed files are separate. Request access with your name, phone, email, and organization. Staff approve or deny each request.
+          The files that go with this report open after approval. Request access with your name, phone, email, and organization. Staff approve or deny each request.
         </p>
         <RequestAccessButton className="mt-6" />
       </section>

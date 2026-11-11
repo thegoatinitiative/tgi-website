@@ -159,27 +159,27 @@ export function IntelClient({
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
               </svg>
               <span className="font-heading text-xs text-primary tracking-widest">
-                FIELD REPORTS
+                REPORTS
               </span>
             </motion.div>
             
             <h1 className="font-heading text-3xl sm:text-5xl text-gray-100 tracking-normal sm:tracking-wide leading-tight mb-4">
-              INTEL <span className="text-primary text-glow-sm">UPDATES</span>
+              <span className="text-primary text-glow-sm">REPORTS</span>
             </h1>
             
             <p className="text-base md:text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed mb-3">
-              Field reports from The GOAT Initiative, grouped by what was recovered.
+              Reports from The GOAT Initiative, grouped by what was recovered.
               Each report stays locked until we release it. Create an account on this website to open a released report.
             </p>
             <p className="text-sm text-gray-400 mb-2">
               {released} of {REPORTS.length} reports released
             </p>
             <p className="text-sm text-gray-300 max-w-2xl mx-auto leading-relaxed mt-4">
-              The intel reports login is separate.{" "}
+              The files that go with a report open with the username from your approval email.{" "}
               <Link href="/intel/portal" className="text-primary hover:underline">Request access</Link>
               , then sign in at{" "}
               <a href="https://goatintel.com/" className="text-primary hover:underline">GOAT Intel</a>
-              {" "}with the username from your approval email. For email only,{" "}
+              . For email only,{" "}
               <a href={SUBSTACK_URL} className="text-primary hover:underline">join the email list</a>.
               That does not open the reports.
             </p>
@@ -262,7 +262,7 @@ export function IntelClient({
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                   </svg>
                 ),
-                title: "Field Reports",
+                title: "Reports",
                 description: "On-the-ground updates from border operations and intelligence gathering missions.",
               },
               {

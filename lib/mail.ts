@@ -55,7 +55,7 @@ function message(name: string, url: string): string {
   return [
     `Hello ${name},`,
     "",
-    "Confirm your account to read field reports from The GOAT Initiative.",
+    "Confirm your account to read reports from The GOAT Initiative.",
     "After you confirm, each report opens when it is released.",
     "",
     url,

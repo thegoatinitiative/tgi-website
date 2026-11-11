@@ -109,11 +109,11 @@ export function FerReader() {
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            INTEL UPDATES
+            REPORTS
           </Link>
 
           <p className="font-mono text-xs text-primary tracking-widest mb-4">
-            FIELD REPORT · 6 SEP 2026 · FER-2026-0906-TECNO-CH6i
+            REPORT · 6 SEP 2026 · FER-2026-0906-TECNO-CH6i
           </p>
           <h1 className="font-heading text-2xl md:text-4xl text-gray-100 tracking-wider leading-tight mb-4 max-w-5xl">
             {"FEROZ SHAH'S PHONE FOUND ON "}<span className="text-primary text-glow-sm">OTAY MOUNTAIN</span>
@@ -125,7 +125,7 @@ export function FerReader() {
             Some pages are omitted from this public copy.
           </p>
           <p className="mt-4 text-gray-400 leading-relaxed">
-            Detailed files from this work are separate. Staff approve or deny each request. Approved people sign in at{" "}
+            The files that go with this report open on GOAT Intel after staff approve a request. Sign in at{" "}
             <a href="https://goatintel.com/" className="text-primary hover:underline">GOAT Intel</a>.
           </p>
           <RequestAccessButton className="mt-6" />

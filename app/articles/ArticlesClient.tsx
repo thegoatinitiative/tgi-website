@@ -8,7 +8,7 @@ const writers = [
     name: "Cory Gautereaux",
     role: "Founder & President",
     blurb:
-      "Field reports and written briefings from Cory Gautereaux. The full articles are on Substack.",
+      "Reports and written briefings from Cory Gautereaux. The full articles are on Substack.",
     profileUrl: "https://substack.com/@thecorygoat",
     embedUrl: "https://thecorygoat.substack.com/embed",
     socials: [
@@ -210,7 +210,7 @@ export function ArticlesClient({ children }: { children?: React.ReactNode }) {
                 href="/intel"
                 className="px-6 py-3 font-heading text-sm uppercase tracking-widest border border-gray-700 text-gray-400 hover:border-primary hover:text-primary transition-all duration-300"
               >
-                Intel Updates
+                Reports
               </Link>
             </div>
           </motion.div>

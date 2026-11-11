@@ -44,7 +44,7 @@ const supportTiers = [
       "All Analyst impact, plus:",
       "Fund night vision & thermal imaging gear",
       "Support multi-day field deployments",
-      "Added to TGI Substack for exclusive intel updates",
+      "Added to TGI Substack for exclusive updates",
     ],
     popular: false,
   },

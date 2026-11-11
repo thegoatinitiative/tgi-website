@@ -8,7 +8,7 @@ const explore = [
   { href: "/operations", label: "Operations" },
   { href: "/operatives", label: "Leadership" },
   { href: "/media", label: "Video briefings" },
-  { href: "/intel", label: "Intel updates" },
+  { href: "/intel", label: "Reports" },
   { href: "/articles", label: "Articles" },
   { href: "/donate", label: "Donate" },
   { href: "/contact", label: "Contact" },

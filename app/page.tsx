@@ -973,7 +973,7 @@ export default function Home() {
           >
             {[
               { value: "24/7", label: "MONITORING" },
-              { value: "100+", label: "INTEL REPORTS" },
+              { value: "100+", label: "REPORTS" },
               { value: "50+", label: "AGENCY PARTNERS" },
               { value: "REAL-TIME", label: "THREAT UPDATES" },
             ].map((stat, index) => (

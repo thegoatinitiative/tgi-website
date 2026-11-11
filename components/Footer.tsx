@@ -37,11 +37,11 @@ const exploreLinks = [
   { label: "Operations", href: "/operations" },
   { label: "Leadership", href: "/operatives" },
   { label: "Video Intel", href: "/media" },
-  { label: "Intel Updates", href: "/intel" },
+  { label: "Reports", href: "/intel" },
   { label: "Articles", href: "/articles" },
   { label: "Donate", href: "/donate" },
   { label: "Contact", href: "/contact" },
-  { label: "Intel reports", href: "https://goatintel.com/" },
+  { label: "GOAT Intel", href: "https://goatintel.com/" },
   { label: "Email list", href: "https://thecorygoat.substack.com/subscribe" },
 ];
 
@@ -142,7 +142,7 @@ export function Footer() {
             
             {/* Social Links */}
             <div className="pt-2">
-              <p className="text-xs text-gray-600 mb-3">Follow for intel updates:</p>
+              <p className="text-xs text-gray-600 mb-3">Follow for updates:</p>
               <div className="flex items-center gap-3">
                 {socialLinks.map((social) => (
                   <motion.a

@@ -188,7 +188,7 @@ export default function MediaPage() {
               Video Briefings{" "}
               <span className="text-primary text-glow-sm">&</span>{" "}
               <br className="hidden md:block" />
-              Field Reports
+              Reports
             </h1>
             
             {/* Subtitle */}
@@ -286,7 +286,7 @@ export default function MediaPage() {
               </div>
               
               <h3 className="font-heading text-2xl text-gray-100 tracking-wider mb-3">
-                SUBSCRIBE FOR <span className="text-primary">INTEL UPDATES</span>
+                SUBSCRIBE FOR <span className="text-primary">UPDATES</span>
               </h3>
               
               <p className="text-gray-500 mb-6 max-w-lg mx-auto">
